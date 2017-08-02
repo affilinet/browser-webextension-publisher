@@ -5,9 +5,9 @@
 4. Run `npm run build`
 
 Alternately, if you want to try out the extension, here are the download links. After you download it, unzip the file and load it in your browser using the steps mentioned below.
- - [**Download Chrome Extension**](https://github.com/affilinet/browser-webextension-publisher/dist/chrome.zip)
- - [**Download Firefox Extension**](https://github.com/affilinet/browser-webextension-publisher/dist/firefox.zip)
- - [**Download Opera Extension**](https://github.com/affilinet/browser-webextension-publisher/dist/opera.zip)
+ - [**Download Chrome Extension**](https://github.com/affilinet/browser-webextension-publisher/raw/master/dist/chrome.zip)
+ - [**Download Firefox Extension**](https://github.com/affilinet/browser-webextension-publisher/raw/master/dist/firefox.zip)
+ - [**Download Opera Extension**](https://github.com/affilinet/browser-webextension-publisher/raw/master/dist/opera.zip)
 
 
 ##### Load the extension in Chrome & Opera
