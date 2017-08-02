@@ -1,24 +1,24 @@
 ## Installation
-1. Clone the repository `git clone https://github.com/teraone/affilinet-webextension.git`
+1. Clone the repository `git clone https://github.com/affilinet/browser-webextension-publisher.git`
 2. Run `npm install`
 3. Run `bower install`
 4. Run `npm run build`
 
 Alternately, if you want to try out the extension, here are the download links. After you download it, unzip the file and load it in your browser using the steps mentioned below.
- - [**Download Chrome Extension**](https://github.com/teraone/affilinet-webextension/dist/chrome.zip)
- - [**Download Firefox Extension**](https://github.com/teraone/affilinet-webextension/dist/firefox.zip)
- - [**Download Opera Extension**](https://github.com/teraone/affilinet-webextension/dist/opera.zip)
+ - [**Download Chrome Extension**](https://github.com/affilinet/browser-webextension-publisher/dist/chrome.zip)
+ - [**Download Firefox Extension**](https://github.com/affilinet/browser-webextension-publisher/dist/firefox.zip)
+ - [**Download Opera Extension**](https://github.com/affilinet/browser-webextension-publisher/dist/opera.zip)
 
 
 ##### Load the extension in Chrome & Opera
 1. Open Chrome/Opera browser and navigate to chrome://extensions
 2. Select "Developer Mode" and then click "Load unpacked extension..."
-3. From the file browser, choose to `extension-boilerplate/build/chrome` or (`extension-boilerplate/build/opera`)
+3. From the file browser, choose to `browser-webextension-publisher/build/chrome` or (`browser-webextension-publisher/build/opera`)
 
 
 ##### Load the extension in Firefox
 1. Open Firefox browser and navigate to about:debugging
-2. Click "Load Temporary Add-on" and from the file browser, choose `extension-boilerplate/build/firefox`
+2. Click "Load Temporary Add-on" and from the file browser, choose `browser-webextension-publisher/build/firefox`
 
 
 ## Developing
