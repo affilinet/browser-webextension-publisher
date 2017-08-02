@@ -1,0 +1,30 @@
+{
+  "name": "affilinet-toolbar@affili.net",
+  "version": "3.0.0",
+  "description": "Affilinet Extension for Firefox",
+  "homepage": "http://affili.net",
+  "author": [
+    "Stefan Gotre <gotre@teraone.de>"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.5.9",
+    "angular-bootstrap": "~0.11.0",
+    "angular-momentjs": "~0.2.2",
+    "angular-ui-router": "0.4.0",
+    "bootstrap": "~3.2.0",
+    "font-awesome": "~4.1.0",
+    "moment": "momentjs#~2.10.6",
+    "rdash-ui": "1.0.*",
+    "angular-xml": "~2.2.1",
+    "angular-flot": "~0.0.13",
+    "jquery": "~2.1.4",
+    "Flot": "flot#~0.8.3",
+    "angular-clipboard": "~1.1.1",
+    "angular-translate": "~2.8.1"
+  },
+  "resolutions": {
+    "angular": "1.6.1"
+  }
+}

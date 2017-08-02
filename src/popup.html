@@ -1,0 +1,249 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+        /* http://meyerweb.com/eric/tools/css/reset/
+           v2.0 | 20110126
+           License: none (public domain)
+        */
+
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+
+        body {
+            line-height: 1;
+        }
+
+        ol, ul {
+            list-style: none;
+        }
+
+        blockquote, q {
+            quotes: none;
+        }
+
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+    </style>
+
+
+    <style type="text/css">
+        body, html, #app {
+            width: 350px;
+            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            color: rgb(59, 48, 45);
+            background:#ffffff;
+        }
+
+        #header {
+            height: 44px;
+            background-color: #a8a199;
+            color: white;
+            box-sizing: border-box;
+        }
+        #header .left {
+            margin-top: 12px;
+            margin-left: 12px;
+            float:left;
+        }
+        #logo {
+            height: 24px;
+        }
+        #header .right {
+            float: right;
+            margin-top: 16px;
+            margin-right: 12px;
+        }
+        #header .cog {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAQAAAC1QeVaAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDE0IDc5LjE1Njc5NywgMjAxNC8wOC8yMC0wOTo1MzowMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6M0YzM0I0RjlBQTAxMTFFNEFGRjdCQzlERDk0MEFFNEMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6M0YzM0I0RkFBQTAxMTFFNEFGRjdCQzlERDk0MEFFNEMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozRjMzQjRGN0FBMDExMUU0QUZGN0JDOUREOTQwQUU0QyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozRjMzQjRGOEFBMDExMUU0QUZGN0JDOUREOTQwQUU0QyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PiocFREAAADCSURBVBjTbZBNDgFBFIR7Y7Z+DuEv4ix+OsNRSJApR5DMHYTRnIMEW8SeNQtW4/XTPdMjUpuu+jqvq5+IhRWmOJKCNBEOPCAm7TIQNYRooocnwwckuRAVgvCgKHozsNJuAU9g7ISKL1oNBbo48/EFyS/7ZsoJLW0LuJOJkmIRuRvy30IlhqsEKoZFXUjiakr4jPpm7AUdgZFTYY2N4wb6K0uu8/uVOXJ6UBUz1Gm8XUIbDUrK2fXtGW7/7zbgxU/S5APPFOUTU8b6bgAAAABJRU5ErkJggg==');
+            width: 14px;
+            height: 14px;
+        }
+
+        .link {
+            cursor: pointer;
+        }
+
+        .button {
+            background-color: #ff3f2c;
+            color:white;
+            padding: 8px 12px;
+            display: inline-block;
+            margin: 3px;
+        }
+        .button:hover {
+            background-color: #3b302d
+        }
+
+        #programSection {
+            border-bottom: 1px solid #3b302d;
+            text-align: center;
+            padding: 20px 0;
+
+        }
+        #programDetails {
+            padding: 0 50px;
+        }
+        #programName {
+            font-size: 18px;
+            font-weight: bold;
+            padding-bottom: 20px;
+        }
+
+
+
+        #errorSection {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        #errorDetails {
+            padding: 20px 50px;
+        }
+
+        .fa {
+            height: 24px;
+            display: inline-block;
+            padding:0;
+            margin: 0;
+            padding-bottom: 5px;
+
+        }
+
+
+        #statisticSection {
+            border-bottom: 1px solid #3b302d;
+            padding: 20px 0;
+
+        }
+        .statItem {
+            width: 32%;
+            display: inline-block;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        #confirmed {
+            color: #007239;
+        }
+
+        #open {
+            color: #2d2825;
+        }
+
+        #cancelled {
+            color:#DE1C44;
+        }
+        #footerSection {
+            padding: 15px 0;
+            text-align: center;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <header id="header">
+        <div class="left">
+            <img id="logo" class="link" src="images/affilinet_logo.png">
+        </div>
+
+        <div class="right">
+            <div class="cog link" id="settings" data-translateKey="popup_settings"></div>
+        </div>
+
+
+    </header>
+
+    <div id="errorSection">
+        <div id="errorDetails">
+            <div id="errorText"  class="translateHtml" data-translateKey="popup_errorMessageInvalidCredentials"></div>
+        </div>
+
+        <div id="errorButtons" >
+            <div class="button link translateHtml" id="settings2"  data-translateKey="popup_errorButton"></div>
+
+        </div>
+    </div>
+
+    <div id="programSection">
+        <div id="programDetails">
+            <div id="programName"></div>
+        </div>
+
+        <div id="programButtons" >
+            <div class="button link translateHtml"  id="applyNow"        data-translateKey="popup_applyNow" >Apply</div>
+            <div class="button link translateHtml"  id="getCreatives"    data-translateKey="popup_getCreatives">Get Creatives</div>
+            <div class="button link translateHtml"  id="getVouchers"     data-translateKey="popup_getVouchers">Get Vouchers</div>
+
+        </div>
+    </div>
+
+    <div id="statisticSection">
+        <div id="confirmed" class="statItem">
+            <img src="images/fa-check-circle.png" class="fa" alt="">
+            <div id="confirmedText">0,00 €</div>
+        </div>
+
+        <div id="open" class="statItem">
+            <img src="images/fa-circle-o.png" class="fa" alt="">
+            <div id="openText">0,00 €</div>
+        </div>
+
+
+        <div id="cancelled" class="statItem">
+            <img src="images/fa-times-circle.png" class="fa" alt="">
+            <div id="cancelledText">0,00 €</div>
+        </div>
+
+
+    </div>
+    <div id="footerSection">
+
+        <div class="button link translateHtml" id="statistics" data-translateKey="popup_statistics">Statistics</div>
+        <div class="button link translateHtml" id="news" data-translateKey="popup_news">News</div>
+        <div class="button link translateHtml" id="settings3" data-translateKey="popup_settings">Settings</div>
+
+    </div>
+</div>
+<input id="programId" value="" type="hidden">
+
+<script src="scripts/popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" data-ng-app="AffilinetToolbar">
+<head>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>affilinet Publisher Extension</title>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/ico"/>
+
+
+    <!-- STYLES -->
+    <!-- build:css lib/css/main.min.css -->
+    <link rel="stylesheet" type="text/css" href="../../bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/custom-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="./css/main.css">
+    <link rel="stylesheet" type="text/css" href="./css/content.css">
+    <link rel="stylesheet" type="text/css" href="./css/hamburg.css">
+    <link rel="stylesheet" type="text/css" href="./css/header.css">
+    <link rel="stylesheet" type="text/css" href="./css/loading.css">
+    <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="./css/widgets.css">
+    <link rel="stylesheet" type="text/css" href="./css/applynow.css">
+    <link rel="stylesheet" type="text/css" href="./css/getcreatives.css">
+    <link rel="stylesheet" type="text/css" href="./css/getvouchers.css">
+    <link rel="stylesheet" type="text/css" href="./css/news.css">
+    <!-- endbuild -->
+    <!-- SCRIPTS -->
+    <!-- build:js lib/js/main.min.js -->
+    <script type="text/javascript" src="../../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/Flot/jquery.flot.js"></script>
+    <script type="text/javascript" src="../../bower_components/Flot/jquery.flot.time.js"></script>
+    <script type="text/javascript" src="../../bower_components/Flot/jquery.flot.resize.js"></script>
+    <script type="text/javascript" src="../../bower_components/Flot/jquery.flot.categories.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
+    <script type="text/javascript" src="../../bower_components/moment/moment.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-momentjs/angular-momentjs.js"></script>
+    <script type="text/javascript" src="../../bower_components/x2js/xml2json.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-xml/angular-xml.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-flot/angular-flot.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-clipboard/angular-clipboard.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-translate/angular-translate.min.js"></script>
+
+
+    <!-- endbuild -->
+    <!-- Custom Scripts -->
+    <script type="text/javascript" src="js/templates.js"></script>
+    <script type="text/javascript" src="js/dashboard.min.js"></script>
+
+    <!-- ONLY IN DEBUG MODE -->
+
+
+</head>
+<body ng-controller="MasterCtrl">
+<div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
+
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar">
+            <li class="sidebar-main">
+                <a ng-click="toggleSidebar()">
+                    <img src="img/logo.png" ng-hide="!toggle">
+                    <img src="img/favicon.ico" class="pull-right small-logo" ng-hide="toggle">
+
+                </a>
+            </li>
+
+            <li class="sidebar-list" ng-if="validCredentials">
+                <a ui-sref="news">{{'NEWS_PageName'|translate}} <span class="menu-icon fa fa-envelope"></span></a>
+            </li>
+            <li class="sidebar-list"  ng-if="validCredentials">
+                <a ui-sref="orders">{{'ORDERS_PageName'|translate}}<span class="menu-icon fa fa-money"></span></a>
+            </li>
+            <li class="sidebar-list">
+                <a ui-sref="settings">{{'SETTINGS_PageName'|translate}} <span class="menu-icon fa fa-cog"></span></a>
+            </li>
+            <li class="sidebar-list"  ng-if="validCredentials">
+                <a href="https://publisher.affili.net/Login/NewLogin.aspx" target="_blank">Publisher Portal<span
+                        class="menu-icon fa fa-external-link"></span></a>
+            </li>
+            <!-- <li class="sidebar-list">
+                 <a ui-sref="applynow({'programId': 8402})" ><small>applynow</small></a>
+                 <a ui-sref="getVouchers({'programId': 8402})"><small>getVouchers</small></a>
+                 <a ui-sref="getCreatives({'programId': 8402})"><small>getCreatives</small></a>
+                 <a ui-sref="getCreatives({'programId': 4586})"><small>getCreatives(maxdome)</small></a>
+                 <a ui-sref="getVouchers({'programId': 1860})"><small>getVouchers(vistaprint)</small></a>
+             </li>
+             -->
+        </ul>
+        <div class="sidebar-footer">
+            <a href="{{ 'IMPRESSUM_LINK'|translate }}" target="_blank">&copy; {{ ''|currentyear }} affilinet</a>
+        </div>
+    </div>
+    <!-- End Sidebar -->
+
+    <div id="content-wrapper">
+        <div class="page-content">
+
+            <!-- Header Bar -->
+            <div class="row header">
+                <div class="col-xs-12">
+
+
+                    <div class="meta">
+                        <div class="page">
+                            {{ pageName }}
+                        </div>
+                        <div class="breadcrumb-links">
+                            affilinet Extension / {{ pageName }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Header Bar -->
+
+            <!-- Main Content -->
+            <div class="row alerts-container" data-ng-show="alerts.length">
+                <div class="col-xs-12">
+                    <alert data-ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+                        {{alert.msg}}
+                    </alert>
+                </div>
+            </div>
+
+            <div ui-view></div>
+
+        </div><!-- End Page Content -->
+    </div><!-- End Content Wrapper -->
+</div><!-- End Page Wrapper -->
+
+<div class="hidden">
+    <input id="exchangeInitiator" type="hidden"/>
+</div>
+
+</body>
+</html>

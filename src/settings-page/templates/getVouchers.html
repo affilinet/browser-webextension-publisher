@@ -1,0 +1,85 @@
+<div class="row" id="getVouchers" ng-show="loadingFinished">
+
+    <div class="col-lg-12">
+        <table class="table table-responsive table-hover" data-ng-hide="noVouchers && contentLoaded">
+            <thead>
+            <tr>
+                <th>{{'GETVOUCHERS_ProgramName'|translate}}</th>
+                <th>{{'GETVOUCHERS_VoucherName'|translate}}</th>
+                <th>{{'GETVOUCHERS_Properties'|translate}}</th>
+                <th>{{'GETVOUCHERS_Code'|translate}}</th>
+                <th>{{'GETVOUCHERS_ApplyNowCopyCode'|translate}}</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr data-ng-repeat="voucher in vouchers">
+                <td>
+                    <a class="programName" href="/#/applynow?programId={{voucher.ProgramId.toString()}}">{{
+                        programInfo.ProgramTitle.toString() }}</a><br/>
+                    <a ng-href="{{'/#/applynow?programId=' + voucher.ProgramId.toString()}}"><img
+                            ng-src="{{programInfo.LogoURL.toString()}}"/></a>
+                </td>
+                <td>
+                    <a class="programName" href="/#/applynow?programId={{voucher.ProgramId.toString()}}">{{
+                        voucher.Title.toString() }}</a><br>
+                    {{ voucher.StartDate.toString() | amDateFormat:'MM/DD/YYYY' }} - {{ voucher.EndDate.toString() |
+                    amDateFormat:'MM/DD/YYYY' }}
+
+                </td>
+                <td>
+                    <ul>
+                        <li data-ng-show="voucher.CustomerRestriction.toString() == 'AllCustomers'">
+                            {{'GETVOUCHERS_AllCustomers'|translate}}
+                        </li>
+                        <li data-ng-repeat="type in voucher.VoucherTypes.VoucherType"
+                            ng-hide="voucher.VoucherTypes.VoucherType.__text">{{type.__text}}
+                        </li>
+                        <li ng-show="voucher.VoucherTypes.VoucherType.__text">
+                            {{voucher.VoucherTypes.VoucherType.toString()|translate }}
+                        </li>
+                        <li data-ng-show="voucher.MinimumOrderValue.toString() != {}">
+                            {{'GETVOUCHERS_MinimumOrderValue'|translate}} : {{voucher.MinimumOrderValue.toString()}}
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <textarea class="integrationCode" style="width: 100%"
+                              data-ng-show="voucher.IntegrationCode.toString() != {}" class="integrationCode"
+                              ng-bind="voucher.IntegrationCode.toString()"></textarea>
+                </td>
+
+                <td>
+                    <a ng-show="voucher.PartnershipStatus.toString()=='NoPartnership'"
+                       href="http://publisher.affili.net/Programs/ProgramInfo.aspx?pid={{voucher.ProgramId.toString()}}"
+                       class="btn btn-primary">{{'GETVOUCHERS_ApplyNow'|translate}}</a>
+
+                    <button data-ng-show="voucher.IntegrationCode.toString() != {}" clipboard
+                            text="voucher.IntegrationCode.toString()" class="btn btn-primary">
+                        {{'GETVOUCHERS_CopyVoucherCode'|translate}}
+                    </button>
+
+                </td>
+
+
+            </tr>
+
+
+            </tbody>
+        </table>
+        <div data-ng-show="noVouchers">
+            <p>
+                {{ programInfo.ProgramTitle.toString() }} does not offer any vouchers
+            </p>
+
+        </div>
+
+
+    </div>
+</div>
+
+<div class="row" ng-hide="loadingFinished">
+    <div class="col-lg-12 text-center">
+        <i class="fa fa-4x fa-spinner fa-spin"></i>
+    </div>
+</div>
