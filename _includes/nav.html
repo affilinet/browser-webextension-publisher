@@ -1,0 +1,66 @@
+   <!-- Navigation -->
+   <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header page-scroll">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ site.devhub_url }}">
+          <img style="width:150px" class="img-responsive" src="{{ site.remote_base_url }}/assets/img/affilinet_logo_rev-out.png" alt="affilinet Logo">
+        </a>
+        <h3>{{ site.title }}</h3>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div id="bs-example-navbar-collapse-1" class="navbar-collapse collapse navbar-right" style="height: 1px;">
+        <ul class="nav navbar-nav">
+
+          <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+          <li class="hidden">
+            <a href="#page-top"></a>
+          </li>   
+
+          <!-- Show main menus (configured in _config.yml) --> 
+          {% for menu_item in site.mainmenu %}
+
+            <!-- Get slug of current page based on the current page url --> 
+            {% assign current_page_slug = page.url | replace: '/', ''  %}
+
+            <!-- If slug of current page matches the slug of the menu item set class active--> 
+            {% if current_page_slug.size > 0 and current_page_slug == menu_item.slug %}
+              <li class="active page-scroll">         
+            {% elsif current_page_slug.size == 0 and menu_item.slug == nil %}
+              <li class="active page-scroll">   
+            {% else %}
+              <li class="page-scroll">   
+            {% endif %}
+              
+              <!-- Distinguish between external and internal links -->
+              {% if menu_item.slug contains "http" or menu_item.slug contains "https" %}
+                <a target="_blank" href="{{ menu_item.slug }}">{{ menu_item.title }}</a>
+              {% else %}
+                <a href="{{ menu_item.slug | prepend:site.baseurl }}">{{ menu_item.title }}</a>
+              {% endif %}
+  
+              </li>  
+          {% endfor %}
+
+          <!-- Display Components Menu Item if in development mode -->
+          {% if jekyll.environment == "development" %}
+            <li class="page-scroll">
+              <a href="{{ 'components'| prepend:site.baseurl }}"><span class="text-primary">Components</span></a> 
+            </li>
+          {% endif %}
+
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+  </nav>
+  
+

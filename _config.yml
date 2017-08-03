@@ -1,0 +1,67 @@
+# Site
+title: Browser Extension for Publishers
+meta_description: Browser Extension for Publishers - Info and Download
+baseurl: /browser-webextension-publisher/
+remote_base_url: https://affilinet.github.io
+devhub_url: https://affilinet.github.io
+
+# Follow
+twitter: http://twitter.com/affilinet_news
+facebook: https://www.facebook.com/affilinet
+github: http://github.com/affilinet
+
+# Address
+address_street: Sapporobogen 6-8
+address_city: 80637 Munich
+
+# Main menu
+mainmenu: 
+  - title: Start
+    slug: 
+  - title: Documentation
+    slug: documentation
+  - title: Support
+    slug: https://github.com/affilinet/browser-webextension-publisher/issues
+  - title: Download
+    slug: download
+
+# Conversion
+markdown: kramdown
+highlighter: rouge
+permalink: date
+
+# Collections
+collections:
+  - documentation
+
+# Defaults
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+    values:
+      layout: "default"
+
+# Default font sizes
+maintext_fontsize: 16px
+maintext_lists_fontsize: 16px
+mainmenu_fontsize: 15px
+sidebar_fontsize: 16px
+table_fontsize: 14px
+
+# Color settings (hex-codes without the leading hash-tag)
+color:
+  darkbrown: 3b302d 
+  lightbrown: B2A79D
+  lightbrown_background: f7f6f5
+  pink: DE1C44
+  purple: 90005B
+  darkpurple: 53214b
+  red: ff3f2c
+  orange: ec5b0a
+  yellow: EC810A  
+  green: 3D7850
+  lightgreen: 73BA73
+  lighblue: 7882DC
+  blue: 283CC8
+

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+{% include head.html %}
+<body id="page-top">
+  <div class="main">
+    {% include nav.html %}
+    <div class="container inner text-center">
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 text-center">
+
+          <!-- Store all collections in new collections array -->
+          {% assign collection_labels = "" | split:"|"  %}
+          {% for collection in site.collections %}  
+          {% assign collection_labels = collection_labels | push: collection.label %}
+          {% endfor %}  
+
+          {% include main.html %}
+        </div>
+      </div>
+    </div>
+    {% include footer.html %}
+    {% include js.html %}
+  </div>
+</body>
+</html>

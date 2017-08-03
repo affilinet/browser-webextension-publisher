@@ -1,0 +1,22 @@
+<!-- Breadcrumb -->       
+<div class="row">
+
+<!-- Check if current page is a collection by checking if the current page slug is part of collection_labels -->  
+  {% unless collection_labels contains page.slug %}
+    
+    <!-- Start Breadcrumb Container -->
+    <div class="col-lg-12">
+
+  {% else %}
+ 
+    <div class="col-lg-9 col-lg-offset-3 col-md-8 col-md-offset-4">
+
+  {% endunless %}
+
+    <ol class="breadcrumb">
+        <li><a href="{{ site.devhub_url }}">affilinet Developer Hub</a></li>
+        <li><a href="{{ site.baseurl }}">{{ site.title }}</a></li>              
+        <li class="active">{{ page.title }}</li>
+    </ol>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+{% include head.html %}
+<body id="page-top">
+  <div class="main">
+    {% include nav.html %}
+    <div class="container inner">
+
+      <!-- Store all collections in new collections array -->
+      {% assign collection_labels = "" | split:"|"  %}
+      {% for collection in site.collections %}  
+      {% assign collection_labels = collection_labels | push: collection.label %}
+      {% endfor %}
+
+      {% include breadcrumb.html %}
+      {% include main.html %}
+    </div>
+    {% include footer.html %}
+    {% include js.html %}
+  </div>
+</body>
+</html>

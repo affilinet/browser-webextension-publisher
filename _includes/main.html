@@ -1,0 +1,107 @@
+	<div class="row">
+
+	<!-- Check if current page is a collection by checking if the current page slug is part of collection_labels -->	
+	{% unless collection_labels contains page.slug %}
+		
+		<!-- Start Content Container -->
+		<div class="col-lg-12" id="content">		
+
+	{% else %}
+
+		<!-- Store all documents of the current collection in chapters, sorted by position -->
+		{% for collection in site.collections %}
+			{% if collection.label == page.slug %}
+				{% assign chapters = collection.docs | sort: "position" %}
+			{% endif %}
+		{% endfor %}
+
+		<!-- Vertical nav -->
+		<div class="col-lg-3 col-md-4 scrollspy" id="sidebar">
+			<nav class="fixed-sidebar hidden-print hidden-xs hidden-sm" data-spy="affix">
+				<ul class="nav nav-pills nav-stacked">
+
+					{% for chapter in chapters %}
+
+					<!-- Include the chapter's first level menu items -->
+					<li><a href="#{{ chapter.slug }}">{{ chapter.title }}</a>
+				
+						<!-- Include the chapter's submenu items -->
+						{% if chapter.sections %}
+						<ul class="nav">
+							{% for menu_item in chapter.sections %}
+								<li><a href="#{{ menu_item.slug }}"><span class="fa fa-angle-double-right"></span>{{ menu_item.title }}</a></li>
+							{% endfor %}
+						</ul>	
+						{% endif %}
+					</li>
+					{% endfor %}
+				</ul>         
+			</nav>
+		</div>
+ 
+		<!-- Start Content Container -->
+		<div class="col-lg-9 col-md-8" id="content">
+
+			{% endunless %}
+				
+			<!-- Page Title -->				
+			<div class="row">
+				<div class="col-lg-12">
+					<h1>{{ page.title }}</h1>
+				</div>
+			</div>
+
+			<!-- Main Content -->		
+			<div class="row">
+				<div class="col-lg-12">
+						
+					{% unless collection_labels contains page.slug %}
+
+						<!-- Output if content type is not a collection, but a plain page -->	
+						{{ content }}
+
+					{% else %}
+
+						<!-- Output if content type is collection -->
+						{% for chapter in chapters %}
+
+							<section id="{{ chapter.slug }}">
+								<h2>{{ chapter.title }}</h2>
+
+								<!-- Include the chapter's main content (e.g. introduction.html) -->
+								{% include {{ page.slug }}/{{chapter.slug}}.html %}
+
+								<!-- Include the chapter's sections (e.g. introduction-use-cases.html -->
+								{% for section in chapter.sections %}
+								<section id="{{ section.slug }}">
+									<h3>{{ section.title }}</h3>
+									{% include {{ page.slug }}/{{section.slug}}.html %} 
+
+									<!-- Include the chapter's subsections (e.g. introduction-use-cases-retargeting.html -->
+									{% for subsection in section.sections %}	
+									<section id="{{ subsection.slug }}">
+										<h4>{{ subsection.title }}</h4>
+										{% include {{ page.slug }}/{{subsection.slug}}.html %} 
+
+										<!-- Include the chapter's subsections (e.g. introduction-use-cases-retargeting-app.html -->
+										{% for subsubsection in subsection.sections %}	
+										<section id="{{ subsection.slug }}">
+											<h5>{{ subsubsection.title }}</h5>
+											{% include {{ page.slug }}/{{subsubsection.slug}}.html %} 	
+										</section>
+										{% endfor %}
+
+									</section>
+									{% endfor %}
+
+								</section>
+								{% endfor %}
+
+							</section>	
+						{% endfor %}
+					
+					{% endunless %}
+				</div>
+			</div>
+		</div>
+	</div>
