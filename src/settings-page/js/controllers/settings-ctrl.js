@@ -18,7 +18,12 @@ function SettingsController($scope, $rootScope, $window, $translate, LogonServic
 
     $scope.submitLoginData = function () {
         $rootScope.validCredentials = false;
+        console.log($rootScope.credentials.countryPlatform);
 
+        if (angular.isUndefined($rootScope.credentials.countryPlatform)) {
+            $scope.$parent.sendAlert('Please select a country platform', 'danger');
+            return
+        }
         LogonService.RemoveToken();
 
         LogonService.CheckCredentials($rootScope.credentials).then(function (response) {
@@ -63,7 +68,7 @@ function SettingsController($scope, $rootScope, $window, $translate, LogonServic
                 from: 'settings-ctrl'
             });
             $scope.$parent.sendAlert('Incorrect Login Data', 'danger');
-            $rootScope.credentials = {publisherId: '', webservicePassword: ''};
+            $rootScope.credentials = {publisherId: '', webservicePassword: '', countryPlatform : ''};
         });
 
 

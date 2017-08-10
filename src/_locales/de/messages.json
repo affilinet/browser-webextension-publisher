@@ -11,37 +11,48 @@
     "message": "affilinet",
     "description": "Tooltip for the button."
   },
-  "popup_applyNow" : {
-    "message" : "Jetzt bewerben",
-    "description" : "Popup Button Name for applyNow"
+  "popup_applyNow": {
+    "message": "Jetzt bewerben",
+    "description": "Popup Button Name for applyNow"
   },
-  "popup_getCreatives" : {
-    "message" : "Werbemittel",
-    "description" : "Popup Button Name for getCreatives"
+  "popup_getCreatives": {
+    "message": "Werbemittel",
+    "description": "Popup Button Name for getCreatives"
   },
-  "popup_getVouchers" : {
-    "message" : "Gutscheine",
-    "description" : "Popup Button Name for getVouchers"
+  "popup_getTrackingLink": {
+    "message": "Tracking Link",
+    "description": "Popup Button Name for get tracking link"
   },
-  "popup_statistics" : {
-    "message" : "Statistik",
-    "description" : "Popup Button Name for statistics"
+  "popup_getDeeplink": {
+    "message": "Deeplink",
+    "description": "Popup Button Name for get deeplink"
   },
-  "popup_news" : {
-    "message" : "News",
-    "description" : "Popup Button Name for news"
+  "popup_copyLink": {
+    "message": "Kopieren",
+    "description": "Popup Button Name copy link"
   },
-  "popup_settings" : {
-    "message" : "Einstellungen",
-    "description" : "Popup Button Name for settings"
+  "popup_getVouchers": {
+    "message": "Gutscheine",
+    "description": "Popup Button Name for getVouchers"
   },
-  "popup_errorButton" : {
-    "message" : "Setup",
-    "description" : "Popup Error Button Name linking to Settings Page, visible if no credentials"
+  "popup_statistics": {
+    "message": "Statistik",
+    "description": "Popup Button Name for statistics"
   },
-  "popup_errorMessageInvalidCredentials" : {
-    "message" : "Ungültige Zugangsdaten. <br> Bitte hinterlegen Sie Ihre Zugangsdaten.",
-    "description" : "Popup Error: Invalid Login Credentials"
+  "popup_news": {
+    "message": "News",
+    "description": "Popup Button Name for news"
+  },
+  "popup_settings": {
+    "message": "Einstellungen",
+    "description": "Popup Button Name for settings"
+  },
+  "popup_errorButton": {
+    "message": "Setup",
+    "description": "Popup Error Button Name linking to Settings Page, visible if no credentials"
+  },
+  "popup_errorMessageInvalidCredentials": {
+    "message": "Ungültige Zugangsdaten. Bitte hinterlegen Sie Ihre Zugangsdaten.",
+    "description": "Popup Error: Invalid Login Credentials"
   }
-
 }

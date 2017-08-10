@@ -11,36 +11,48 @@
     "message": "affilinet",
     "description": "Tooltip for the button."
   },
-  "popup_applyNow" : {
-    "message" : "Meld je nu aan",
-    "description" : "Popup Button Name for applyNow"
+  "popup_applyNow": {
+    "message": "Meld je nu aan",
+    "description": "Popup Button Name for applyNow"
   },
-  "popup_getCreatives" : {
-    "message" : "Advertentiemateriaal",
-    "description" : "Popup Button Name for getCreatives"
+  "popup_getCreatives": {
+    "message": "Advertentiemateriaal",
+    "description": "Popup Button Name for getCreatives"
   },
-  "popup_getVouchers" : {
-    "message" : "Kortingscodes",
-    "description" : "Popup Button Name for getVouchers"
+  "popup_getVouchers": {
+    "message": "Kortingscodes",
+    "description": "Popup Button Name for getVouchers"
   },
-  "popup_statistics" : {
-    "message" : "Statistiek",
-    "description" : "Popup Button Name for statistics"
+  "popup_getTrackingLink": {
+    "message": "Tracking Link",
+    "description": "Popup Button Name for get tracking link"
   },
-  "popup_news" : {
-    "message" : "Nieuws",
-    "description" : "Popup Button Name for news"
+  "popup_getDeeplink": {
+    "message": "Deeplink",
+    "description": "Popup Button Name for get deeplink"
   },
-  "popup_settings" : {
-    "message" : "Instellingen",
-    "description" : "Popup Button Name for settings"
+  "popup_copyLink": {
+    "message": "Kopiëren",
+    "description": "Popup Button Name copy link"
   },
-  "popup_errorButton" : {
-    "message" : "Setup",
-    "description" : "Popup Error Button Name linking to Settings Page, visible if no credentials"
+  "popup_statistics": {
+    "message": "Statistiek",
+    "description": "Popup Button Name for statistics"
   },
-  "popup_errorMessageInvalidCredentials" : {
-    "message" : "Invalid Credentials<br> Please store your Webservice Password.",
-    "description" : "Popup Error: Invalid Login Credentials"
+  "popup_news": {
+    "message": "Nieuws",
+    "description": "Popup Button Name for news"
+  },
+  "popup_settings": {
+    "message": "Instellingen",
+    "description": "Popup Button Name for settings"
+  },
+  "popup_errorButton": {
+    "message": "Setup",
+    "description": "Popup Error Button Name linking to Settings Page, visible if no credentials"
+  },
+  "popup_errorMessageInvalidCredentials": {
+    "message": "Invalid Credentials. Please store your Webservice Password.",
+    "description": "Popup Error: Invalid Login Credentials"
   }
 }

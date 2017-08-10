@@ -232,34 +232,8 @@ let addToMyPrograms = function (items) {
         let myPrograms = results["myPrograms"] || [];
 
         for (let i = 0; i < items.length; i++) {
-            let url = items[i].getElementsByTagName("a:ProgramURL")[0].firstChild.nodeValue;
-            let parsedHost = getHostNameForUrl(url);
-            let screenshotUrl = "";
-            if (items[i].getElementsByTagName("a:ScreenshotURL")[0].firstChild != null) {
-                screenshotUrl = items[i].getElementsByTagName("a:ScreenshotURL")[0].firstChild.nodeValue;
-                if (screenshotUrl === null) {
-                    screenshotUrl = '';
-                }
-                else {
-                    // screenshot url is in format https://simple.thumbshots.com/image.aspx?cid=1515&v=1&w=240&h=140&url=https%3a%2f%2fwww%2E123moebel%2Ede
-                    screenshotUrl = getQueryParam('url', screenshotUrl);
-                    if (screenshotUrl !== null) {
-                        let parsedScreenshotUrl = getHostNameForUrl(screenshotUrl);
-                        if (parsedScreenshotUrl !== parsedHost) {
-                            parsedHost = parsedScreenshotUrl;
-                        }
-                    }
-                }
-            } else {
-                console.debug('No ScreenshotURL detected for  ' + parsedHost);
-                console.debug(items[i].getElementsByTagName("a:ScreenshotURL")[0].firstChild);
-            }
             let newProgram = {
                 programId: items[i].getElementsByTagName("a:ProgramId")[0].firstChild.nodeValue,
-                title: items[i].getElementsByTagName("a:ProgramTitle")[0].firstChild.nodeValue,
-                url: url,
-                parsedHost: parsedHost,
-                screenshotUrl: screenshotUrl
             };
             myPrograms.push(newProgram);
 
@@ -410,13 +384,18 @@ class PublisherWebservice {
 
                         if (resultsOnThisPage === 100) {
                             for (let page = 1; page < totalPages; page++) {
-                                _sendRequest(generateBodyForAllPrograms(token, page), 'https://api.affili.net/V2.0/PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms').then(function (response) {
-                                    const xmlDoc = getXml(response);
-                                    let ProgramCollection = xmlDoc.getElementsByTagName("ProgramCollection")[0];
-                                    let items = ProgramCollection.getElementsByTagName("a:Program");
-                                    addToAllPrograms(items);
-                                }, console.debug);
-                                console.debug('page number ' + page + ' of AllPrograms added');
+
+                                window.setTimeout(function () {
+                                    _sendRequest(generateBodyForAllPrograms(token, page), 'https://api.affili.net/V2.0/PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms').then(function (response) {
+                                        const xmlDoc = getXml(response);
+                                        let ProgramCollection = xmlDoc.getElementsByTagName("ProgramCollection")[0];
+                                        let items = ProgramCollection.getElementsByTagName("a:Program");
+                                        addToAllPrograms(items);
+                                        console.debug('page number ' + page + ' of AllPrograms added');
+                                    }, console.debug);
+                                }, 500);
+
+
                             }
                         }
 
@@ -466,7 +445,7 @@ class PublisherWebservice {
                             }
                         }
 
-                        console.debug(page + 'SEITEN MyPrograms Hinzugefügt!!!');
+                        console.debug(page + ' Seiten MyPrograms hinzugefügt');
 
                     }, console.debug);
 

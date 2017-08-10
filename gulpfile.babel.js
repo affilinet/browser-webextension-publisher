@@ -11,7 +11,11 @@ var
     rename = require('gulp-rename'),
     minifyHTML = require('gulp-minify-html'),
     addsrc = require('gulp-add-src'),
-    templateCache = require('gulp-angular-templatecache');
+    templateCache = require('gulp-angular-templatecache'),
+    template = require('gulp-template'),
+    modify = require('gulp-modify'),
+    jsonFormat = require('gulp-json-format'),
+    csv2json = require('gulp-csv2json');
 
 
 
@@ -75,7 +79,7 @@ gulp.task('clean', () => {
 })
 
 gulp.task('build', (cb) => {
-    $.runSequence('clean', 'build-settings-page', 'styles', 'ext', cb)
+    $.runSequence('clean', 'copyDependencies', 'createProgramsWithDeeplinkScript', 'createAllProgramsScript',  'build-settings-page', 'styles', 'ext', cb)
 });
 
 gulp.task('watch', ['build'], () => {
@@ -90,6 +94,13 @@ gulp.task('watch', ['build'], () => {
 });
 
 gulp.task('default', ['build']);
+
+gulp.task('copyDependencies', () => {
+    return gulp.src('node_modules/papaparse/papaparse.min.js')
+
+        .pipe(gulp.dest(`src/scripts/services`));
+});
+
 
 gulp.task('ext', ['manifest', 'js'], () => {
     return mergeAll(target)
@@ -129,6 +140,56 @@ gulp.task("manifest", () => {
         .pipe(gulp.dest(`./build/${target}`))
 });
 
+gulp.task('createProgramsWithDeeplinkScript', function () {
+    let csvParseOptions = {
+        delimiter : ';'
+    };
+    gulp.src('./resources/deeplinks.csv')
+        .pipe(csv2json(csvParseOptions))
+
+        .pipe(jsonFormat(4))
+        .pipe(modify({
+            fileModifier: function(file, contents) {
+
+                return 'class ProgramsWithDeeplink {\n' +
+                    '\n' +
+                    '    getPrograms() { return ' + contents  + '}\n' +
+                    '\n' +
+                    '}\n' +
+                    '\n' +
+                    'module.exports = new ProgramsWithDeeplink();\n';
+
+            }
+        }))
+        .pipe(rename({extname: '.js'}))
+
+        .pipe(gulp.dest('./src/scripts'));
+});
+
+gulp.task('createAllProgramsScript', function () {
+    let csvParseOptions = {
+        delimiter : ';'
+    };
+    gulp.src('./resources/programs.csv')
+        .pipe(csv2json(csvParseOptions))
+        .pipe(jsonFormat(4))
+        .pipe(modify({
+            fileModifier: function(file, contents) {
+
+                return 'class AllPrograms {\n' +
+                    '\n' +
+                    '    getPrograms() { return ' + contents  + '}\n' +
+                    '\n' +
+                    '}\n' +
+                    '\n' +
+                    'module.exports = new AllPrograms();\n';
+
+            }
+        }))
+        .pipe(rename({extname: '.js'}))
+
+        .pipe(gulp.dest('./src/scripts'));
+});
 
 // -----------------
 // DIST
@@ -235,6 +296,7 @@ function buildJS(target) {
         'background.js',
         'contentscript.js',
         'popup.js',
+        'programsWithDeeplink.js',
         'livereload.js',
         'services/publisherWebservice.js',
         'utils/ext.js',

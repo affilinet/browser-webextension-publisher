@@ -53,6 +53,12 @@ angular.module('AffilinetToolbar', [
         SETTINGS_save: 'Save',
         SETTINGS_about: 'Help',
         SETTINGS_findYouPassLinkText: 'Find your Webservice Password',
+        SETTINGS_CountryPlatform: 'affilinet Country Platform',
+        SETTINGS_CountryPlatformDE: 'affilinet Germany',
+        SETTINGS_CountryPlatformEN: 'affilinet England',
+        SETTINGS_CountryPlatformFR: 'affilinet France',
+        SETTINGS_CountryPlatformCH: 'affilinet Switzerland',
+        SETTINGS_CountryPlatformAT: 'affilinet Austria',
 
         APPLY_PageName: 'Apply Now',
         APPLY_ProgramDesc: 'Program Description',
@@ -126,6 +132,15 @@ angular.module('AffilinetToolbar', [
         SETTINGS_save: 'Speichern',
         SETTINGS_about: 'Hilfe',
         SETTINGS_findYouPassLinkText: 'Hier finden Sie Ihr Webservice Passwort',
+
+        SETTINGS_CountryPlatform: 'affilinet Länder Platform',
+        SETTINGS_CountryPlatformDE: 'affilinet Deutschland',
+        SETTINGS_CountryPlatformEN: 'affilinet England',
+        SETTINGS_CountryPlatformFR: 'affilinet Frankreich',
+        SETTINGS_CountryPlatformCH: 'affilinet Schweiz',
+        SETTINGS_CountryPlatformAT: 'affilinet Österreich',
+
+
         APPLY_PageName: 'Jetzt bewerben',
         APPLY_ProgramDesc: 'Programm Beschreibung',
         APPLY_ProgramLimits: 'Program Beschränkungen',
@@ -193,6 +208,14 @@ angular.module('AffilinetToolbar', [
         SETTINGS_save: 'Sauvegarder',
         SETTINGS_about: 'Aide',
         SETTINGS_findYouPassLinkText: 'Trouver mon mot de passe Webservice',
+
+        SETTINGS_CountryPlatform: 'Plate-forme affilinet',
+        SETTINGS_CountryPlatformDE: 'affilinet Allemagne',
+        SETTINGS_CountryPlatformEN: 'affilinet Royaume-Uni',
+        SETTINGS_CountryPlatformFR: 'affilinet France',
+        SETTINGS_CountryPlatformCH: 'affilinet Suisse',
+        SETTINGS_CountryPlatformAT: 'affilinet Autriche',
+
         APPLY_PageName: 'Je m\'inscris',
         APPLY_ProgramDesc: 'Descriptif du programme',
         APPLY_ProgramLimits: 'Restrictions du programme',
@@ -261,6 +284,14 @@ angular.module('AffilinetToolbar', [
         SETTINGS_save: 'Guardar',
         SETTINGS_about: 'Ayuda',
         SETTINGS_findYouPassLinkText: 'Encontrar tu Contraseña de WebServices',
+
+        SETTINGS_CountryPlatform: 'affilinet Country Platform',
+        SETTINGS_CountryPlatformDE: 'affilinet Alemania',
+        SETTINGS_CountryPlatformEN: 'affilinet Inglaterra',
+        SETTINGS_CountryPlatformFR: 'affilinet Francia',
+        SETTINGS_CountryPlatformCH: 'affilinet Suiza',
+        SETTINGS_CountryPlatformAT: 'affilinet Austria',
+
         APPLY_PageName: 'Solicitar Ahora',
         APPLY_ProgramDesc: 'Descripción de Programa',
         APPLY_ProgramLimits: 'Limitaciones de Programa',
@@ -329,6 +360,17 @@ angular.module('AffilinetToolbar', [
         SETTINGS_save: 'Opslaan',
         SETTINGS_about: 'Help',
         SETTINGS_findYouPassLinkText: 'Hier vind je je webservice wachtwoord',
+
+
+        SETTINGS_CountryPlatform: 'affilinet landenplatform',
+        SETTINGS_CountryPlatformDE: 'affilinet Duitsland',
+        SETTINGS_CountryPlatformEN: 'affilinet Verenigd Koninkrijk',
+        SETTINGS_CountryPlatformFR: 'affilinet Frankrijk',
+        SETTINGS_CountryPlatformCH: 'affilinet Zwitserland',
+        SETTINGS_CountryPlatformAT: 'affilinet Oostenrijk',
+
+
+
         APPLY_PageName: 'Nu aanmelden',
         APPLY_ProgramDesc: 'Programmabeschrijving',
         APPLY_ProgramLimits: 'Programma beperkingen',

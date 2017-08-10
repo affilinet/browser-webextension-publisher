@@ -9,12 +9,31 @@
             <div class="widget-body">
 
                 <form class="form-horizontal row" ng-submit="submitLoginData()" ng-show="credentials !== {}">
+
+                    <div class="form-group">
+                        <label for="countryPlatform"
+                               class="col-sm-3 control-label">{{'SETTINGS_CountryPlatform'|translate}}</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="countryPlatform" id="countryPlatform" ng-model="credentials.countryPlatform" required >
+                                <option value="DE">{{'SETTINGS_CountryPlatformDE'|translate}}</option>
+                                <option value=EN>{{'SETTINGS_CountryPlatformEN'|translate}}</option>
+                                <option value="FR">{{'SETTINGS_CountryPlatformFR'|translate}}</option>
+                                <option value="CH">{{'SETTINGS_CountryPlatformCH'|translate}}</option>
+                                <option value="AT">{{'SETTINGS_CountryPlatformAT'|translate}}</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+
                     <div class="form-group">
                         <label for="publisherId"
                                class="col-sm-3 control-label">{{'SETTINGS_PublisherId'|translate}}</label>
                         <div class="col-sm-9">
                             <input type="text" ng-model="credentials.publisherId" autocomplete="off"
-                                   class="form-control" id="publisherId"
+                                   class="form-control"
+                                   id="publisherId"
+                                   required
                                    placeholder="{{'SETTINGS_PublisherId'|translate}}"/>
                         </div>
                     </div>
@@ -24,6 +43,7 @@
                         <div class="col-sm-9">
                             <input type="password" ng-model="credentials.webservicePassword" class="form-control"
                                    autocomplete="off" id="webservicePassword"
+                                   required
                                    placeholder="{{'SETTINGS_WebservicePassword'|translate}}"/>
                         </div>
                     </div>
