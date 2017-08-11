@@ -1,10 +1,7 @@
 import ext from "./utils/ext";
 import storage from "./utils/storage";
 import PublisherWebservice from "../scripts/services/publisherWebservice";
-
 import Papa from "../scripts/services/papaparse.min";
-import ProgramsWithDeeplink from "./programsWithDeeplink";
-import AllPrograms from "./programs";
 
 
 let settingsPageTabId = null;
@@ -347,29 +344,33 @@ function getInfoaboutTab() {
 }
 
 function importProgramsWithDeeplink() {
-    storage.get('programsWithDeeplink', function (result) {
-        if (! result.hasOwnProperty('programsWithDeeplink')) {
-            console.log('no deeplink in storage');
-            storage.set({programsWithDeeplink: ProgramsWithDeeplink.getPrograms()})
+    Papa.parse('../data/deeplinks.csv', {
+        download: true,
+        header: true,
+        complete: function(results) {
+            console.log('imported deeplink programs');
+            storage.set({programsWithDeeplink: results.data })
         }
-        else {
-            storage.set({programsWithDeeplink: ProgramsWithDeeplink.getPrograms()})
-        }
-    })
+    });
 }
 
 function importAllPrograms() {
-    const allPrograms = AllPrograms.getPrograms();
-
-    storage.set({
-        allPrograms : allPrograms,
-    })
+    Papa.parse('../data/programs.csv', {
+        download: true,
+        header: true,
+        complete: function(results) {
+            console.log('imported programs');
+            storage.set({
+                allPrograms : results.data,
+            })
+        }
+    });
 }
 
 
 
 function updateProgramsWithDeeplink() {
-    console.log('donwloading all programs with deeplink');
+    console.log('downloading all programs with deeplink');
     Papa.parse('https://raw.githubusercontent.com/affilinet/browser-webextension-publisher/master/resources/deeplinks.csv', {
         download: true,
         header: true,
@@ -380,7 +381,7 @@ function updateProgramsWithDeeplink() {
 }
 
 function updateAllPrograms() {
-    console.log('donwloading all programs');
+    console.log('downloading all programs');
     Papa.parse("https://raw.githubusercontent.com/affilinet/browser-webextension-publisher/master/resources/programs.csv", {
         download: true,
         header: true,

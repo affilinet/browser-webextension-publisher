@@ -54,5 +54,9 @@
   "popup_errorMessageInvalidCredentials": {
     "message": "Invalid Credentials. Please store your Webservice Password.",
     "description": "Popup Error: Invalid Login Credentials"
+  },
+  "popup_trackingLinkOnly": {
+    "message": "This advertiser does not support deeplinks yet.",
+    "description": "Deeplink is Trackinglink only"
   }
 }

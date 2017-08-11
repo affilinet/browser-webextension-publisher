@@ -18,6 +18,7 @@ const getCreatives     = document.getElementById("getCreatives");
 const getVouchers     = document.getElementById("getVouchers");
 const getTrackingLink     = document.getElementById("getTrackingLink");
 const getDeeplink     = document.getElementById("getDeeplink");
+const noDeeplinkSupport     = document.getElementById("noDeeplinkSupport");
 
 const confirmedText     = document.getElementById("confirmedText");
 const openText          = document.getElementById("openText");
@@ -38,7 +39,7 @@ show(errorSection);
 ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
 
     if (tabs.length && tabs[0].url) {
-        const currentUrl = tabs[0].url;
+        currentUrl = tabs[0].url;
 
 
         // if tab badge === 'i => has Program
@@ -53,8 +54,6 @@ ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
             }
 
             // has program
-            ext.runtime.sendMessage({action: "get-programDetails"}, onGetProgramDetailsResponse);
-
             // has partnership?
             ext.browserAction.getBadgeBackgroundColor({tabId: tabs[0].id}, function(badgeColorResult) {
                 // red color is is DE1C44 => 222 / 28 ...
@@ -64,6 +63,7 @@ ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
                     hide(getCreatives);
                     hide(getVouchers);
                     hide(getTrackingLink);
+                    hide(noDeeplinkSupport);
                     hide(getDeeplink);
                 } else {
                     // has partnership
@@ -71,9 +71,9 @@ ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
                     hide(applyNow);
                     hide(getTrackingLink);
                     hide(getDeeplink);
-
-                    popuplateLink(programDetails, currentUrl);
+                    hide(noDeeplinkSupport);
                 }
+                ext.runtime.sendMessage({action: "get-programDetails"}, onGetProgramDetailsResponse);
             });
         })
 
@@ -85,6 +85,7 @@ function onGetProgramDetailsResponse(response) {
     console.log('in on get program response', response);
     if (response.programDetails && response.programDetails.programId) {
         setProgramDetails(response.programDetails);
+        popuplateLink(response.programDetails);
         show(programSection);
     } else {
         hide(programSection)
@@ -168,8 +169,8 @@ function setProgramDetails(programDetails) {
     programName.innerText = programDetails.programTitle ? programDetails.programTitle : '';
 }
 
-function popuplateLink(programDetails, currentUrl) {
-    console.log('pop deeplink', programDetails, currentUrl);
+function popuplateLink(programInfo) {
+    console.log('pop deeplink', programInfo);
     storage.get(['programsWithDeeplink', 'publisherId' , 'countryPlatform'], function(storageResult) {
         if (
             !storageResult.hasOwnProperty('programsWithDeeplink')
@@ -181,36 +182,39 @@ function popuplateLink(programDetails, currentUrl) {
             return;
         }
 
-        let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === programDetails.programId);
-        console.log(deeplinkInfo);
+        let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === programInfo.programId && entry.platform !== '');
+        console.log('found deeplink info' , deeplinkInfo);
         if(deeplinkInfo) {
             // has deeplink
 
-            let url = generateDeeplink(storageResult.publisherId, deeplinkInfo, currentUrl);
+            let url = generateDeeplink(storageResult.publisherId, deeplinkInfo);
             linkInput.setAttribute('value', url);
             hide(getTrackingLink);
+            hide(noDeeplinkSupport);
             show(getDeeplink);
 
         } else {
 
-            let url = generateDefaultTextLink(storageResult.publisherId, programDetails, storageResult.countryPlatform);
+            let url = generateDefaultTextLink(storageResult.publisherId, programInfo, storageResult.countryPlatform);
             linkInput.setAttribute('value', url);
             show(getTrackingLink);
+            show(noDeeplinkSupport);
             hide(getDeeplink);
         }
 
     });
 }
 
-function generateDeeplink(publisherId, deeplinkInfo, deeplink) {
+function generateDeeplink(publisherId, deeplinkInfo) {
 
+    console.log('generateDeeplink', publisherId, deeplinkInfo, currentUrl);
     let params = deeplinkInfo.params;
     let trackingLink = deeplinkInfo.trackingLink;
-    let redirector = deeplinkInfo.redirector;
+
 
     // do not just append the parameters, we might have a URI Hash
     const deeplinkParser = document.createElement('a');
-    deeplinkParser.href = deeplink;
+    deeplinkParser.href = currentUrl;
 
 
     // parameter forwarding
@@ -223,9 +227,14 @@ function generateDeeplink(publisherId, deeplinkInfo, deeplink) {
     }
 
     // redirect form tracking url to attribution solution?
-    if (redirector !== '') {
-        // do not directly redirect to advertiser
-        trackingLink = redirector.replace('[deeplink]',  encodeURIComponent(deeplinkParser.href))
+    if (deeplinkInfo.hasOwnProperty('redirector')) {
+        let redirector = deeplinkInfo.redirector;
+        if (redirector !== '') {
+            // do not directly redirect to advertiser
+            trackingLink = redirector.replace('[deeplink]',  encodeURIComponent(deeplinkParser.href))
+        }
+
+
     }
 
     trackingLink = trackingLink.replace('[deeplink]', encodeURIComponent(deeplinkParser.href));
@@ -236,10 +245,11 @@ function generateDeeplink(publisherId, deeplinkInfo, deeplink) {
 }
 
 
-function generateDefaultTextLink(publisherId, programDetails, countryPlatform) {
+function generateDefaultTextLink(publisherId, programInfo, countryPlatform) {
 
+    console.log(publisherId, programInfo, countryPlatform);
     let link = 'http://' + getHostnameForPlatform(countryPlatform) + '/click.asp';
-    link += "?site=" + programDetails.programId;
+    link += "?site=" + programInfo.programId;
     link += "&ref=" + publisherId;
     link += "&type=text&tnb=1";
     return link

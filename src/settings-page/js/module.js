@@ -59,6 +59,8 @@ angular.module('AffilinetToolbar', [
         SETTINGS_CountryPlatformFR: 'affilinet France',
         SETTINGS_CountryPlatformCH: 'affilinet Switzerland',
         SETTINGS_CountryPlatformAT: 'affilinet Austria',
+        SETTINGS_CountryPlatformES: 'affilinet Spain',
+        SETTINGS_CountryPlatformNL: 'affilinet Benelux',
 
         APPLY_PageName: 'Apply Now',
         APPLY_ProgramDesc: 'Program Description',
@@ -139,6 +141,8 @@ angular.module('AffilinetToolbar', [
         SETTINGS_CountryPlatformFR: 'affilinet Frankreich',
         SETTINGS_CountryPlatformCH: 'affilinet Schweiz',
         SETTINGS_CountryPlatformAT: 'affilinet Österreich',
+        SETTINGS_CountryPlatformES: 'affilinet Spanien',
+        SETTINGS_CountryPlatformNL: 'affilinet Benelux',
 
 
         APPLY_PageName: 'Jetzt bewerben',
@@ -215,6 +219,8 @@ angular.module('AffilinetToolbar', [
         SETTINGS_CountryPlatformFR: 'affilinet France',
         SETTINGS_CountryPlatformCH: 'affilinet Suisse',
         SETTINGS_CountryPlatformAT: 'affilinet Autriche',
+        SETTINGS_CountryPlatformES: 'affilinet Espagne',
+        SETTINGS_CountryPlatformNL: 'affilinet Benelux',
 
         APPLY_PageName: 'Je m\'inscris',
         APPLY_ProgramDesc: 'Descriptif du programme',
@@ -291,6 +297,8 @@ angular.module('AffilinetToolbar', [
         SETTINGS_CountryPlatformFR: 'affilinet Francia',
         SETTINGS_CountryPlatformCH: 'affilinet Suiza',
         SETTINGS_CountryPlatformAT: 'affilinet Austria',
+        SETTINGS_CountryPlatformES: 'affilinet España',
+        SETTINGS_CountryPlatformNL: 'affilinet Benelux',
 
         APPLY_PageName: 'Solicitar Ahora',
         APPLY_ProgramDesc: 'Descripción de Programa',
@@ -368,6 +376,8 @@ angular.module('AffilinetToolbar', [
         SETTINGS_CountryPlatformFR: 'affilinet Frankrijk',
         SETTINGS_CountryPlatformCH: 'affilinet Zwitserland',
         SETTINGS_CountryPlatformAT: 'affilinet Oostenrijk',
+        SETTINGS_CountryPlatformES: 'affilinet Spanje',
+        SETTINGS_CountryPlatformNL: 'affilinet Benelux',
 
 
 

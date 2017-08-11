@@ -129,6 +129,13 @@
             text-align: center;
             padding: 20px 0;
         }
+        #noDeeplinkSupport {
+            font-size: 12px;
+            text-align: left;
+            margin-left: 15px;
+            margin-top: 4px;
+            color: #a2a2a2
+        }
         #linkInput {
             height: 14px;
             padding: 7px 3px;
@@ -242,6 +249,8 @@
     <div id="linkSection">
         <input type="text" id="linkInput"  >
         <div class="button translateHtml"   id="copyLink" data-translateKey="popup_copyLink">Kopieren</div>
+
+        <p id="noDeeplinkSupport" class="translateHtml" data-translateKey="popup_trackingLinkOnly" >This advertiser does not support deeplinks yet.</p>
     </div>
 
     <div id="statisticSection">

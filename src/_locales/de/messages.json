@@ -54,5 +54,9 @@
   "popup_errorMessageInvalidCredentials": {
     "message": "Ungültige Zugangsdaten. Bitte hinterlegen Sie Ihre Zugangsdaten.",
     "description": "Popup Error: Invalid Login Credentials"
+  },
+  "popup_trackingLinkOnly": {
+    "message": "Dieser Advertiser unterstützt noch keine Deeplinks.",
+    "description": "Deeplink is Trackinglink only"
   }
 }
