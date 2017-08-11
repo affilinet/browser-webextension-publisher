@@ -57,23 +57,32 @@ ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
             // has partnership?
             ext.browserAction.getBadgeBackgroundColor({tabId: tabs[0].id}, function(badgeColorResult) {
                 // red color is is DE1C44 => 222 / 28 ...
-                if (badgeColorResult[0] === 222 && badgeColorResult[1] === 28) {
-                    // no partnership
-                    show(applyNow);
-                    hide(getCreatives);
-                    hide(getVouchers);
-                    hide(getTrackingLink);
-                    hide(noDeeplinkSupport);
-                    hide(getDeeplink);
-                } else {
-                    // has partnership
-                    show(programSection);
-                    hide(applyNow);
-                    hide(getTrackingLink);
-                    hide(getDeeplink);
-                    hide(noDeeplinkSupport);
+
+                let hasPartnership = false;
+                if (badgeColorResult[0] !== 222 && badgeColorResult[1] !== 28) {
+                    hasPartnership = true;
                 }
-                ext.runtime.sendMessage({action: "get-programDetails"}, onGetProgramDetailsResponse);
+
+                ext.runtime.sendMessage({action: "get-programDetails"}, (response) => {
+                    onGetProgramDetailsResponse(response, hasPartnership);
+                    if (hasPartnership === false) {
+
+                        show(applyNow);
+                        hide(getCreatives);
+                        hide(getVouchers);
+                        hide(getTrackingLink);
+                        hide(noDeeplinkSupport);
+                        hide(getDeeplink);
+                    } else {
+                        // has partnership
+                        hasPartnership = true;
+                        show(programSection);
+                        hide(applyNow);
+                        hide(getTrackingLink);
+                        hide(getDeeplink);
+                        hide(noDeeplinkSupport);
+                    }
+                });
             });
         })
 
@@ -81,11 +90,13 @@ ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
 });
 
 
-function onGetProgramDetailsResponse(response) {
+function onGetProgramDetailsResponse(response, hasPartnership) {
     console.log('in on get program response', response);
     if (response.programDetails && response.programDetails.programId) {
         setProgramDetails(response.programDetails);
-        popuplateLink(response.programDetails);
+        if (hasPartnership) {
+            popuplateLink(response.programDetails);
+        }
         show(programSection);
     } else {
         hide(programSection)
@@ -231,7 +242,8 @@ function generateDeeplink(publisherId, deeplinkInfo) {
         let redirector = deeplinkInfo.redirector;
         if (redirector !== '') {
             // do not directly redirect to advertiser
-            trackingLink = redirector.replace('[deeplink]',  encodeURIComponent(deeplinkParser.href))
+            console.log('having redirector, ' , redirector, trackingLink);
+            trackingLink = redirector +=   encodeURIComponent(deeplinkParser.href);
         }
 
 
