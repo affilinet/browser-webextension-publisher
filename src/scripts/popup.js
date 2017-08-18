@@ -5,25 +5,24 @@ const popup = document.getElementById("app");
 const programId = document.getElementById("programId");
 const programName = document.getElementById("programName");
 
-const errorSection      = document.getElementById("errorSection");
-const programSection    = document.getElementById("programSection");
-const linkSection    = document.getElementById("linkSection");
-const linkInput    = document.getElementById("linkInput");
-const copyLink    = document.getElementById("copyLink");
-const statisticSection  = document.getElementById("statisticSection");
-const footerSection     = document.getElementById("footerSection");
+const errorSection = document.getElementById("errorSection");
+const programSection = document.getElementById("programSection");
+const linkSection = document.getElementById("linkSection");
+const linkInput = document.getElementById("linkInput");
+const copyLink = document.getElementById("copyLink");
+const statisticSection = document.getElementById("statisticSection");
+const footerSection = document.getElementById("footerSection");
 
-const applyNow     = document.getElementById("applyNow");
-const getCreatives     = document.getElementById("getCreatives");
-const getVouchers     = document.getElementById("getVouchers");
-const getTrackingLink     = document.getElementById("getTrackingLink");
-const getDeeplink     = document.getElementById("getDeeplink");
-const noDeeplinkSupport     = document.getElementById("noDeeplinkSupport");
+const applyNow = document.getElementById("applyNow");
+const getCreatives = document.getElementById("getCreatives");
+const getVouchers = document.getElementById("getVouchers");
+const getTrackingLink = document.getElementById("getTrackingLink");
+const getDeeplink = document.getElementById("getDeeplink");
+const noDeeplinkSupport = document.getElementById("noDeeplinkSupport");
 
-const confirmedText     = document.getElementById("confirmedText");
-const openText          = document.getElementById("openText");
-const cancelledText     = document.getElementById("cancelledText");
-
+const confirmedText = document.getElementById("confirmedText");
+const openText = document.getElementById("openText");
+const cancelledText = document.getElementById("cancelledText");
 
 
 const translateHtmlElements = document.getElementsByClassName("translateHtml");
@@ -45,7 +44,7 @@ ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
         // if tab badge === 'i => has Program
         // if tab badgeBG Color  === #007239 => has partnership
 
-        ext.browserAction.getBadgeText({tabId: tabs[0].id}, function(result) {
+        ext.browserAction.getBadgeText({tabId: tabs[0].id}, function (result) {
 
             // no program
             if (result !== 'i') {
@@ -55,7 +54,7 @@ ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
 
             // has program
             // has partnership?
-            ext.browserAction.getBadgeBackgroundColor({tabId: tabs[0].id}, function(badgeColorResult) {
+            ext.browserAction.getBadgeBackgroundColor({tabId: tabs[0].id}, function (badgeColorResult) {
                 // red color is is DE1C44 => 222 / 28 ...
 
                 let hasPartnership = false;
@@ -104,18 +103,18 @@ function onGetProgramDetailsResponse(response, hasPartnership) {
 }
 
 // will be executed every time the popup is opened!
-storage.get(['confirmed', 'open', 'cancelled', 'publisherId', 'webservicePassword', 'countryPlatform'], function(response) {
-    if(response.confirmed) {
+storage.get(['confirmed', 'open', 'cancelled', 'publisherId', 'webservicePassword', 'countryPlatform'], function (response) {
+    if (response.confirmed) {
         confirmedText.innerText = response.confirmed;
         show(statisticSection);
         show(footerSection);
     }
-    if(response.open) {
+    if (response.open) {
         openText.innerText = response.open;
         show(statisticSection);
         show(footerSection);
     }
-    if(response.cancelled) {
+    if (response.cancelled) {
         cancelledText.innerText = response.cancelled;
         show(statisticSection);
         show(footerSection);
@@ -126,12 +125,11 @@ storage.get(['confirmed', 'open', 'cancelled', 'publisherId', 'webservicePasswor
 });
 
 
-
 popup.addEventListener("click", function (e) {
     e.preventDefault();
 
     if (e.target) {
-        if (e.target.matches("#settings") || e.target.matches("#settings2") ||  e.target.matches("#settings3")) {
+        if (e.target.matches("#settings") || e.target.matches("#settings2") || e.target.matches("#settings3")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "settings"}});
         }
         else if (e.target.matches("#logo")) {
@@ -144,13 +142,19 @@ popup.addEventListener("click", function (e) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "orders"}});
         }
         else if (e.target.matches("#applyNow")) {
-            ext.runtime.sendMessage({action: "open-page", data: {page: "applynow/" + programId.getAttribute('value')} });
+            ext.runtime.sendMessage({action: "open-page", data: {page: "applynow/" + programId.getAttribute('value')}});
         }
         else if (e.target.matches("#getCreatives")) {
-            ext.runtime.sendMessage({action: "open-page", data: {page: "getCreatives/" + programId.getAttribute('value') }});
+            ext.runtime.sendMessage({
+                action: "open-page",
+                data: {page: "getCreatives/" + programId.getAttribute('value')}
+            });
         }
         else if (e.target.matches("#getVouchers")) {
-            ext.runtime.sendMessage({action: "open-page", data: {page: "getVouchers/" + programId.getAttribute('value') }});
+            ext.runtime.sendMessage({
+                action: "open-page",
+                data: {page: "getVouchers/" + programId.getAttribute('value')}
+            });
         }
         else if (e.target.matches("#getDeeplink") || e.target.matches("#getTrackingLink")) {
             show(linkSection);
@@ -165,10 +169,10 @@ for (let i = 0; i < translateHtmlElements.length; i++) {
 }
 
 
-
 function hide(htmlElement) {
     htmlElement.classList.add('hidden');
 }
+
 function show(htmlElement) {
     htmlElement.classList.remove('hidden');
 }
@@ -182,7 +186,7 @@ function setProgramDetails(programDetails) {
 
 function popuplateLink(programInfo) {
     console.log('pop deeplink', programInfo);
-    storage.get(['programsWithDeeplink', 'publisherId' , 'countryPlatform'], function(storageResult) {
+    storage.get(['programsWithDeeplink', 'publisherId', 'countryPlatform'], function (storageResult) {
         if (
             !storageResult.hasOwnProperty('programsWithDeeplink')
             && !storageResult.hasOwnProperty('publisherId')
@@ -194,10 +198,10 @@ function popuplateLink(programInfo) {
         }
 
         let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === programInfo.programId && entry.platform !== '');
-        console.log('found deeplink info' , deeplinkInfo);
-        if(deeplinkInfo) {
+        console.log('found deeplink info', deeplinkInfo);
+        if (deeplinkInfo) {
             // has deeplink
-
+            console.log('gen deeplink');
             let url = generateDeeplink(storageResult.publisherId, deeplinkInfo);
             linkInput.setAttribute('value', url);
             hide(getTrackingLink);
@@ -205,7 +209,7 @@ function popuplateLink(programInfo) {
             show(getDeeplink);
 
         } else {
-
+            console.log('gen default link');
             let url = generateDefaultTextLink(storageResult.publisherId, programInfo, storageResult.countryPlatform);
             linkInput.setAttribute('value', url);
             show(getTrackingLink);
@@ -218,15 +222,12 @@ function popuplateLink(programInfo) {
 
 function generateDeeplink(publisherId, deeplinkInfo) {
 
-    console.log('generateDeeplink', publisherId, deeplinkInfo, currentUrl);
     let params = deeplinkInfo.params;
+
     let trackingLink = deeplinkInfo.trackingLink;
-
-
     // do not just append the parameters, we might have a URI Hash
     const deeplinkParser = document.createElement('a');
     deeplinkParser.href = currentUrl;
-
 
     // parameter forwarding
     if (params !== '') {
@@ -236,23 +237,19 @@ function generateDeeplink(publisherId, deeplinkInfo) {
             deeplinkParser.search += '&' + params
         }
     }
+    let finalUrl = deeplinkParser.href;
 
     // redirect form tracking url to attribution solution?
     if (deeplinkInfo.hasOwnProperty('redirector')) {
-        let redirector = deeplinkInfo.redirector;
-        if (redirector !== '') {
+        if (deeplinkInfo.redirector !== '') {
             // do not directly redirect to advertiser
-            console.log('having redirector, ' , redirector, trackingLink);
-            trackingLink = redirector +=   encodeURIComponent(deeplinkParser.href);
+            finalUrl = deeplinkInfo.redirector + encodeURIComponent(finalUrl);
         }
-
-
     }
 
-    trackingLink = trackingLink.replace('[deeplink]', encodeURIComponent(deeplinkParser.href));
+    trackingLink = trackingLink.replace('[deeplink]', encodeURIComponent(finalUrl));
     trackingLink = trackingLink.replace('[ref]', publisherId);
     trackingLink = trackingLink.replace('[paramforwarding]', '');
-
     return trackingLink;
 }
 
@@ -285,12 +282,12 @@ function getHostnameForPlatform(countryPlatform) {
     }
 }
 
-linkInput.addEventListener('focus', function(){
+linkInput.addEventListener('focus', function () {
     this.setSelectionRange(0, this.value.length);
     document.execCommand('copy');
 });
 
-copyLink.addEventListener('click', function() {
+copyLink.addEventListener('click', function () {
     linkInput.select();
     copyLink.classList.remove('success');
     try {
