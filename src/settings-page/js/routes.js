@@ -5,7 +5,6 @@
  */
 angular.module('AffilinetToolbar').config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider) {
-
         // For unmatched routes
         $urlRouterProvider.otherwise(function ($injector, $location) {
 
@@ -51,6 +50,24 @@ angular.module('AffilinetToolbar').config(['$stateProvider', '$urlRouterProvider
                 url: '/getCreatives/:programId',
                 templateUrl: 'templates/getCreatives.html',
                 controller: 'getCreativesController'
+            })
+            .state('searchDiscover', {
+                url: '/searchDiscover',
+                templateUrl: 'templates/searchDiscover.html',
+                controller: 'SearchDiscoverController'
+            })
+            .state('likeList', {
+                url: '/likeList',
+                templateUrl: 'templates/likeList.html',
+                controller: 'LikeListController'
+            })
+            .state('widget', {
+                url: '/widget',
+                params: {
+                    productIds: [],
+                },
+                templateUrl: 'templates/widget.html',
+                controller: 'WidgetController'
             })
         ;
 

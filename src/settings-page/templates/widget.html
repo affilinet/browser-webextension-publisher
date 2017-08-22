@@ -1,0 +1,370 @@
+<div class="row widgetPage" ng-show="loadingFinished">
+    <div class="col-xs-12">
+
+        <div  class="widget">
+            <div class="widget-header">
+                {{'WIDGET_WizardHeadline'|translate}}
+                <div class="btn-group pull-right">
+                    <button class="btn btn-primary" ng-if="widget.id !== null" ng-click="copyWidget()" translate="WIDGET_BtnCopyWidget"></button>
+                    <button class="btn btn-primary" ng-if="widget.id !== null" ng-click="deleteWidget()" translate="WIDGET_BtnDeleteWidget"></button>
+                    <button class="btn btn-primary" ng-click="createNewWidget()" translate="WIDGET_BtnCreateNew"></button>
+                </div>
+            </div>
+            <div class="widget-body">
+
+                <div class="row">
+                    <div class="col-md-3">
+
+                        <div class="form-horizontal">
+
+                            <div class="form-group">
+                                <label class="col-xs-4" translate="WIDGET_GeneratorLabelImgSize" for="imageSize"></label>
+                                <span class="col-xs-8" >
+                                <select class="form-control"  id="imageSize" name="imageSize" ng-model="widget.imageSize">
+                                    <option value="30">S (30px)</option>
+                                    <option value="60">M (60px)</option>
+                                    <option value="90">L (90px)</option>
+                                    <option value="120">XL (120px)</option>
+                                    <option value="180">XXL (180px)</option>
+                                </select>
+                                </span>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-xs-4" translate="WIDGET_GeneratorLabelProductInfo" for="productInfo"></label>
+                                <span class="col-xs-8" >
+                                <select class="form-control"  id="productInfo" name="productInfo" ng-model="widget.productInfoOnHover">
+                                    <option ng-value="false">Direct</option>
+                                    <option ng-value="true">Mouseover</option>
+                                </select>
+                                </span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-xs-4" translate="WIDGET_GeneratorLabelType" for="type"></label>
+                                <span class="col-xs-8" >
+                                    <select class="form-control"  id="type" name="type" ng-model="widget.type">
+                                        <option value="carousel">Carousel</option>
+                                        <option value="floatingImages">Floating Images</option>
+                                    </select>
+                                    </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="checkbox col-xs-6">
+                                    <label for="name"><input type="checkbox" ng-model="widget.name" id="name"> {{'WIDGET_GeneratorLabelName'|translate}} </label>
+                                </div>
+
+
+                                <div class="checkbox col-xs-6">
+                                    <label for="price"><input type="checkbox" ng-model="widget.price" id="price"> {{'WIDGET_GeneratorLabelPrice'|translate}} </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+
+
+                                <div class="checkbox col-xs-6">
+                                    <label for="shop"><input type="checkbox" ng-model="widget.shop" id="shop"> {{'WIDGET_GeneratorLabelShop'|translate}} </label>
+                                </div>
+
+                                <div class="checkbox col-xs-6">
+                                    <label for="brand"><input type="checkbox" ng-model="widget.brand" id="brand"> {{'WIDGET_GeneratorLabelBrand'|translate}} </label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <div class="checkbox col-xs-6" ng-hide="widget.type !== 'carousel'">
+                                    <label for="autoRotate"><input type="checkbox" ng-model="widget.autoRotate" id="autoRotate"> {{'WIDGET_GeneratorLabelAutoplay'|translate}} </label>
+                                </div>
+
+                                <div class="checkbox col-xs-6">
+                                    <label for="manufacturer"><input type="checkbox" ng-model="widget.manufacturer" id="manufacturer"> {{'WIDGET_GeneratorLabelManufacturer'|translate}} </label>
+                                </div>
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="col-md-6 ">
+
+
+                        <div class="row">
+                            <div class="col-xs-12">
+
+                                <label class="col-xs-4" translate="WIDGET_BtnOpenWidget" for="openWidget"></label>
+
+                                <div class="col-xs-8">
+                                    <oi-select
+                                            id="openWidget"
+                                            ng-change="openWidget()"
+                                            oi-options="item.widgetName for item in storedWidgets"
+                                            ng-model="selectedWidget"
+                                            oi-select-options="{newItem: false}"
+                                            placeholder="{{'WIDGET_OpenWidgetPlaceholder'|translate}}"
+                                    ></oi-select>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+
+                                <label class="col-xs-4" translate="WIDGET_WidgetNameLabel" for="widgetName"></label>
+
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" ng-model="widget.widgetName" id="widgetName">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-primary" ng-click="saveWidget()" translate="WIDGET_BtnSave" ng-disabled="widget.widgetName === ''"></button>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="row widgetPage" id="widgetDragDrop" ng-show="loadingFinished" >
+    <div class="col-xs-12">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="row">
+                    <label class="col-xs-2">{{ 'WIDGET_ProductsHeadline'|translate}}</label>
+                    <div class="col-xs-10">
+
+                        <oi-select
+                                id="productList"
+                                oi-options="item.name for item in storedProductLists track by item.name"
+                                ng-model="selectedProductList"
+                                oi-select-options="{
+                                    newItem: true,
+                                    saveTrigger: 'enter',
+                                    newItemFn: 'createProductList($query)',
+                                    }"
+                                placeholder="{{'WIDGET_SelectProductListPlaceholder'|translate}}"
+                        ></oi-select>
+                    </div>
+                </div>
+
+
+                <div class="row productListContainer" id="">
+                    <div class="col-xs-12">
+
+
+                        <div class="" ng-if="selectedProductList.products.length < 1">
+                            <div class="widget">
+                                <div class="widget-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 text-center">
+                                            <p class="productUnavailable">{{'LIKELIST_NoProductsInList'|translate}}</p>
+                                            <a class="btn btn-xs btn-primary" ui-sref="searchDiscover">{{'LIKELIST_NoProductsInListBtnToSearchDiscover'|translate}}</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="">
+
+                            <div class="image-col "
+                                 ng-repeat="productId in selectedProductList.products track by productId"
+                                 data-drag="true"
+
+                                 jqyoui-draggable="{ }"
+
+                                 data-product-id="{{productId}}"
+                                 data-from="productlist"
+                                 data-jqyoui-options="{ revert: true, revertDuration: 0, animate: true,  placeholder: true, appendTo: '#widgetDragDrop', containment: 'window', scroll: false, helper: 'clone' }"
+
+
+                                 data-drop="true"
+                                 jqyoui-droppable="{onDrop: 'dropProductOnTrash'}"
+
+
+                            >
+
+                                    <div class="affilinetWidgetElement"
+                                        ng-if="productDetails[productId]"
+                                        ng-style="{'background-image':'url( '+ productDetails[productId].Images[0][0].URL + ')'}">
+                                    </div>
+
+                                    <div class="affilinetWidgetElement"     ng-if="!productDetails[productId]">
+                                        <div class="row">
+                                            <div class="col-xs-12 text-center">
+                                                <p class="productUnavailable" translate="LIKELIST_ProductNotAvailableAnymore"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row widgetPage"  ng-show="loadingFinished" >
+
+    <div class="col-xs-12 col-md-8 " >
+
+        <div class="row"   >
+            <div class="widget" >
+                <div class="widget-header" translate="WIDGET_PreviewHeadline" ></div>
+                <div class="widget-body" id="widgetContainer">
+
+                    <div class="row" ng-if="widget.type === 'carousel'">
+
+                        <div class="col-xs-12">
+
+                            <div slick infinite="true"
+                                 class="affilinet-product-widget affilinet-product-widget-carousel affilinet-product-widget-size-{{widget.imageSize}} "
+                                 ng-class="widget.productInfoOnHover ? 'affilinet-product-widget-productInfoOnHover' : ''"
+                                 settings="slickConfig"
+                                 ng-if="sliderIsReady">
+                                <div ng-repeat="i in getWidgetSizeAsArray()"
+                                     class="affilinet-product-widget-product"
+                                     ng-style="{ 'min-height' : ( +widget.imageSize ) + 'px'}"
+                                     data-drop="true"
+                                     data-index="{{i}}"
+                                     jqyoui-droppable="{onDrop: 'dropProductOnWidget'}"
+
+                                     data-drag="true"
+
+                                     ng-mouseenter="activateDragOnSlick()"
+                                     data-product-id="{{widget.products[$index]}}"
+                                     data-from="widget"
+                                >
+                                    <div class="productHoverTrash" ng-click="deleteProductFromWidget($index)"><i class="fa fa-times-circle"></i></div>
+                                    <img ng-src="{{ trustAsUrl(productDetails[widget.products[$index]].Images[0][0].URL) }}">
+                                    <span class="affilinet-product-widget-info"  ng-if="widget.products[$index] !== undefined">
+                            <span class=""  ng-if="widget.name">{{ productDetails[widget.products[$index]].ProductName }}</span>
+                            <span class=""  ng-if="widget.brand">{{ productDetails[widget.products[$index]].Brand }}</span>
+                            <span class=""  ng-if="widget.manufacturer">{{ productDetails[widget.products[$index]].Manufacturer }}</span>
+                            <span class=""  ng-if="widget.shop">{{ productDetails[widget.products[$index]].ShopTitle }}</span>
+                            <span class=""  ng-if="widget.price">{{ productDetails[widget.products[$index]].PriceInformation.DisplayPrice }}</span>
+                        </span>
+                                    <img ng-if="widget.products[$index] === undefined || productDetails[widget.products[$index]] === undefined"
+                                         src="/settings-page/img/placeholder.png">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row" ng-if="widget.type === 'floatingImages'">
+
+                        <div class="col-xs-12">
+
+                            <div class="affilinet-product-widget affilinet-product-widget-size-{{widget.imageSize}} affilinet-product-widget-floating-images "
+                                 ng-class="widget.productInfoOnHover ? 'affilinet-product-widget-productInfoOnHover' : ''">
+                                <div ng-repeat="i in getWidgetSizeAsArray()"
+                                     class="affilinet-product-widget-product"
+                                     ng-style="{ 'min-height' : ( +widget.imageSize ) + 'px'}"
+                                     data-drop="true"
+                                     data-index="{{i}}"
+                                     jqyoui-droppable="{onDrop: 'dropProductOnWidget'}"
+
+                                     data-drag="true"
+
+                                     ng-mouseenter="activateDragOnSlick()"
+                                     data-product-id="{{widget.products[$index]}}"
+                                     data-from="widget"
+                                >
+                                    <div class="productHoverTrash" ng-click="deleteProductFromWidget($index)"><i ng-hide="$last" class="fa fa-times-circle"></i></div>
+                                    <img  ng-if="widget.products[$index]" ng-src="{{ trustAsUrl(productDetails[widget.products[$index]].Images[0][0].URL) }}">
+                                    <span class="affilinet-product-widget-info"  ng-if="widget.products[$index] !== undefined">
+                            <span class=""  ng-if="widget.name">{{ productDetails[widget.products[$index]].ProductName }}</span>
+                            <span class=""  ng-if="widget.brand">{{ productDetails[widget.products[$index]].Brand }}</span>
+                            <span class=""  ng-if="widget.manufacturer">{{ productDetails[widget.products[$index]].Manufacturer }}</span>
+                            <span class=""  ng-if="widget.shop">{{ productDetails[widget.products[$index]].ShopTitle }}</span>
+                            <span class=""  ng-if="widget.price">{{ productDetails[widget.products[$index]].PriceInformation.DisplayPrice }}</span>
+                        </span>
+                                    <img ng-if="widget.products[$index] === undefined || productDetails[widget.products[$index]] === undefined"
+                                         src="/settings-page/img/placeholder.png">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-xs-12 col-md-4 " >
+
+        <div class="row" ng-if="widget.products.length > 0">
+            <div class="widget">
+                <div class="widget-header" translate="WIDGET_GetCodeHeadline"></div>
+                <div class="widget-body">
+
+
+                    <div class="row" >
+                        <div class="col-xs-12">
+                            <textarea class="integrationCode form-control" ng-bind="widgetCode" select-on-click></textarea>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            <a clipboard text="widgetCode"
+                               class="btn btn-primary">{{'WIDGET_CopyToClipboard'|translate}}</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<div class="row" ng-hide="loadingFinished">
+    <div class="col-lg-12 text-center">
+        <i class="fa fa-4x fa-spinner fa-spin"></i>
+    </div>
+</div>

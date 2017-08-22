@@ -13,9 +13,8 @@ function MasterCtrl($scope, $rootScope, BrowserExtensionService) {
 
 
     var checkIfCredentialObjectIsSet = function () {
-        BrowserExtensionService.storage.local.get(['publisherId', 'webservicePassword', 'countryPlatform'], function(result) {
+        BrowserExtensionService.storage.local.get(['publisherId', 'webservicePassword', 'countryPlatform', 'disableImageContextMenu', 'productWebservicePassword'], function(result) {
             "use strict";
-            console.log('getting creds from storage');
             if (result.webservicePassword && result.publisherId && result.countryPlatform) {
                 $rootScope.credentials = result;
                 clearInterval(refreshIntervalId);

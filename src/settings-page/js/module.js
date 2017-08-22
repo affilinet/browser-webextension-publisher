@@ -1,22 +1,32 @@
 angular.module('AffilinetToolbar', [
     'ui.bootstrap',
+    'ui.bootstrap.popover',
     'ui.router',
     'angular-momentjs',
     'xml',
     'template',
     'angular-flot',
     'angular-clipboard',
-    'pascalprecht.translate'
+    'pascalprecht.translate',
+    'oi.select',
+    'mgcrea.bootstrap.affix',
+    'xeditable',
+    'ngDragDrop',
+    'slickCarousel',
+    'rzModule'
 ], function ($compileProvider) {
     "use strict";
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|resource):/);
 
 }).config(function ($httpProvider, $sceDelegateProvider, $translateProvider) {
+
     $httpProvider.interceptors.push('xmlHttpInterceptor');
     $sceDelegateProvider.resourceUrlWhitelist([
         // Allow same origin resource loads.
         'self'
     ]);
+
+    $translateProvider.fallbackLanguage('en');
 
     $translateProvider.translations('en', {
         LOCALE_DATEFORMAT: 'MM/DD/YYYY',
@@ -49,10 +59,12 @@ angular.module('AffilinetToolbar', [
         SETTINGS_PageName: 'Settings',
         SETTINGS_LoginData: 'Login Data',
         SETTINGS_PublisherId: 'Publisher ID',
-        SETTINGS_WebservicePassword: 'Webservice Password',
+        SETTINGS_WebservicePassword: 'Publisher Webservice Password',
+        SETTINGS_productWebservicePassword: 'Product Webservice Password',
+        SETTINGS_disableImageContextMenu: 'Disable the image context menu',
         SETTINGS_save: 'Save',
         SETTINGS_about: 'Help',
-        SETTINGS_findYouPassLinkText: 'Find your Webservice Password',
+        SETTINGS_findYouPassLinkText: 'Find your Webservice Passwords',
         SETTINGS_CountryPlatform: 'affilinet Country Platform',
         SETTINGS_CountryPlatformDE: 'affilinet Germany',
         SETTINGS_CountryPlatformEN: 'affilinet England',
@@ -95,11 +107,102 @@ angular.module('AffilinetToolbar', [
         FreeProduct: 'Free Product',
         GETVOUCHERS_ApplyNow: 'Apply Now',
         GETVOUCHERS_CopyVoucherCode: 'Copy Voucher Code',
-        IMPRESSUM_LINK: 'https://www.affili.net/uk/about-affilinet/contact'
+        IMPRESSUM_LINK: 'https://www.affili.net/uk/about-affilinet/contact',
 
+        SEARCHDISCOVER_PageName : 'Search & Discover',
+        SEARCHDISCOVER_PlaceholderSearch : 'Products, Brands...',
+        SEARCHDISCOVER_SearchFieldLabel : 'Search for Products',
+        SEARCHDISCOVER_LabelShops : 'Shops',
+        SEARCHDISCOVER_PlaceholderShops : 'Filter Shops',
+        SEARCHDISCOVER_ResetButton: 'Reset',
+        SEARCHDISCOVER_SearchButton : 'Search',
+        SEARCHDISCOVER_AllPrograms : 'All Programs',
+        SEARCHDISCOVER_LabelAllPrograms : 'Filter to Programs',
+        SEARCHDISCOVER_AllCategories : 'All Categories',
+        SEARCHDISCOVER_useAffilinetCategories : 'Use affilinet Categories',
+        SEARCHDISCOVER_CreateWidgetHeadline : 'Add Products to Widget',
+        SEARCHDISCOVER_BtnAddToWidget : 'Add to Widget',
+
+        SEARCHDISCOVER_ShopCategories : 'Shop Categories',
+        SEARCHDISCOVER_PlaceholderShopCategories : 'Select Categories',
+        SEARCHDISCOVER_PlaceholderUniversalCategories: 'Select Categories',
+        SEARCHDISCOVER_SelectLikeListCategory : 'Select Category',
+        SEARCHDISCOVER_StoreInLikeList : 'Store in my Like List',
+        SEARCHDISCOVER_HeadlineSelectedProducts: 'Selected Products',
+        SEARCHDISCOVER_SelectProductListLabel: 'Add to Product Like List',
+        SEARCHDISCOVER_SelectProductListPlaceholder: 'Select or add List',
+        SEARCHDISCOVER_AddToList: 'Add to List',
+        SEARCHDISCOVER_NoProductsSelected: 'No products selected',
+        SEARCHDISCOVER_LoadMoreBtn: 'Show more...',
+
+        SEARCHDISCOVER_Results: 'Results',
+        SEARCHDISCOVER_GoToProductList: 'Show List ',
+        SEARCHDISCOVER_ProductsAddedToProductList: 'Products added to List',
+
+        SEARCHDISCOVER_DisplayName : 'Product Name',
+        SEARCHDISCOVER_DisplayBrand : 'Brand',
+        SEARCHDISCOVER_DisplayPrice : 'Price',
+        SEARCHDISCOVER_DisplayManufacturer : 'Manufacturer',
+
+        LIKELIST_PageName : 'Like List',
+        LIKELIST_TabProducts : 'Products',
+        LIKELIST_TabPins : 'Images / Websites',
+        LIKELIST_BtnCreateWidget : 'Create Widget from selected products',
+        LIKELIST_ListNamesMustBeUnique: 'Product List names must be unique',
+        LIKELIST_SureYouWantToDeleteProduct : 'Do you really want to delete this product',
+        LIKELIST_NoProductsInList: 'No products yet in this list',
+        LIKELIST_NoProductsInListBtnToSearchDiscover: 'Find products',
+        LIKELIST_ProductNotAvailableAnymore: 'Not available anymore',
+        LIKELIST_CreateNewProductList: 'New List',
+        LIKELIST_PopoverShareOn: 'Share on:',
+        LIKELIST_PopoverGetWidgetCode: 'Get Widget / Image Code / Deeplink',
+        LIKELIST_PopoverMoveToList: 'Move to list:',
+        LIKELIST_PopoverSelectProductListPlaceholder: 'Select List',
+        LIKELIST_HeadlineImages : 'Image Pins',
+        LIKELIST_NoLikesInImageList : 'No Images pinned.',
+        LIKELIST_NoLikesInSiteList : 'No Websites pinned',
+        LIKELIST_SureYouWantToDeleteLike: 'Do you really want to delete this pin',
+        LIKELIST_PopoverVisitWebsite : 'Visit Website',
+        LIKELIST_PopoverVisitWebsiteViewImage : 'Visit Website / View Image',
+        LIKELIST_HeadlineSites : 'Website Pins',
+        LIKELIST_SureYouWantToDeleteProductList: 'Are you sure you want to delete this Product List? This action can not be undone.',
+        LIKELIST_PopoverCopyImageCodeDeeplink : 'Get Image Code/ Deeplink',
+
+
+
+        WIDGET_PageName : 'Widget Generator',
+        WIDGET_WizardHeadline : 'Settings',
+        WIDGET_ProductsHeadline: 'Drag & Drop Products',
+        WIDGET_PreviewHeadline: 'Widget Preview',
+        WIDGET_GetCodeHeadline: 'Widget Code',
+        WIDGET_SelectProductListPlaceholder: 'Product List',
+        WIDGET_CopyToClipboard: 'Copy to Clipboard',
+
+        WIDGET_GeneratorLabelWidth: 'Width',
+        WIDGET_GeneratorLabelHeight: 'Height',
+        WIDGET_GeneratorLabelType: 'Type',
+        WIDGET_GeneratorLabelProductInfo: 'Product Info',
+        WIDGET_GeneratorLabelImgSize: 'Image Size',
+        WIDGET_GeneratorLabelPinIt: 'Pin-it',
+        WIDGET_GeneratorLabelAutoplay: 'Auto Play',
+        WIDGET_GeneratorLabelPrice: 'Price',
+        WIDGET_GeneratorLabelName: 'Name',
+        WIDGET_GeneratorLabelShop: 'Shop',
+        WIDGET_GeneratorLabelBrand: 'Brand',
+        WIDGET_GeneratorLabelManufacturer: 'Manufacturer',
+        WIDGET_BtnCopyWidget: 'Copy Widget',
+        WIDGET_BtnCreateNew: 'Create New Widget',
+        WIDGET_BtnOpenWidget: 'Open Saved Widget',
+        WIDGET_OpenWidgetPlaceholder: 'Select Widget',
+        WIDGET_WidgetNameLabel: 'Widget Name',
+        WIDGET_BtnSave: 'Save',
+        WIDGET_DropProductHere: 'No Product added',
+        WIDGET_SureYouWantToClearProductsFromWidget: 'Do you want to remove all products from your widget?',
+        WIDGET_SureYouWantToDeleteWidget: 'Do you really want to delete this widget?',
+        WIDGET_BtnDeleteWidget: 'Delete Widget',
+        WIDGET_WarningChangesNotSaved: 'You have unsaved changes, do you really want to create a new Widget',
 
     });
-
 
     $translateProvider.translations('de', {
         LOCALE_DATEFORMAT: 'DD.MM.YYYY',
@@ -130,10 +233,11 @@ angular.module('AffilinetToolbar', [
         SETTINGS_PageName: 'Einstellungen',
         SETTINGS_LoginData: 'Login Daten',
         SETTINGS_PublisherId: 'Publisher ID',
-        SETTINGS_WebservicePassword: 'Webservice Passwort',
+        SETTINGS_WebservicePassword: 'Publisher Webservice Passwort',
+        SETTINGS_disableImageContextMenu: 'Das Kontextmenu  nicht verwenden',
         SETTINGS_save: 'Speichern',
         SETTINGS_about: 'Hilfe',
-        SETTINGS_findYouPassLinkText: 'Hier finden Sie Ihr Webservice Passwort',
+        SETTINGS_findYouPassLinkText: 'Hier finden Sie Ihre Webservice Passwörter',
 
         SETTINGS_CountryPlatform: 'affilinet Länder Platform',
         SETTINGS_CountryPlatformDE: 'affilinet Deutschland',
@@ -176,7 +280,10 @@ angular.module('AffilinetToolbar', [
         GETVOUCHERS_ApplyNow: 'Jetzt bewerben',
         GETVOUCHERS_CopyVoucherCode: 'Gutschein Code kopieren',
 
-        IMPRESSUM_LINK: 'https://www.affili.net/de/footeritem/impressum'
+        IMPRESSUM_LINK: 'https://www.affili.net/de/footeritem/impressum',
+
+
+
     });
 
     $translateProvider.translations('fr', {
@@ -211,7 +318,7 @@ angular.module('AffilinetToolbar', [
         SETTINGS_WebservicePassword: 'Mot de passe Webservice',
         SETTINGS_save: 'Sauvegarder',
         SETTINGS_about: 'Aide',
-        SETTINGS_findYouPassLinkText: 'Trouver mon mot de passe Webservice',
+        SETTINGS_findYouPassLinkText: 'Trouver mon mot de passe Webservice', // todo pluralize
 
         SETTINGS_CountryPlatform: 'Plate-forme affilinet',
         SETTINGS_CountryPlatformDE: 'affilinet Allemagne',
@@ -253,7 +360,11 @@ angular.module('AffilinetToolbar', [
         GETVOUCHERS_ApplyNow: 'Je m\'inscris',
         GETVOUCHERS_CopyVoucherCode: 'Copier le code',
 
-        IMPRESSUM_LINK: 'https://www.affili.net/fr/footeritem/contact'
+
+
+
+
+
     });
 
 
@@ -289,7 +400,7 @@ angular.module('AffilinetToolbar', [
         SETTINGS_WebservicePassword: 'Contraseña de Webservice',
         SETTINGS_save: 'Guardar',
         SETTINGS_about: 'Ayuda',
-        SETTINGS_findYouPassLinkText: 'Encontrar tu Contraseña de WebServices',
+        SETTINGS_findYouPassLinkText: 'Encontrar tu Contraseña de WebServices', // todo plularlize
 
         SETTINGS_CountryPlatform: 'affilinet Country Platform',
         SETTINGS_CountryPlatformDE: 'affilinet Alemania',
@@ -331,7 +442,9 @@ angular.module('AffilinetToolbar', [
         GETVOUCHERS_ApplyNow: 'Solicitar Ahora',
         GETVOUCHERS_CopyVoucherCode: 'Copiar Código Voucher',
 
-        IMPRESSUM_LINK: 'https://www.affili.net/es/footeritem/aviso-legal'
+        IMPRESSUM_LINK: 'https://www.affili.net/es/footeritem/aviso-legal',
+
+
     });
 
 
@@ -367,7 +480,7 @@ angular.module('AffilinetToolbar', [
         SETTINGS_WebservicePassword: 'Webservice wachtwoord',
         SETTINGS_save: 'Opslaan',
         SETTINGS_about: 'Help',
-        SETTINGS_findYouPassLinkText: 'Hier vind je je webservice wachtwoord',
+        SETTINGS_findYouPassLinkText: 'Hier vind je je webservice wachtwoord', // todo pluralize
 
 
         SETTINGS_CountryPlatform: 'affilinet landenplatform',
@@ -412,11 +525,15 @@ angular.module('AffilinetToolbar', [
         GETVOUCHERS_ApplyNow: 'Nu aanmelden',
         GETVOUCHERS_CopyVoucherCode: 'Kortingscode kopiëren',
 
-        IMPRESSUM_LINK: 'https://www.affili.net/nl/footeritem/contact'
+        IMPRESSUM_LINK: 'https://www.affili.net/nl/footeritem/contact',
+
+
+
+
     });
 
 
-    $translateProvider.useSanitizeValueStrategy('escape');
+    $translateProvider.useSanitizeValueStrategy(null);
     switch (navigator.language) {
         case 'de-DE':
         case 'de-de':
@@ -429,6 +546,8 @@ angular.module('AffilinetToolbar', [
         case 'de-LU':
         case 'de-lu':
         case 'de':
+        case 'at':
+        case 'ch':
             $translateProvider.preferredLanguage('de');
             break;
 
@@ -488,7 +607,13 @@ angular.module('AffilinetToolbar', [
     }
 
 
-});
+}).run(function(editableOptions, editableThemes) {
+    // set `default` theme
+    editableOptions.theme = 'bs3';
 
+    editableThemes['bs3'].submitTpl = '<button class="btn btn-primary" type="submit"><i class="fa fa-check"</button>';
+    editableThemes['bs3'].cancelTpl = '<button class="btn btn-default"><i class="fa fa-times-circle"></i></button>';
+
+});
 
 

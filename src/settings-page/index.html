@@ -25,15 +25,31 @@
     <link rel="stylesheet" type="text/css" href="./css/getcreatives.css">
     <link rel="stylesheet" type="text/css" href="./css/getvouchers.css">
     <link rel="stylesheet" type="text/css" href="./css/news.css">
+    <link rel="stylesheet" type="text/css" href="./css/likeList.css">
+    <link rel="stylesheet" type="text/css" href="./css/searchdiscover.css">
+    <link rel="stylesheet" type="text/css" href="./css/xeditable.css">
+    <link rel="stylesheet" type="text/css" href="./css/widget.css">
+
+    <link rel="stylesheet" type="text/css" href="../../bower_components/oi.select/dist/select.min.css">
+    <link rel="stylesheet" href="../../bower_components/slick-carousel/slick/slick.css">
+    <link rel="stylesheet" href="../../bower_components/slick-carousel/slick/slick-theme.css">
+
+    <link rel="stylesheet" type="text/css" href="./css/slickSlider.css">
+    <link rel="stylesheet" type="text/css" href="./css/rzslider.css">
+
+
+
     <!-- endbuild -->
     <!-- SCRIPTS -->
     <!-- build:js lib/js/main.min.js -->
     <script type="text/javascript" src="../../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../../bower_components/Flot/jquery.flot.js"></script>
     <script type="text/javascript" src="../../bower_components/Flot/jquery.flot.time.js"></script>
     <script type="text/javascript" src="../../bower_components/Flot/jquery.flot.resize.js"></script>
     <script type="text/javascript" src="../../bower_components/Flot/jquery.flot.categories.js"></script>
     <script type="text/javascript" src="../../bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-bootstrap/ui-bootstrap.js"></script>
     <script type="text/javascript" src="../../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script type="text/javascript" src="../../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 
@@ -44,6 +60,18 @@
     <script type="text/javascript" src="../../bower_components/angular-flot/angular-flot.js"></script>
     <script type="text/javascript" src="../../bower_components/angular-clipboard/angular-clipboard.js"></script>
     <script type="text/javascript" src="../../bower_components/angular-translate/angular-translate.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/oi.select/dist/select.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/oi.select/dist/select-tpls.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-jquery/dist/angular-jquery.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-bootstrap-affix/dist/angular-bootstrap-affix.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+
+    <script src="../../bower_components/angularjs-slider/dist/rzslider.min.js"></script>
+
+    <script src="../../bower_components/angular-dragdrop/src/angular-dragdrop.min.js"></script>
+
+    <script src="../../bower_components/slick-carousel/slick/slick.js"></script>
+    <script src="../../bower_components/angular-slick-carousel/dist/angular-slick.min.js"></script>
 
 
     <!-- endbuild -->
@@ -66,7 +94,6 @@
                 <a ng-click="toggleSidebar()">
                     <img src="img/logo.png" ng-hide="!toggle">
                     <img src="img/favicon.ico" class="pull-right small-logo" ng-hide="toggle">
-
                 </a>
             </li>
 
@@ -74,23 +101,27 @@
                 <a ui-sref="news">{{'NEWS_PageName'|translate}} <span class="menu-icon fa fa-envelope"></span></a>
             </li>
             <li class="sidebar-list"  ng-if="validCredentials">
-                <a ui-sref="orders">{{'ORDERS_PageName'|translate}}<span class="menu-icon fa fa-money"></span></a>
+                <a ui-sref="orders"><span translate="ORDERS_PageName"></span><span class="menu-icon fa fa-money"></span></a>
+            </li>
+            <li class="sidebar-list" ng-if="validCredentials">
+                <a ui-sref="searchDiscover"><span translate="SEARCHDISCOVER_PageName"></span><span class="menu-icon fa fa-search"></span></a>
+            </li>
+            <li class="sidebar-list" ng-if="validCredentials">
+                <a ui-sref="likeList"><span translate="LIKELIST_PageName"></span><span class="menu-icon fa fa-thumbs-up"></span></a>
+            </li>
+
+            <li class="sidebar-list" ng-if="validCredentials">
+                <a ui-sref="widget"><span translate="WIDGET_PageName"></span><span class="menu-icon fa fa-file-code-o"></span></a>
             </li>
             <li class="sidebar-list">
                 <a ui-sref="settings">{{'SETTINGS_PageName'|translate}} <span class="menu-icon fa fa-cog"></span></a>
             </li>
+
             <li class="sidebar-list"  ng-if="validCredentials">
                 <a href="https://publisher.affili.net/Login/NewLogin.aspx" target="_blank">Publisher Portal<span
                         class="menu-icon fa fa-external-link"></span></a>
             </li>
-            <!-- <li class="sidebar-list">
-                 <a ui-sref="applynow({'programId': 8402})" ><small>applynow</small></a>
-                 <a ui-sref="getVouchers({'programId': 8402})"><small>getVouchers</small></a>
-                 <a ui-sref="getCreatives({'programId': 8402})"><small>getCreatives</small></a>
-                 <a ui-sref="getCreatives({'programId': 4586})"><small>getCreatives(maxdome)</small></a>
-                 <a ui-sref="getVouchers({'programId': 1860})"><small>getVouchers(vistaprint)</small></a>
-             </li>
-             -->
+
         </ul>
         <div class="sidebar-footer">
             <a href="{{ 'IMPRESSUM_LINK'|translate }}" target="_blank">&copy; {{ ''|currentyear }} affilinet</a>
@@ -121,9 +152,9 @@
             <!-- Main Content -->
             <div class="row alerts-container" data-ng-show="alerts.length">
                 <div class="col-xs-12">
-                    <alert data-ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+                    <uib-alert data-ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
                         {{alert.msg}}
-                    </alert>
+                    </uib-alert>
                 </div>
             </div>
 

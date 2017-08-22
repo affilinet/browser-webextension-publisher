@@ -94,7 +94,7 @@ function onGetProgramDetailsResponse(response, hasPartnership) {
     if (response.programDetails && response.programDetails.programId) {
         setProgramDetails(response.programDetails);
         if (hasPartnership) {
-            popuplateLink(response.programDetails);
+            popuplateLink(response.programDetails.programId);
         }
         show(programSection);
     } else {
@@ -159,6 +159,19 @@ popup.addEventListener("click", function (e) {
         else if (e.target.matches("#getDeeplink") || e.target.matches("#getTrackingLink")) {
             show(linkSection);
         }
+        else if (e.target.matches("#likeList")) {
+            ext.runtime.sendMessage({action: "open-page", data: {page: "likeList"}});
+        }
+        else if (e.target.matches("#widgetGenerator")) {
+            ext.runtime.sendMessage({action: "open-page", data: {page: "widget"}});
+        }
+        else if (e.target.matches("#searchDiscover")) {
+            ext.runtime.sendMessage({action: "open-page", data: {page: "searchDiscover"}});
+        }
+
+        else if (e.target.matches("#addToWebsitePins")) {
+            ext.runtime.sendMessage({action: "save-current-tab-in-like-list"});
+        }
     }
     return true;
 });
@@ -184,8 +197,8 @@ function setProgramDetails(programDetails) {
     programName.innerText = programDetails.programTitle ? programDetails.programTitle : '';
 }
 
-function popuplateLink(programInfo) {
-    console.log('pop deeplink', programInfo);
+function popuplateLink(programId) {
+    console.log('pop deeplink', programId);
     storage.get(['programsWithDeeplink', 'publisherId', 'countryPlatform'], function (storageResult) {
         if (
             !storageResult.hasOwnProperty('programsWithDeeplink')
@@ -197,7 +210,7 @@ function popuplateLink(programInfo) {
             return;
         }
 
-        let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === programInfo.programId && entry.platform !== '');
+        let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === programId && entry.platform !== '');
         console.log('found deeplink info', deeplinkInfo);
         if (deeplinkInfo) {
             // has deeplink
@@ -210,7 +223,7 @@ function popuplateLink(programInfo) {
 
         } else {
             console.log('gen default link');
-            let url = generateDefaultTextLink(storageResult.publisherId, programInfo, storageResult.countryPlatform);
+            let url = generateDefaultTextLink(storageResult.publisherId, programId, storageResult.countryPlatform);
             linkInput.setAttribute('value', url);
             show(getTrackingLink);
             show(noDeeplinkSupport);
@@ -254,11 +267,11 @@ function generateDeeplink(publisherId, deeplinkInfo) {
 }
 
 
-function generateDefaultTextLink(publisherId, programInfo, countryPlatform) {
+function generateDefaultTextLink(publisherId, programId, countryPlatform) {
 
-    console.log(publisherId, programInfo, countryPlatform);
+    console.log(publisherId, programId, countryPlatform);
     let link = 'http://' + getHostnameForPlatform(countryPlatform) + '/click.asp';
-    link += "?site=" + programInfo.programId;
+    link += "?site=" + programId;
     link += "&ref=" + publisherId;
     link += "&type=text&tnb=1";
     return link

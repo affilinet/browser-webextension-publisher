@@ -21,7 +21,7 @@ let validUntil = false;
 function getXml(string) {
     let parser = new DOMParser();
     const document = parser.parseFromString(string, "application/xml");
-    if(_hasParseError(document)) {
+    if (_hasParseError(document)) {
         console.error('XML PARSER ERROR: Could not parse Response from Webservice', document);
         console.error(string);
     }
@@ -75,8 +75,8 @@ function _sendRequest(requestBody, url, soap_action) {
 
 let _tokenMustBeRefreshed = function () {
     // Refresh token 2 minutes before it is invalid
-    const now =   (Math.floor(Date.now() ) + 2*60*1000);
-    console.log('token is  valid  for another ', (validUntil - now)/1000 , ' seconds');
+    const now = (Math.floor(Date.now()) + 2 * 60 * 1000);
+    console.log('token is  valid  for another ', (validUntil - now) / 1000, ' seconds');
     if (token === false) {
         console.log('token is not set');
         return true;
@@ -115,7 +115,6 @@ let getToken = function () {
                     console.log('error getting token');
                     reject(response);
                 }
-
             )
         } else {
             resolve(token);
@@ -127,7 +126,6 @@ let _removeToken = function () {
     token = false;
     validUntil = false;
 };
-
 
 
 let generateBodyForMyPrograms = function (token, page) {
@@ -150,11 +148,6 @@ let generateBodyForMyPrograms = function (token, page) {
         '</svc:GetProgramsRequest>' +
         '</soapenv:Body>' +
         '</soapenv:Envelope>';
-};
-
-
-let _addToMyProgramsCache = function (items) {
-
 };
 
 
@@ -182,14 +175,14 @@ let _getTokenExpiration = function (token) {
             const requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc">' +
                 '   <soapenv:Header/>' +
                 '   <soapenv:Body>' +
-                '      <svc:CredentialToken>' + token  + '</svc:CredentialToken>' +
+                '      <svc:CredentialToken>' + token + '</svc:CredentialToken>' +
                 '   </soapenv:Body>' +
                 '</soapenv:Envelope>';
             _sendRequest(requestBody, 'https://api.affili.net/V2.0/Logon.svc', 'http://affilinet.framework.webservices/Svc/AuthenticationContract/GetIdentifierExpiration').then(resolve, reject);
         }
     );
 };
-let _fetchAllMyProgramsPages = function(totalPages, token, startWith = 1) {
+let _fetchAllMyProgramsPages = function (totalPages, token, startWith = 1) {
     _fetchOneOfMyProgramsPage(startWith, token).then(
         (response) => {
             const xmlDoc = getXml(response);
@@ -198,23 +191,24 @@ let _fetchAllMyProgramsPages = function(totalPages, token, startWith = 1) {
             for (let i = 0; i < items.length; i++) {
                 let newProgram = {
                     programId: items[i].getElementsByTagName("a:ProgramId")[0].firstChild.nodeValue,
+                    programTitle: items[i].getElementsByTagName("a:ProgramTitle")[0].firstChild.nodeValue,
                 };
                 myProgramsCache.push(newProgram);
             }
 
             if (startWith < totalPages) {
-                _fetchAllMyProgramsPages(totalPages, token, startWith +1);
+                _fetchAllMyProgramsPages(totalPages, token, startWith + 1);
             } else {
-                console.log('INFO: Webservice returned', myProgramsCache.length , ' Program Partnership');
-                storage.set( {myPrograms: myProgramsCache });
-                console.debug('added page ' +   myProgramsCache.length  + ' Programs of myPrograms');
+                console.log('INFO: Webservice returned', myProgramsCache.length, ' Program Partnership');
+                storage.set({myPrograms: myProgramsCache});
+                console.debug('added page ' + myProgramsCache.length + ' Programs of myPrograms');
             }
         }
     )
 }
 
 
-let _fetchOneOfMyProgramsPage = function(page, token) {
+let _fetchOneOfMyProgramsPage = function (page, token) {
     console.log('Send Request for page', page);
     return _sendRequest(generateBodyForMyPrograms(token, page), 'https://api.affili.net/V2.0/PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms');
 }
@@ -280,7 +274,6 @@ class PublisherWebservice {
     }
 
 
-
     UpdateMyPrograms() {
 
         storage.remove('myPrograms');
@@ -300,12 +293,9 @@ class PublisherWebservice {
                         const resultsOnThisPage = ProgramCollection.getElementsByTagName("a:Program").length;
 
                         let totalPages = Math.ceil(totalResults / 100);
-                        console.log('INFO: Webservice Reports ' , totalResults, ' Partnerships on ', totalPages, ' Pages.. fetching data from webserivice');
-                        const items = ProgramCollection.getElementsByTagName("a:Program");
+                        console.log('INFO: Webservice Reports ', totalResults, ' Partnerships on ', totalPages, ' Pages.. fetching data from webserivice');
 
                         _fetchAllMyProgramsPages(totalPages, token, 1);
-
-
 
 
                     }, console.debug);

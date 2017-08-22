@@ -1,8 +1,8 @@
 <div class="row" ng-show="loadingFinished">
     <div class="col-lg-12">
 
-        <tabset>
-            <tab heading="{{ 'ORDERS_BY_DAY'|translate}}" select="refreshPlot('chartByDay', month, year)">
+        <uib-tabset>
+            <uib-tab heading="{{ 'ORDERS_BY_DAY'|translate}}" select="refreshPlot('chartByDay', month, year)">
                 <hr>
                 <div class="row">
                     <div class="col-lg-12">
@@ -95,9 +95,9 @@
                 </div>
 
 
-            </tab>
+            </uib-tab>
 
-            <tab heading="{{'ORDERS_BY_PROGRAM'|translate }}" select="refreshPlot('chartByProgram', month, year)">
+            <uib-tab heading="{{'ORDERS_BY_PROGRAM'|translate }}" select="refreshPlot('chartByProgram', month, year)">
 
                 <hr>
                 <div class="row">
@@ -180,10 +180,10 @@
                 </div>
 
 
-            </tab>
+            </uib-tab>
 
 
-        </tabset>
+        </uib-tabset>
 
 
     </div>

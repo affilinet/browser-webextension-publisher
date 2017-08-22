@@ -6,10 +6,14 @@ import Papa from "../scripts/services/papaparse.min";
 
 let settingsPageTabId = null;
 let currentPageProgramDetails = [];
+let globalHasPartnership = false;
+let globalHasProgram = false;
+let globalHasProgramPartnerShipAndDeeplink = false;
 
 
 ext.runtime.onMessage.addListener(
     function (request,  sender, sendResponse) {
+        console.log('message received', request);
         switch (request.action) {
             case "open-popup" :
                 console.log(request.data.tabs);
@@ -17,22 +21,63 @@ ext.runtime.onMessage.addListener(
             case "open-page" :
                 openPage(request.data.page);
                 break;
+
+            case "copyImageCode" :
+                copyImageCode(request.data, sendResponse);
+
+                break;
+            case "copyDeeplink" :
+                generateTrackingUrl(request.data.uri).then( (deeplink) => {
+                    console.log('copy deeplink', deeplink);
+                    _copyTextToClipboard(deeplink);
+                    sendResponse(true);
+                });
+                break;
+            case "hasProgramPartnershipAndDeeplink" :
+                sendResponse(globalHasProgramPartnerShipAndDeeplink);
+                break;
+            case "save-in-like-list" :
+                return _saveInLikeList(request.data, sendResponse);
+
+            case "share-on-twitter" :
+                return generateTrackingUrl(request.data.uri).then( (redirectUrl) => {
+                    console.log('redirect url = ', redirectUrl);
+                    let url = 'https://twitter.com/share?url=' + encodeURIComponent(redirectUrl) + '&text=' + encodeURIComponent(request.data.pageTitle);
+                    ext.tabs.create({url: url});
+                });
+
+            case "share-on-facebook" :
+                return generateTrackingUrl(request.data.uri).then( (redirectUrl) => {
+                    let url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(redirectUrl)  ;
+                    ext.tabs.create({url: url});
+                });
+            case "share-on-pinterest" :
+                return generateTrackingUrl(request.data.uri).then( (redirectUrl) => {
+                    let url = 'https://pinterest.com/pin/create/bookmarklet/?media=' + encodeURIComponent(request.data.image.src) + '&url=' + encodeURIComponent(redirectUrl) + '&description=' + encodeURIComponent(request.data.pageTitle);
+                    ext.tabs.create({url: url});
+                });
+            case "share-on-google" :
+                return generateTrackingUrl(request.data.uri).then( (redirectUrl) => {
+                    let url = 'https://plus.google.com/share?url=' + encodeURIComponent(redirectUrl) ;
+                    ext.tabs.create({url: url});
+                });
             case "open-link" :
                 ext.tabs.create({url: request.data.link});
                 break;
             case 'clear-cache':
                 console.log('received clear cache');
                 PublisherWebservice.Reset();
-                storage.clear();
+                break;
+
+            case 'save-current-tab-in-like-list':
+                return _saveCurrentTabInLikeList(sendResponse);
                 break;
 
             case 'get-programDetails':
-                console.log('programDetails');
                 return sendResponse({programDetails : currentPageProgramDetails});
                 break;
             case 'save-credentials' :
                 console.log('received save credentials');
-                storage.clear();
                 PublisherWebservice.UpdateCredentials(
                     request.data.publisherId,
                     request.data.webservicePassword
@@ -40,7 +85,9 @@ ext.runtime.onMessage.addListener(
                 storage.set({
                     publisherId: request.data.publisherId,
                     webservicePassword: request.data.webservicePassword,
-                    countryPlatform: request.data.countryPlatform
+                    countryPlatform: request.data.countryPlatform,
+                    disableImageContextMenu: request.data.disableImageContextMenu,
+                    productWebservicePassword: request.data.productWebservicePassword
                 });
                 // reload all programs
                 PublisherWebservice.Reset();
@@ -61,6 +108,158 @@ ext.runtime.onMessage.addListener(
 
 );
 
+function  copyImageCode(data, sendResponse){
+    generateTrackingUrl(data.uri).then( (deeplink) => {
+        let code = '<a href="' + deeplink +  '" target="_blank" rel="nofollow"><img src="' + data.image.src +'"></a>';
+        console.log('copy image code', code);
+        _copyTextToClipboard(code)
+        sendResponse(true);
+    });
+}
+function _saveCurrentTabInLikeList(sendResponse) {
+    console.log('in _saveCurrentTabInLikeList ');
+
+    ext.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+
+        // since only one tab should be active and in the current window at once
+        // the return variable should only have one entry
+        var activeTab = arrayOfTabs[0];
+        console.log(activeTab);
+
+        let data = {
+            image: {
+                src: activeTab.favIconUrl,
+                width: 16,
+                height: 16,
+                alt: activeTab.title,
+                title: activeTab.title,
+            },
+            type : 'link',
+            uri: activeTab.url,
+            pageTitle: activeTab.title,
+            createdAt: +new Date()
+        };
+        _saveInLikeList(data, sendResponse);
+    })
+}
+
+function _saveInLikeList(data, sendResponse) {
+    storage.get('likeList', (result) => {
+        let list = [];
+        if (result.likeList) {
+            list = result.likeList
+        }
+        // todo generate deeplink
+
+        list.push(data);
+        storage.set({likeList: list});
+        sendResponse({message: 'Added to LikeList' });
+    })
+}
+
+function generateTrackingUrl(url) {
+
+    return new Promise((resolve, reject) => {
+        hasProgram(getCleanedHostnameforUrl(url)).then(
+            (programDetails) => {
+                if (programDetails === false) {
+                    resolve(url)
+
+                } else {
+                    hasPartnership(programDetails.programId).then(
+                        (hasPartnershipResult) => {
+                            if (hasPartnershipResult === true) {
+                                hasDeeplink(programDetails.programId).then(
+                                    (deeplinkInfo, publisherId = false) => {
+                                        if (deeplinkInfo === false) {
+                                            resolve(url);
+                                        } else {
+                                            resolve(generateDeeplink(url, publisherId, deeplinkInfo))
+                                        }
+                                    }
+                                )
+                            } else {
+                                resolve(url);
+                            }
+                        }
+                    )
+                }
+            }
+        )
+    })
+
+    return new Promise((resolve, reject) =>  {
+        if (globalHasPartnership === true && globalHasProgram === true) {
+            // return deeplink
+            storage.get(['programsWithDeeplink', 'publisherId'], (storageResult) => {
+
+                let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === currentPageProgramDetails.programId && entry.platform !== '');
+                console.log(storageResult, currentPageProgramDetails, deeplinkInfo);
+                if (deeplinkInfo) {
+                    // has deeplink
+                    let deeplink = generateDeeplink(url, storageResult.publisherId, deeplinkInfo);
+                    console.log('generated deeplink', deeplink);
+                    resolve(deeplink)
+                } else {
+                    resolve(url);
+                }
+
+            });
+        }else {
+            console.log('no partnership/Program');
+            resolve(url);
+        }
+
+    });
+}
+
+
+
+function generateDeeplink(url, publisherId, deeplinkInfo) {
+
+    console.log('in gen deeplink', url, publisherId, deeplinkInfo);
+    let params = deeplinkInfo.params;
+
+
+    let trackingLink = deeplinkInfo.trackingLink;
+    // do not just append the parameters, we might have a URI Hash
+    const deeplinkParser = document.createElement('a');
+    deeplinkParser.href = url;
+
+    // parameter forwarding
+    if (params !== '') {
+        if (deeplinkParser.search.indexOf('?') === -1) {
+            deeplinkParser.search += '?' + params
+        } else {
+            deeplinkParser.search += '&' + params
+        }
+    }
+    let finalUrl = deeplinkParser.href;
+
+    // redirect form tracking url to attribution solution?
+    if (deeplinkInfo.hasOwnProperty('redirector')) {
+        if (deeplinkInfo.redirector !== '') {
+            // do not directly redirect to advertiser
+            finalUrl = deeplinkInfo.redirector + encodeURIComponent(finalUrl);
+        }
+    }
+
+    trackingLink = trackingLink.replace('[deeplink]', encodeURIComponent(finalUrl));
+    trackingLink = trackingLink.replace('[ref]', publisherId);
+    trackingLink = trackingLink.replace('[paramforwarding]', '');
+    return trackingLink;
+}
+
+
+function _copyTextToClipboard(text) {
+    let copyFrom = document.createElement("textarea");
+    copyFrom.textContent = text;
+    let body = document.body;
+    body.appendChild(copyFrom);
+    copyFrom.select();
+    document.execCommand('copy');
+    body.removeChild(copyFrom);
+}
 
 /**
  * * Listener on tab close if settings page is opened  - workaround for edge
@@ -232,8 +431,11 @@ function getCleanedHostnameforUrl(string) {
  */
 function setHasPartnership(hasPartnership, tabId) {
     if (hasPartnership) {
+        globalHasPartnership = true;
         ext.browserAction.setBadgeBackgroundColor({color: '#007239', tabId: tabId})
     } else {
+        globalHasPartnership = false;
+        globalHasProgramPartnerShipAndDeeplink = false;
         ext.browserAction.setBadgeBackgroundColor({color: '#DE1C44', tabId: tabId})
     }
 }
@@ -246,8 +448,11 @@ function setHasPartnership(hasPartnership, tabId) {
  */
 function setHasProgram(hasProgram, tabId) {
     if (hasProgram) {
+        globalHasProgram = true;
         ext.browserAction.setBadgeText({text: 'i', tabId: tabId})
     } else {
+        globalHasProgram = false;
+        globalHasProgramPartnerShipAndDeeplink = false;
         ext.browserAction.setBadgeText({text: '', tabId: tabId})
     }
 }
@@ -262,18 +467,68 @@ function setHasProgram(hasProgram, tabId) {
  * @param tabId
  */
 function checkHostHasPartnership(programId, tabId) {
-    storage.get(['myPrograms'], function (result) {
-        if (!result.myPrograms) {
-            setHasPartnership(false, tabId);
-        } else {
-            for (let i = 0; i < result.myPrograms.length; i++) {
-                if (result.myPrograms[i].programId === programId) {
-                    setHasPartnership(true, tabId);
-                    return
+    hasPartnership(programId).then(
+        (hasPartnership) => {
+            setHasPartnership(hasPartnership, tabId);
+            if (hasPartnership === true) {
+                checkHostHasDeeplink(programId, tabId);
+            }
+        }
+    );
+}
+
+function hasDeeplink(programId) {
+    return new Promise((resolve, reject) => {
+        storage.get(['programsWithDeeplink', 'publisherId'], (storageResult) => {
+            let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === programId && entry.platform !== '');
+            resolve(deeplinkInfo, storageResult.publisherId)
+        });
+    })
+
+}
+function checkHostHasDeeplink(programId, tabId){
+    hasDeeplink(programId).then(
+        (deeplinkInfo) => {
+            globalHasProgramPartnerShipAndDeeplink = !!deeplinkInfo;
+        }
+    )
+}
+
+function hasProgram(hostname) {
+    return new Promise((resolve,reject) => {
+        storage.get(['allPrograms', 'countryPlatform'], function (result) {
+            if (!result.allPrograms) {
+                resolve(false);
+            } else {
+                // find program in allPrograms
+                let programIndex = result.allPrograms.findIndex((program) => {
+                    return program.platformId === result.countryPlatform && hostname.search(program.programUrl) >= 0
+                });
+                if (programIndex > 0 ) {
+                    resolve(result.allPrograms[programIndex]);
+                } else {
+                    resolve(false);
                 }
             }
-            setHasPartnership(false, tabId);
-        }
+        });
+    })
+}
+
+function hasPartnership(programId){
+    return new Promise((resolve, rejcet) => {
+        storage.get(['myPrograms'], function (result) {
+            if (!result.myPrograms) {
+                resolve(false);
+            } else {
+                for (let i = 0; i < result.myPrograms.length; i++) {
+                    if (result.myPrograms[i].programId === programId) {
+                        resolve(true);
+                        return
+                    }
+                }
+                resolve(false);
+            }
+        });
     });
 }
 
@@ -284,31 +539,16 @@ function checkHostHasPartnership(programId, tabId) {
  * @param tabId
  */
 function checkHostHasProgram(hostname, tabId) {
-    storage.get(['allPrograms', 'countryPlatform'], function (result) {
-        if (!result.allPrograms) {
-            console.log('allPrograms not in storage');
-            setHasProgram(false, tabId);
-        } else {
-            // does program exist?
-            currentPageProgramDetails = [];
-
-            // find program in allPrograms
-            let programIndex = result.allPrograms.findIndex((program) => {
-                return program.platformId === result.countryPlatform && hostname.search(program.programUrl) >= 0
-            });
-
-            if (programIndex > 0 ) {
-                console.log(result.allPrograms[programIndex]);
-                currentPageProgramDetails = result.allPrograms[programIndex];
-                setHasProgram(true, tabId);
-                checkHostHasPartnership(result.allPrograms[programIndex].programId, tabId )
-            } else {
-                setHasProgram(false, tabId);
+    hasProgram(hostname).then(
+        (hasProgram) => {
+            setHasProgram(hasProgram, tabId);
+            if (hasProgram === true) {
+                storage.get(['allPrograms'], (result) => {
+                    checkHostHasPartnership(result.allPrograms[programIndex].programId, tabId )
+                })
             }
-
-
         }
-    });
+    )
 }
 
 /**
@@ -375,7 +615,10 @@ function updateProgramsWithDeeplink() {
         download: true,
         header: true,
         complete: function(results) {
-            storage.set({programsWithDeeplink: results.data })
+            console.log('Updated all programsWithDeeplink');
+            storage.set({
+                programsWithDeeplink: results.data
+            })
         }
     });
 }
@@ -386,7 +629,7 @@ function updateAllPrograms() {
         download: true,
         header: true,
         complete: (results) =>  {
-            console.log('LOADED all programs');
+            console.log('Updated all programs');
             storage.set({
                 allPrograms : results.data,
             })
@@ -409,6 +652,11 @@ function updateData () {
             storage.set({
                 lastDailyDataUpdate : timestampMS
             })
+        } else {
+            console.log('All Programs and Programs with deeplink is fresh; Last update was',
+                new Date(storageResult.lastDailyDataUpdate));
+            console.log('Next update of  Programs and Programs at',
+                new Date(storageResult.lastDailyDataUpdate +  (24 * 60 *60 *1000)));
         }
     });
 }
