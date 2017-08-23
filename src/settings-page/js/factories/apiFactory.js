@@ -23,13 +23,12 @@ angular.module('AffilinetToolbar')
         };
 
         var _tokenMustBeRefreshed = function () {
+            // Refresh token 2 minutes before it is invalid
+            const now =  new $moment().subtract(2, 'minutes');
             if (token === false) {
                 return true;
             }
-            if (validUntil === false || validUntil < new $moment().subtract(2, 'minutes')) {
-                return true
-            }
-            return false
+            return validUntil === false || validUntil < now;
         };
 
 
@@ -48,8 +47,19 @@ angular.module('AffilinetToolbar')
                     function success(response) {
                         var localToken = response.data.Envelope.Body.CredentialToken.toString();
                         token = localToken;
-                        validUntil = new $moment().add('20 minutes');
-                        deferred.resolve(localToken);
+                        _getTokenExpiration(token).then(
+                            (tokenExpResult) => {
+                                let expirationDate = tokenExpResult.data.Envelope.Body.ExpirationDate.toString();
+                                validUntil = new Date(expirationDate);
+                                deferred.resolve(localToken);
+
+                            },
+                            (error) => {
+                                console.log('error in get token expiration ', error);
+                                validUntil = 0;
+                                deferred.reject(error);
+                            }
+                        );
                     },
                     function error(response) {
                         deferred.reject(response);
@@ -109,6 +119,19 @@ angular.module('AffilinetToolbar')
                 });
 
             return deferred.promise
+        };
+
+
+        let _getTokenExpiration = function (token) {
+            var deferred = $q.defer();
+            var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc">' +
+                        '   <soapenv:Header/>' +
+                        '   <soapenv:Body>' +
+                        '      <svc:CredentialToken>' + token  + '</svc:CredentialToken>' +
+                        '   </soapenv:Body>' +
+                        '</soapenv:Envelope>';
+            _sendRequest(requestBody, 'Logon.svc', 'http://affilinet.framework.webservices/Svc/AuthenticationContract/GetIdentifierExpiration',deferred.resolve, deferred.reject);
+            return deferred.promise;
         };
 
 
@@ -194,39 +217,6 @@ angular.module('AffilinetToolbar')
                 return deferred.promise;
             },
 
-            GetMyPrograms: function () {
-                var deferred = $q.defer();
-
-                getToken().then(
-                    function success(response) {
-                        var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherProgram" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
-                            '<soapenv:Header/>' +
-                            '<soapenv:Body>' +
-                            '<svc:GetProgramsRequest>' +
-                            '<svc:CredentialToken>' + response + '</svc:CredentialToken>' +
-                            '<svc:DisplaySettings><pub:CurrentPage>1</pub:CurrentPage><pub:PageSize>100</pub:PageSize></svc:DisplaySettings>' +
-                            '<svc:GetProgramsQuery>' +
-                            //'<pub:ProgramIds><arr:int>'+programId +'</arr:int></pub:ProgramIds>'+
-                            '<pub:PartnershipStatus>' +
-                            '<pub:ProgramPartnershipStatusEnum>Active</pub:ProgramPartnershipStatusEnum>' +
-                            //'<pub:ProgramPartnershipStatusEnum>Paused</pub:ProgramPartnershipStatusEnum>' +
-                            //'<pub:ProgramPartnershipStatusEnum>Waiting</pub:ProgramPartnershipStatusEnum>' +
-                            //'<pub:ProgramPartnershipStatusEnum>Cancelled</pub:ProgramPartnershipStatusEnum>' +
-                            '</pub:PartnershipStatus>' +
-                            '</svc:GetProgramsQuery>' +
-                            '</svc:GetProgramsRequest>' +
-                            '</soapenv:Body>' +
-                            '</soapenv:Envelope>';
-
-                        _sendRequest(requestBody, 'PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms', deferred.resolve, deferred.reject);
-
-                    },
-                    function error() {
-
-                    }
-                );
-                return deferred.promise;
-            },
 
             GetProgramInfoForIds: function (programIds) {
                 var deferred = $q.defer();

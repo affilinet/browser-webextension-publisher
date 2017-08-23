@@ -423,7 +423,7 @@ window.setTimeout(function () {
     importProgramsWithDeeplink();
 
     // update data all 15 min
-    setInterval(updateData, 15 * 60 * 1000); // 15 mins
+    setInterval(updateData, 2 * 60 * 1000); // 15 mins
 
     // update now
     updateData();

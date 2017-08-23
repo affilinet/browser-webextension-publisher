@@ -13,6 +13,7 @@ storage.get('webservicePassword', function (results) {
     }
 );
 
+let myProgramsCache = [];
 
 let token = false;
 let validUntil = false;
@@ -22,25 +23,6 @@ function getXml(string) {
     return parser.parseFromString(string, "application/xml");
 }
 
-function getHostNameForUrl(string) {
-    const parser = document.createElement('a');
-    parser.href = string;
-    return parser.host
-}
-
-function getQueryParam(name, url) {
-    try {
-        name = name.replace(/[\[\]]/g, "\\$&");
-        let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-    catch (Error) {
-        return '';
-    }
-}
 
 function _sendRequest(requestBody, url, soap_action) {
     return new Promise(function (resolve, reject) {
@@ -67,11 +49,14 @@ function _sendRequest(requestBody, url, soap_action) {
 
 
 let _tokenMustBeRefreshed = function () {
+    // Refresh token 2 minutes before it is invalid
+    const now =   (Math.floor(Date.now() ) + 2*60*1000);
+    console.log('token is  valid  for another ', (validUntil - now)/1000 , ' seconds');
     if (token === false) {
         console.log('token is not set');
         return true;
     }
-    return validUntil === false || validUntil < (Math.floor(Date.now() / 1000) - 120);
+    return validUntil === false || validUntil < now;
 
 };
 
@@ -79,18 +64,33 @@ let getToken = function () {
     return new Promise(function (resolve, reject) {
         "use strict";
         if (_tokenMustBeRefreshed()) {
+            console.log('token will get refreshed');
             Logon().then(
                 function success(response) {
                     let xmlDoc = getXml(response);
                     let localToken = xmlDoc.getElementsByTagName('CredentialToken')[0].firstChild.nodeValue;
                     token = localToken;
-                    validUntil = Math.floor(Date.now());
-                    resolve(localToken);
+                    _getTokenExpiration(token).then(
+                        (tokenExpResult) => {
+                            let xmlDoc = getXml(tokenExpResult);
+                            let expirationDate = xmlDoc.getElementsByTagName('ExpirationDate')[0].firstChild.nodeValue;
+                            validUntil = new Date(expirationDate).getTime();
+                            resolve(localToken);
+                        },
+                        (error) => {
+                            console.log('error in get token expiration ', error);
+                            validUntil = 0;
+                            reject(error);
+                        }
+                    );
+
+
                 },
                 function error(response) {
                     console.log('error getting token');
                     reject(response);
                 }
+
             )
         } else {
             resolve(token);
@@ -103,30 +103,6 @@ let _removeToken = function () {
     validUntil = false;
 };
 
-
-let generateBodyForAllPrograms = function (token, page) {
-
-    return '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherProgram" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
-        '<soapenv:Header/>' +
-        '<soapenv:Body>' +
-        '<svc:GetProgramsRequest>' +
-        '<svc:CredentialToken>' + token + '</svc:CredentialToken>' +
-        '<svc:DisplaySettings><pub:CurrentPage>' + page + '</pub:CurrentPage><pub:PageSize>100</pub:PageSize></svc:DisplaySettings>' +
-        '<svc:GetProgramsQuery>' +
-
-        '<pub:PartnershipStatus>' +
-        '<pub:ProgramPartnershipStatusEnum>Active</pub:ProgramPartnershipStatusEnum>' +
-        '<pub:ProgramPartnershipStatusEnum>Paused</pub:ProgramPartnershipStatusEnum>' +
-        '<pub:ProgramPartnershipStatusEnum>Waiting</pub:ProgramPartnershipStatusEnum>' +
-        '<pub:ProgramPartnershipStatusEnum>Cancelled</pub:ProgramPartnershipStatusEnum>' +
-        '<pub:ProgramPartnershipStatusEnum>NoPartnership</pub:ProgramPartnershipStatusEnum>' +
-        '<pub:ProgramPartnershipStatusEnum>Refused</pub:ProgramPartnershipStatusEnum>' +
-        '</pub:PartnershipStatus>' +
-        '</svc:GetProgramsQuery>' +
-        '</svc:GetProgramsRequest>' +
-        '</soapenv:Body>' +
-        '</soapenv:Envelope>';
-};
 
 
 let generateBodyForMyPrograms = function (token, page) {
@@ -151,95 +127,14 @@ let generateBodyForMyPrograms = function (token, page) {
         '</soapenv:Envelope>';
 };
 
-let addToAllPrograms = function (items) {
 
-    storage.get(['allProgramHosts', 'allPrograms'], function (results) {
-        let allProgramHosts = '';
-        let allPrograms = [];
-
-        for (let i = 0; i < items.length; i++) {
-            const url = items[i].getElementsByTagName("a:ProgramURL")[0].firstChild.nodeValue;
-            let parsedHost = getHostNameForUrl(url);
-            let screenshotUrl = "";
-
-            if (items[i].getElementsByTagName("a:ScreenshotURL")[0].firstChild !== null) {
-                screenshotUrl = items[i].getElementsByTagName("a:ScreenshotURL")[0].firstChild.nodeValue;
-
-                if (screenshotUrl === null) {
-                    screenshotUrl = ' ';
-                }
-                else {
-                    // screenshot url is in format https://simple.thumbshots.com/image.aspx?cid=1515&v=1&w=240&h=140&url=https%3a%2f%2fwww%2E123moebel%2Ede
-                    let parsedScreenshotUrl = getQueryParam('url', screenshotUrl);
-                    if (parsedScreenshotUrl !== null) {
-                        parsedScreenshotUrl = getHostNameForUrl(parsedScreenshotUrl);
-
-                        if (parsedScreenshotUrl !== parsedHost && parsedScreenshotUrl !== null) {
-                            parsedHost = parsedScreenshotUrl;
-                        }
-                    }
-                }
-            } else {
-                console.debug('No ScreenshotURL detected for  ' + parsedHost);
-                console.debug(items[i].getElementsByTagName("a:ScreenshotURL")[0].firstChild);
-                console.debug(items[i]);
-            }
-
-            if (parsedHost !== 'affili.net' && parsedHost !== 'www.facebook.com') {
-                const sendData = {
-                    programId: items[i].getElementsByTagName("a:ProgramId")[0].firstChild.nodeValue,
-                    title: items[i].getElementsByTagName("a:ProgramTitle")[0].firstChild.nodeValue,
-                    url: url,
-                    parsedHost: parsedHost,
-                    screenshotUrl: screenshotUrl
-                };
-
-                allProgramHosts = allProgramHosts + ' ' + parsedHost;
-                allPrograms.push(sendData)
-            }
-        }
-
-        storage.get(['allProgramHosts', 'allPrograms'], function (results) {
-
-
-            if (!results.allProgramHosts) {
-                results.allProgramHosts = '';
-            }
-
-            if (!results.allPrograms) {
-                results.allPrograms = [];
-            }
-            results.allProgramHosts += allProgramHosts;
-            results.allPrograms = results.allPrograms.concat(allPrograms);
-
-            storage.set(
-                {
-                    allProgramHosts: results.allProgramHosts,
-                    allPrograms: results.allPrograms
-                });
-        })
-
-
-    });
-
-
-};
-
-
-let addToMyPrograms = function (items) {
-
-    storage.get("myPrograms", function (results) {
-        let myPrograms = results["myPrograms"] || [];
-
-        for (let i = 0; i < items.length; i++) {
-            let newProgram = {
-                programId: items[i].getElementsByTagName("a:ProgramId")[0].firstChild.nodeValue,
-            };
-            myPrograms.push(newProgram);
-
-            storage.set({myPrograms: myPrograms});
-        }
-    })
+let _addToMyProgramsCache = function (items) {
+    for (let i = 0; i < items.length; i++) {
+        let newProgram = {
+            programId: items[i].getElementsByTagName("a:ProgramId")[0].firstChild.nodeValue,
+        };
+        myProgramsCache.push(newProgram);
+    }
 };
 
 
@@ -261,48 +156,25 @@ let Logon = function () {
     );
 };
 
+let _getTokenExpiration = function (token) {
+    console.log('in GetTokenExpiration');
+    return new Promise(function (resolve, reject) {
+            const requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc">' +
+                '   <soapenv:Header/>' +
+                '   <soapenv:Body>' +
+                '      <svc:CredentialToken>' + token  + '</svc:CredentialToken>' +
+                '   </soapenv:Body>' +
+                '</soapenv:Envelope>';
+            _sendRequest(requestBody, 'https://api.affili.net/V2.0/Logon.svc', 'http://affilinet.framework.webservices/Svc/AuthenticationContract/GetIdentifierExpiration').then(resolve, reject);
+        }
+    );
+};
 
 class PublisherWebservice {
 
     constructor() {
         console.log('created Publisher Webservice')
     }
-
-    GetMyPrograms(resolve, errorCallback) {
-        return new Promise(function (resolve, reject) {
-            "use strict";
-            getToken().then(
-                function success(response) {
-                    const requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherProgram" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
-                        '<soapenv:Header/>' +
-                        '<soapenv:Body>' +
-                        '<svc:GetProgramsRequest>' +
-                        '<svc:CredentialToken>' + response + '</svc:CredentialToken>' +
-                        '<svc:DisplaySettings><pub:CurrentPage>1</pub:CurrentPage><pub:PageSize>100</pub:PageSize></svc:DisplaySettings>' +
-                        '<svc:GetProgramsQuery>' +
-                        //'<pub:ProgramIds><arr:int>'+programId +'</arr:int></pub:ProgramIds>'+
-                        '<pub:PartnershipStatus>' +
-                        '<pub:ProgramPartnershipStatusEnum>Active</pub:ProgramPartnershipStatusEnum>' +
-                        //'<pub:ProgramPartnershipStatusEnum>Paused</pub:ProgramPartnershipStatusEnum>' +
-                        //'<pub:ProgramPartnershipStatusEnum>Waiting</pub:ProgramPartnershipStatusEnum>' +
-                        //'<pub:ProgramPartnershipStatusEnum>Cancelled</pub:ProgramPartnershipStatusEnum>' +
-                        '</pub:PartnershipStatus>' +
-                        '</svc:GetProgramsQuery>' +
-                        '</svc:GetProgramsRequest>' +
-                        '</soapenv:Body>' +
-                        '</soapenv:Envelope>';
-
-                    _sendRequest(requestBody, 'https://api.affili.net/V2.0/PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms').then(resolve, reject);
-
-                },
-                function error(error) {
-                    console.debug('Error in method GetMyPrograms:error', error);
-                    reject(error)
-                }
-            );
-        });
-    }
-
 
     GetLinkedAccounts() {
         console.debug('in Method GetLinkedAccounts');
@@ -359,63 +231,10 @@ class PublisherWebservice {
     }
 
 
-    UpdateAllPrograms() {
-
-        storage.remove('allPrograms');
-        storage.remove('allProgramHosts');
-
-        // hole die ersten 100 ergebnisse
-
-        console.debug('Downloading AllPrograms started');
-        getToken().then(
-            function success(token) {
-                let page = 1;
-                _sendRequest(generateBodyForAllPrograms(token, page), 'https://api.affili.net/V2.0/PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms').then(
-                    function (response) {
-                        // checke ob mehr als 100
-                        const xmlDoc = getXml(response);
-                        const totalResults = xmlDoc.getElementsByTagName("TotalResults")[0].firstChild.nodeValue;
-                        const ProgramCollection = xmlDoc.getElementsByTagName("ProgramCollection")[0];
-                        const resultsOnThisPage = ProgramCollection.getElementsByTagName("a:Program").length;
-
-                        const totalPages = Math.ceil(totalResults / 100);
-                        const items = ProgramCollection.getElementsByTagName("a:Program");
-                        addToAllPrograms(items);
-
-                        if (resultsOnThisPage === 100) {
-                            for (let page = 1; page < totalPages; page++) {
-
-                                window.setTimeout(function () {
-                                    _sendRequest(generateBodyForAllPrograms(token, page), 'https://api.affili.net/V2.0/PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms').then(function (response) {
-                                        const xmlDoc = getXml(response);
-                                        let ProgramCollection = xmlDoc.getElementsByTagName("ProgramCollection")[0];
-                                        let items = ProgramCollection.getElementsByTagName("a:Program");
-                                        addToAllPrograms(items);
-                                        console.debug('page number ' + page + ' of AllPrograms added');
-                                    }, console.debug);
-                                }, 500);
-
-
-                            }
-                        }
-
-
-                    }, console.debug);
-            },
-            function error(error) {
-                console.debug('ERROR in Method GetAllPrograms', error);
-            }
-        );
-
-        // wenn mehr als 100 iteriere bis maximale anzahl erreicht ist
-
-
-    }
-
-
     UpdateMyPrograms() {
 
         storage.remove('myPrograms');
+        myProgramsCache = [];
 
         // hole die ersten 100 ergebnisse
 
@@ -432,20 +251,34 @@ class PublisherWebservice {
 
                         const totalPages = Math.ceil(totalResults / 100);
                         const items = ProgramCollection.getElementsByTagName("a:Program");
-                        addToMyPrograms(items);
+
+                        _addToMyProgramsCache(items);
+
+
 
                         if (resultsOnThisPage == 100) {
                             for (page; page < totalPages; page++) {
-                                _sendRequest(generateBodyForMyPrograms(token, page), 'https://api.affili.net/V2.0/PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms').then(function (response) {
+
+                                _sendRequest(generateBodyForMyPrograms(token, page), 'https://api.affili.net/V2.0/PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms')
+                                    .then( function(response) {
                                     const xmlDoc = getXml(response);
                                     const ProgramCollection = xmlDoc.getElementsByTagName("ProgramCollection")[0];
                                     const items = ProgramCollection.getElementsByTagName("a:Program");
-                                    addToMyPrograms(items);
+
+                                    _addToMyProgramsCache(items);
+
+                                    if (myProgramsCache.length > (totalPages - 1 ) * 100 ) {
+                                        // this is the last request
+                                        console.log('write myProgramsCache to Storage', myProgramsCache);
+                                        storage.set( {myPrograms: myProgramsCache });
+                                        console.debug(page  + ' Seiten MyPrograms hinzugefügt');
+                                    }
+
                                 }, console.debug)
+
                             }
                         }
 
-                        console.debug(page + ' Seiten MyPrograms hinzugefügt');
 
                     }, console.debug);
 
