@@ -20,7 +20,32 @@ let validUntil = false;
 
 function getXml(string) {
     let parser = new DOMParser();
-    return parser.parseFromString(string, "application/xml");
+    const document = parser.parseFromString(string, "application/xml");
+    if(_hasParseError(document)) {
+        console.error('XML PARSER ERROR: Could not parse Response from Webservice', document);
+        console.error(string);
+    }
+    return document
+}
+
+/**
+ * https://stackoverflow.com/questions/11563554/how-do-i-detect-xml-parsing-errors-when-using-javascripts-domparser-in-a-cross
+ * Note this might not work on IE
+ * @param parsedDocument
+ * @returns {boolean}
+ * @private
+ */
+function _hasParseError(parsedDocument) {
+    // parser and parsererrorNS could be cached on startup for efficiency
+    let parser = new DOMParser(),
+        errorneousParse = parser.parseFromString('<', 'text/xml'),
+        parsererrorNS = errorneousParse.getElementsByTagName("parsererror")[0].namespaceURI;
+
+    if (parsererrorNS === 'http://www.w3.org/1999/xhtml') {
+        // In PhantomJS the parseerror element doesn't seem to have a special namespace, so we are just guessing here :(
+        return parsedDocument.getElementsByTagName("parsererror").length > 0;
+    }
+    return parsedDocument.getElementsByTagNameNS(parsererrorNS, 'parsererror').length > 0;
 }
 
 
@@ -129,12 +154,7 @@ let generateBodyForMyPrograms = function (token, page) {
 
 
 let _addToMyProgramsCache = function (items) {
-    for (let i = 0; i < items.length; i++) {
-        let newProgram = {
-            programId: items[i].getElementsByTagName("a:ProgramId")[0].firstChild.nodeValue,
-        };
-        myProgramsCache.push(newProgram);
-    }
+
 };
 
 
@@ -169,6 +189,35 @@ let _getTokenExpiration = function (token) {
         }
     );
 };
+let _fetchAllMyProgramsPages = function(totalPages, token, startWith = 1) {
+    _fetchOneOfMyProgramsPage(startWith, token).then(
+        (response) => {
+            const xmlDoc = getXml(response);
+            const ProgramCollection = xmlDoc.getElementsByTagName("ProgramCollection")[0];
+            const items = ProgramCollection.getElementsByTagName("a:Program");
+            for (let i = 0; i < items.length; i++) {
+                let newProgram = {
+                    programId: items[i].getElementsByTagName("a:ProgramId")[0].firstChild.nodeValue,
+                };
+                myProgramsCache.push(newProgram);
+            }
+
+            if (startWith < totalPages) {
+                _fetchAllMyProgramsPages(totalPages, token, startWith +1);
+            } else {
+                console.log('INFO: Webservice returned', myProgramsCache.length , ' Program Partnership');
+                storage.set( {myPrograms: myProgramsCache });
+                console.debug('added page ' +   myProgramsCache.length  + ' Programs of myPrograms');
+            }
+        }
+    )
+}
+
+
+let _fetchOneOfMyProgramsPage = function(page, token) {
+    console.log('Send Request for page', page);
+    return _sendRequest(generateBodyForMyPrograms(token, page), 'https://api.affili.net/V2.0/PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms');
+}
 
 class PublisherWebservice {
 
@@ -231,6 +280,7 @@ class PublisherWebservice {
     }
 
 
+
     UpdateMyPrograms() {
 
         storage.remove('myPrograms');
@@ -249,35 +299,13 @@ class PublisherWebservice {
                         const ProgramCollection = xmlDoc.getElementsByTagName("ProgramCollection")[0];
                         const resultsOnThisPage = ProgramCollection.getElementsByTagName("a:Program").length;
 
-                        const totalPages = Math.ceil(totalResults / 100);
+                        let totalPages = Math.ceil(totalResults / 100);
+                        console.log('INFO: Webservice Reports ' , totalResults, ' Partnerships on ', totalPages, ' Pages.. fetching data from webserivice');
                         const items = ProgramCollection.getElementsByTagName("a:Program");
 
-                        _addToMyProgramsCache(items);
+                        _fetchAllMyProgramsPages(totalPages, token, 1);
 
 
-
-                        if (resultsOnThisPage == 100) {
-                            for (page; page < totalPages; page++) {
-
-                                _sendRequest(generateBodyForMyPrograms(token, page), 'https://api.affili.net/V2.0/PublisherProgram.svc', 'http://affilinet.framework.webservices/Svc/PublisherProgramContract/SearchPrograms')
-                                    .then( function(response) {
-                                    const xmlDoc = getXml(response);
-                                    const ProgramCollection = xmlDoc.getElementsByTagName("ProgramCollection")[0];
-                                    const items = ProgramCollection.getElementsByTagName("a:Program");
-
-                                    _addToMyProgramsCache(items);
-
-                                    if (myProgramsCache.length > (totalPages - 1 ) * 100 ) {
-                                        // this is the last request
-                                        console.log('write myProgramsCache to Storage', myProgramsCache);
-                                        storage.set( {myPrograms: myProgramsCache });
-                                        console.debug(page  + ' Seiten MyPrograms hinzugefügt');
-                                    }
-
-                                }, console.debug)
-
-                            }
-                        }
 
 
                     }, console.debug);
