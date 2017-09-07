@@ -1,4 +1,3 @@
-// locale-de.json
 {
 
   "SIDEBAR_Account": "Account",
@@ -134,7 +133,6 @@
   "WIDGET_ProductsHeadline": "Drag & Drop Products",
   "WIDGET_PreviewHeadline": "Widget Preview",
   "WIDGET_GetCodeHeadline": "Widget Code",
-  "WIDGET_SelectProductListPlaceholder": "Product List",
   "WIDGET_CopyToClipboard": "Copy to Clipboard",
   "WIDGET_GeneratorLabelWidth": "Width",
   "WIDGET_GeneratorLabelHeight": "Height",
@@ -145,13 +143,12 @@
   "WIDGET_GeneratorLabelAutoplay": "Auto Play",
   "WIDGET_GeneratorLabelPrice": "Price",
   "WIDGET_GeneratorLabelName": "Name",
-  "WIDGET_GeneratorLabelShop": "Shop",
+  "WIDGET_GeneratorLabelShop": "Advertiser",
   "WIDGET_GeneratorLabelBrand": "Brand",
   "WIDGET_GeneratorLabelManufacturer": "Manufacturer",
   "WIDGET_BtnCopyWidget": "Copy Widget",
   "WIDGET_BtnCreateNew": "Create New Widget",
   "WIDGET_BtnOpenWidget": "Open Saved Widget",
-  "WIDGET_OpenWidgetPlaceholder": "Select Widget",
   "WIDGET_WidgetNameLabel": "Widget Name",
   "WIDGET_BtnSave": "Save",
   "WIDGET_DropProductHere": "No Product added",

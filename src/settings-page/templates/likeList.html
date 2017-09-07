@@ -229,6 +229,7 @@
             <button  class="btn btn-link" ui-sref="widget({productIds : [productId] })"><i class="fa fa-2x fa-file-code-o"></i></button>
             <span  class="btn btn-link" ng-click="copyImageCodeForProduct(productId)"  ><i class="fa fa-2x fa-code"></i></span>
             <span  class="btn btn-link" ng-click="copyDeeplinkForProduct(productId)"  ><i class="fa fa-2x fa-link"></i></span>
+            <a  class="btn btn-link" target="_blank" ng-href="{{productDetails[productId].Deeplink1}}" ng-if="productDetails[productId]"><i class="fa fa-2x fa-external-link"></i></a>
 
 
         </div>
@@ -284,7 +285,7 @@
             <p ng-if="like.type != 'image'"translate="LIKELIST_PopoverVisitWebsite"></p>
             <p ng-if="like.type == 'image'" translate="LIKELIST_PopoverVisitWebsiteViewImage"></p>
 
-            <a  class="btn btn-link" target="_blank" ng-href="{{like.uri}}"><i class="fa fa-2x fa-globe"></i></a>
+            <a  class="btn btn-link" target="_blank" ng-href="{{like.uri}}"><i class="fa fa-2x fa-external-link"></i></a>
             <a ng-if="like.type == 'image'" class="btn btn-link" target="_blank" ng-href="{{like.image.src}}"><i class="fa fa-2x fa-image"></i></a>
 
         </div>

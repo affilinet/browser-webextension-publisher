@@ -98,5 +98,17 @@
   "context_messageImageCodeCopied": {
     "message": "Code de l'image copié dans le Presse-papier",
     "description": "Context menu success message for Image Code copied"
+  },
+  "popup_headlineStatus" : {
+    "message" : "Status",
+    "description" : "Popup Headline above statistics"
+  },
+  "popup_headlineShop" : {
+    "message" : "Shop",
+    "description" : "Popup Headline above Shop Details"
+  },
+  "popup_headlineTools" : {
+    "message" : "Tools",
+    "description" : "Popup Headline above Tools/links"
   }
 }

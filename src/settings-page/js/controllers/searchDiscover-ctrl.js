@@ -5,9 +5,9 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
     $scope.loadingFinished = false;
     $translate('SEARCHDISCOVER_PageName').then(function (text) {
         $scope.$parent.pageName = text;
+
     });
 
-    $scope.loadingFinished = true;
 
 
     $scope.searchFinsihed = false;
@@ -45,6 +45,38 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
 
 
     $scope.selectedProductList = null;
+
+    let loadProducts = function (productIds){
+
+        let i = 0;
+        let batch = 0;
+        let productBatches = [];
+        angular.forEach(productIds, (productId) => {
+
+            if (!productBatches[batch]) {
+                productBatches[batch] = [productId];
+            } else {
+                productBatches[batch].push(productId);
+            }
+            if (productBatches[batch].length === 50) {
+                batch++;
+            }
+            i++;
+        });
+
+        // load the product details from webservice
+
+        angular.forEach(productBatches, function (productIds) {
+            productWebservice.GetProducts(productIds).then(
+                (response) => {
+                    response.data.Products.forEach((product) => {
+                        $scope.productDetails[product.ProductId] = product;
+                    })
+                }
+            )
+        });
+    };
+
 
     BrowserExtensionService.storage.local.get(
         ['storedProductLists',
@@ -88,16 +120,12 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
                 $scope.selectedProductIds = result.searchDiscoverSelectedProductIds;
                 console.log('selected product ids', $scope.selectedProductIds);
 
-                if ($scope.selectedProductIds.length > 0 )
-                productWebservice.GetProducts($scope.selectedProductIds).then(
-                    (response) => {
-                        console.log(response.data.Products);
-                        response.data.Products.forEach((product) => {
-                            $scope.productDetails[product.ProductId] = product;
-                        })
+                if ($scope.selectedProductIds.length > 0 ) {
+                    loadProducts($scope.selectedProductIds)
 
-                    }
-                )
+                }
+
+
             }
 
             if (result.searchDiscoverShopsFilteredToSelectedPrograms) {
@@ -130,6 +158,8 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
                     }
                 }
             };
+
+            $scope.loadingFinished = true
 
         });
 
@@ -322,10 +352,17 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
                 .filter( (prod) => prod !== productId);
 
         } else {
-            $scope.selectedProductIds.push(productId);
+            $scope.selectedProductIds.unshift(productId);
         }
         console.log($scope.selectedProductIds);
-
+    }
+    $scope.addAllProducts = function(){
+        "use strict";
+        $scope.productResult.forEach((product) => {
+            if (!$scope.selectedProductIds.includes(product.ProductId)) {
+                $scope.selectedProductIds.unshift(product.ProductId);
+            }
+        })
     }
 
     $scope.createProductList = function (query) {
@@ -358,7 +395,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
         angular.forEach($scope.selectedProductIds, (productId) => {
             // do now allow dupes
             if (! $scope.selectedProductList.products.includes(productId)) {
-                $scope.selectedProductList.products.push(productId);
+                $scope.selectedProductList.products.unshift(productId);
             }
         });
         if ($scope.selectedProductIds.length > 0) {

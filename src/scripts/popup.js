@@ -6,12 +6,12 @@ const programId = document.getElementById("programId");
 const programName = document.getElementById("programName");
 
 const errorSection = document.getElementById("errorSection");
-const programSection = document.getElementById("programSection");
+const programSection = document.getElementById("shopSection");
 const linkSection = document.getElementById("linkSection");
 const linkInput = document.getElementById("linkInput");
 const copyLink = document.getElementById("copyLink");
 const statisticSection = document.getElementById("statisticSection");
-const footerSection = document.getElementById("footerSection");
+const footerSection = document.getElementById("toolsSection");
 
 const applyNow = document.getElementById("applyNow");
 const getCreatives = document.getElementById("getCreatives");

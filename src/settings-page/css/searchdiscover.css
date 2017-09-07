@@ -50,6 +50,11 @@
   font-size: 12px;
   line-height: 13px;
 }
+.searchDiscover #selectedProductsContainer {
+  max-height: 500px;
+  overflow-y: auto;
+  display: block;
+}
 .searchDiscover .small-image-col {
   height: 50px;
   width: 50px;

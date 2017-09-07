@@ -84,6 +84,7 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
         }, function(resposne) {
         });
     };
+
     $scope.copyImageCodeForProduct = function(productId){
         "use strict";
         $scope.$parent.sendAlert('Image Code  copied', 'success');
@@ -104,6 +105,7 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
                 alt : productDetails.ProductName,
                 title : productDetails.ProductName,
             },
+            hasDeeplink: false,
             uri: productDetails.Deeplink1,
             pageTitle: productDetails.ProductName
         };

@@ -127,10 +127,10 @@
             background-color: #135e13
         }
 
-        #programSection {
+        #shopSection {
             border-bottom: 1px solid #3b302d;
             text-align: center;
-            padding: 20px 0;
+            padding: 0 0 20px 0;
 
         }
 
@@ -138,7 +138,7 @@
         #linkSection {
             border-bottom: 1px solid #3b302d;
             text-align: center;
-            padding: 20px 0;
+            padding: 0  0 20px 0;
         }
         #noDeeplinkSupport {
             font-size: 12px;
@@ -185,12 +185,26 @@
 
         }
 
+        .headline {
+            text-align: left;
+            width: 100%;
+            padding: 10px 10px 20px 10px;
+            color: #8c8c8c;
+            background: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
 
         #statisticSection {
             border-bottom: 1px solid #3b302d;
-            padding: 20px 0;
+            padding: 0 0 20px 0;
 
         }
+         #statisticSection .button-list {
+             margin-top: 20px;
+             width: 100%;
+             text-align: center;
+         }
         .statItem {
             width: 32%;
             display: inline-block;
@@ -209,8 +223,8 @@
         #cancelled {
             color:#DE1C44;
         }
-        #footerSection {
-            padding: 15px 0;
+        #toolsSection {
+            padding: 0 10px 15px 10px;
             text-align: center;
         }
         .hidden {
@@ -245,6 +259,9 @@
     </div>
 
     <div id="statisticSection">
+        <div class="headline">
+            <p data-translateKey="popup_headlineStatus">Status</p>
+        </div>
         <div id="confirmed" class="statItem">
             <img src="images/fa-check-circle.png" class="fa" alt="">
             <div id="confirmedText">0,00 €</div>
@@ -260,6 +277,7 @@
             <img src="images/fa-times-circle.png" class="fa" alt="">
             <div id="cancelledText">0,00 €</div>
         </div>
+
         <div class="button-list">
             <div class="button link translateHtml" id="statistics" data-translateKey="popup_statistics">Statistics</div>
             <div class="button link translateHtml" id="news" data-translateKey="popup_news">News</div>
@@ -269,7 +287,11 @@
 
     </div>
 
-    <div id="programSection">
+    <div id="shopSection">
+        <div class="headline">
+            <p data-translateKey="popup_headlineShop">Shop</p>
+        </div>
+
         <div id="programDetails">
             <div id="programName"></div>
         </div>
@@ -294,14 +316,17 @@
     </div>
 
 
-    <div id="footerSection">
+    <div id="toolsSection">
+
+        <div class="headline">
+            <p data-translateKey="popup_headlineTools">Tools</p>
+        </div>
 
 
         <div class="button link translateHtml" id="searchDiscover" data-translateKey="popup_searchDiscover">Search & Discover</div>
         <div class="button link translateHtml" id="likeList" data-translateKey="popup_likeList">Like List</div>
         <div class="button link translateHtml" id="widgetGenerator" data-translateKey="popup_widgetGenerator">Widget Genererator</div>
 
-        <div class="button link translateHtml" id="settings3" data-translateKey="popup_settings">Settings</div>
 
     </div>
 </div>

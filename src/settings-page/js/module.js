@@ -13,7 +13,8 @@ angular.module('AffilinetToolbar', [
     'xeditable',
     'ngDragDrop',
     'slickCarousel',
-    'rzModule'
+    'rzModule',
+    'ngSanitize'
 ], function ($compileProvider) {
     "use strict";
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|resource):/);
@@ -28,18 +29,23 @@ angular.module('AffilinetToolbar', [
     ]);
 
 
+    $translateProvider.useSanitizeValueStrategy(null);
+    $translateProvider.forceAsyncReload(true);
+
+
+    $translateProvider.useLoader('customLoader');
+
     $translateProvider.useStaticFilesLoader({
         prefix: 'locales/',
         suffix: '/settings-page.json'
     });
 
-    $translateProvider.forceAsyncReload(true);
+
 
 
     $translateProvider.fallbackLanguage('en');
 
 
-    $translateProvider.useSanitizeValueStrategy(null);
     switch (navigator.language) {
         case 'de-DE':
         case 'de-de':
@@ -120,6 +126,6 @@ angular.module('AffilinetToolbar', [
     editableThemes['bs3'].submitTpl = '<button class="btn btn-primary" type="submit"><i class="fa fa-check"</button>';
     editableThemes['bs3'].cancelTpl = '<button class="btn btn-default"><i class="fa fa-times-circle"></i></button>';
 
-});
+})
 
 

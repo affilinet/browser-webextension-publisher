@@ -19,7 +19,17 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
     $translate('WIDGET_WarningChangesNotSaved').then(function (text) {
         $scope.messages.WIDGET_WarningChangesNotSaved = text;
     });
+    $translate('WIDGET_WidgetCreated').then(function (text) {
+        $scope.messages.WIDGET_WidgetCreated = text;
+    });
+    $translate('WIDGET_WidgetSaved').then(function (text) {
+        $scope.messages.WIDGET_WidgetSaved = text;
+    });
 
+    $translate('WIDGET_OpenWidgetPlaceholder').then(function (text) {
+        $scope.messages.WIDGET_OpenWidgetPlaceholder = text;
+        console.log($scope.messages);
+    });
 
     $scope.storedProductLists = [];
     $scope.storedWidgets = [];
@@ -121,13 +131,15 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
             delete changedWidget.$$hashKey;
             $scope.storedWidgets[index] = changedWidget;
             $scope.selectedWidget = changedWidget;
+            $scope.$parent.sendAlert($scope.messages.WIDGET_WidgetSaved, 'success')
         } else {
             let newWidget = angular.copy($scope.widget);
             delete newWidget.$$hashKey;
             newWidget.id = new Date().getTime();
-            $scope.storedWidgets.push(newWidget);
+            $scope.storedWidgets.unshift(newWidget);
             $scope.widget.id = newWidget.id;
             $scope.selectedWidget = newWidget;
+            $scope.$parent.sendAlert($scope.messages.WIDGET_WidgetCreated, 'success')
         }
     };
 
@@ -168,7 +180,9 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
             }
         } else {
             // save changes!
-            $scope.saveWidget();
+            if( $scope.widget.widgetName !== '') {
+                $scope.saveWidget();
+            }
         }
 
         $scope.widget = angular.copy($scope.defaultWidget);
@@ -328,10 +342,11 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
             if ($scope.storedProductLists[0]) {
                 $scope.selectedProductList = $scope.storedProductLists[0];
             }
-
         }
         if (res.storedWidgets) {
             $scope.storedWidgets = res.storedWidgets;
+
+
         }
         attachWatchHandlers();
 
@@ -343,6 +358,13 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
         });
 
         $scope.loadProductData(allProductIds);
+
+        // TODO Load widget
+        if ($stateParams.productIds.length === 0 ) {
+            $scope.selectedWidget = $scope.storedWidgets[0];
+            $scope.openWidget()
+        }
+
 
         $scope.loadingFinished = true;
     });
@@ -394,12 +416,14 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
             "shop" : $scope.widget.shop,
             "brand" : $scope.widget.brand,
             "manufacturer" : $scope.widget.manufacturer,
+            "version" : "1",
             "products" : []
         };
         angular.forEach($scope.widget.products, function(productId){
             if ($scope.productDetails[productId]) {
                 widgetConfig.products.push(
                     {
+                        "id" : productId,
                         "url" : $scope.productDetails[productId].Deeplink1,
                         "img" : $scope.productDetails[productId].Images[0][0].URL,
                         "price": $scope.productDetails[productId].PriceInformation.DisplayPrice,
@@ -424,12 +448,12 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
         ' class="affilinet-product-widget"' +
         ' data-affilinet-widget-id="' + $scope.widget.id +'"' +
         ' data-config=\''+  JSON.stringify(widgetConfig) +'\'>' +
-        '<sty' + 'le type="text/css">@import "https://productwidget.com/style.css";</style>' +
+        '<sty' + 'le type="text/css">@import "https://productwidget.com/style-1.0.0.css";</style>' +
         '<scr' + 'ipt type="text/javascript">' +
         '!function(d){var e,i = \'affilinet-product-widget-script\';if(!d.getElementById(i)){' +
         'e = d.createElement(\'script\');' +
         'e.id = i;' +
-        'e.src = \'https://productwidget.com/affilinet-product-widget-min.js\';' +
+        'e.src = \'https://productwidget.com/affilinet-product-widget-min-1.0.0.js\';' +
         'd.body.appendChild(e);}' +
         'if (typeof window.__affilinetWidget===\'object\')if (d.readyState===\'complete\'){' +
         'window.__affilinetWidget.init();}}(document);</scr' + 'ipt></div>'
