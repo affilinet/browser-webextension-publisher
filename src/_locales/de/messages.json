@@ -71,32 +71,32 @@
     "message": "Widget Generator",
     "description": "Popup Button Name for Widget Generator"
   },
-  "context_shareOn" :{
-    "message" : "Share",
+  "context_shareOn": {
+    "message": "Share",
     "description": "Context menu headline for share icons"
   },
-  "context_likeList" :{
-    "message" : "Save in my Like list",
+  "context_likeList": {
+    "message": "Save in my Like list",
     "description": "Context menu headline Like List icons"
   },
-  "context_codes" :{
-    "message" : "Get Codes",
+  "context_codes": {
+    "message": "Get Codes",
     "description": "Context menu headline get codes"
   },
-  "context_messageImageSaved" :{
-    "message" : "Image added to Like List ",
+  "context_messageImageSaved": {
+    "message": "Image added to Like List ",
     "description": "Context menu success message for Image Pin saved"
   },
-  "context_messageWebsiteSaved" :{
-    "message" : "Link added in Like List ",
+  "context_messageWebsiteSaved": {
+    "message": "Link added in Like List ",
     "description": "Context menu success message for Website Pin saved"
   },
-  "context_messageDeeplinkCopied" :{
-    "message" : "Deeplink copied to clipboard ",
+  "context_messageDeeplinkCopied": {
+    "message": "Deeplink copied to clipboard ",
     "description": "Context menu success message for Deeplink copied"
   },
-  "context_messageImageCodeCopied" :{
-    "message" : "Image code copied to clipboard",
+  "context_messageImageCodeCopied": {
+    "message": "Image code copied to clipboard",
     "description": "Context menu success message for Image Code copied"
   }
 }
