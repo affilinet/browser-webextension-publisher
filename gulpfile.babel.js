@@ -39,6 +39,7 @@ const paths = {
     cssOutput: 'src/settings-page/css/',
     images: 'src/settings-page/img/**/*.*',
     templates: 'src/settings-page/templates/**/*.html',
+    angularLocales: 'src/settings-page/locales/**/*.*',
     index: 'src/settings-page/*.html',
     bower_fonts: 'src/settings-page/fonts/*.{ttf,woff,eof,svg}'
 };
@@ -80,7 +81,7 @@ gulp.task('clean', () => {
 })
 
 gulp.task('build', (cb) => {
-    $.runSequence('clean', 'copyDependencies', 'copyCSVFiles', 'build-settings-page', 'styles', 'ext', cb)
+    $.runSequence('clean', 'copyDependencies', 'copyStaticFiles', 'build-settings-page', 'styles', 'ext', cb)
 });
 
 gulp.task('watch', ['build'], () => {
@@ -143,13 +144,17 @@ gulp.task('copyDependencies', () => {
 });
 
 
-gulp.task('copyCSVFiles',  () => {
+gulp.task('copyStaticFiles',  () => {
 
     gulp.src('./resources/*.csv')
         .pipe(gulp.dest('./src/data'));
 
     gulp.src('./resources/*.csv')
         .pipe(gulp.dest(`build/${target}/data`));
+    
+    
+    gulp.src(paths.angularLocales)
+        .pipe(gulp.dest(`build/${target}/settings-page/locales/`));
 });
 
 // -----------------
@@ -226,6 +231,11 @@ gulp.task('custom-less', function() {
     return gulp.src(paths.less)
         .pipe(less())
         .pipe(gulp.dest(paths.cssOutput));
+});
+
+gulp.task('copy-locales', function() {
+    return gulp.src(paths.angularLocales)
+        .pipe(gulp.dest(paths.angularLocalesOutput));
 });
 
 
