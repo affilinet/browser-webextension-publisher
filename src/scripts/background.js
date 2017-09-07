@@ -74,7 +74,20 @@ ext.runtime.onMessage.addListener(
                 break;
 
             case 'get-programDetails':
-                return sendResponse({programDetails : currentPageProgramDetails});
+                ext.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+
+                    // since only one tab should be active and in the current window at once
+                    // the return variable should only have one entry
+                    var activeTab = arrayOfTabs[0];
+                    hasProgram(getCleanedHostnameforUrl(activeTab.url))
+                        .then(
+                            (programDetails) => {
+                                sendResponse({programDetails : programDetails});
+                            },
+                            (error) => {
+                                sendResponse({programDetails : false})
+                            });
+                })
                 break;
             case 'save-credentials' :
                 console.log('received save credentials');
@@ -149,8 +162,6 @@ function _saveInLikeList(data, sendResponse) {
         if (result.likeList) {
             list = result.likeList
         }
-        // todo generate deeplink
-
         list.push(data);
         storage.set({likeList: list});
         sendResponse({message: 'Added to LikeList' });
@@ -186,33 +197,9 @@ function generateTrackingUrl(url) {
                 }
             }
         )
-    })
-
-    return new Promise((resolve, reject) =>  {
-        if (globalHasPartnership === true && globalHasProgram === true) {
-            // return deeplink
-            storage.get(['programsWithDeeplink', 'publisherId'], (storageResult) => {
-
-                let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === currentPageProgramDetails.programId && entry.platform !== '');
-                console.log(storageResult, currentPageProgramDetails, deeplinkInfo);
-                if (deeplinkInfo) {
-                    // has deeplink
-                    let deeplink = generateDeeplink(url, storageResult.publisherId, deeplinkInfo);
-                    console.log('generated deeplink', deeplink);
-                    resolve(deeplink)
-                } else {
-                    resolve(url);
-                }
-
-            });
-        }else {
-            console.log('no partnership/Program');
-            resolve(url);
-        }
-
     });
-}
 
+}
 
 
 function generateDeeplink(url, publisherId, deeplinkInfo) {
@@ -469,6 +456,7 @@ function setHasProgram(hasProgram, tabId) {
 function checkHostHasPartnership(programId, tabId) {
     hasPartnership(programId).then(
         (hasPartnership) => {
+            console.log('programId hasPartnership', hasPartnership);
             setHasPartnership(hasPartnership, tabId);
             if (hasPartnership === true) {
                 checkHostHasDeeplink(programId, tabId);
@@ -489,6 +477,7 @@ function hasDeeplink(programId) {
 function checkHostHasDeeplink(programId, tabId){
     hasDeeplink(programId).then(
         (deeplinkInfo) => {
+            console.log('programId hasDeeplink', programId, deeplinkInfo);
             globalHasProgramPartnerShipAndDeeplink = !!deeplinkInfo;
         }
     )
@@ -540,12 +529,11 @@ function hasPartnership(programId){
  */
 function checkHostHasProgram(hostname, tabId) {
     hasProgram(hostname).then(
-        (hasProgram) => {
-            setHasProgram(hasProgram, tabId);
-            if (hasProgram === true) {
-                storage.get(['allPrograms'], (result) => {
-                    checkHostHasPartnership(result.allPrograms[programIndex].programId, tabId )
-                })
+        (programInfo) => {
+            console.log('hostname has program', hostname, programInfo);
+            setHasProgram(programInfo, tabId);
+            if (programInfo !== false) {
+                checkHostHasPartnership(programInfo.programId, tabId );
             }
         }
     )
@@ -572,10 +560,11 @@ ext.tabs.onUpdated.addListener(function(tab, changes) {
  *
  */
 function getInfoaboutTab() {
+
     ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
         if (tabs.length) {
             const hostname = getCleanedHostnameforUrl(tabs[0].url);
-
+            console.log('info about tab with hostname', hostname)
             if (hostname !== 'newtab' && hostname !== null && hostname !== '' && hostname !== getCleanedHostnameforUrl(ext.extension.getURL(''))) {
                 checkHostHasProgram(hostname, tabs[0].id)
             }
