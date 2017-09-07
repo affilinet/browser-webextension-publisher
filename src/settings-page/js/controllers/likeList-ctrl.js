@@ -109,14 +109,6 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
         };
     }
 
-
-    $scope.createProductList = function(query) {
-        if (query !== '') {
-            let newItem = {name: query, products : [], id: new Date().getTime() + '-' + Math.random()};
-            $scope.storedProductLists.push(newItem);
-        }
-    };
-
     $scope.selectedNewListForProduct = function(productId, fromList, toList, productKey) {
         "use strict";
         console.log('selected new list for product', productId, fromList,  toList);
@@ -141,6 +133,7 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
     };
 
     $scope.createProductList = function (name) {
+
         console.log('create product list', name);
         if (name === undefined) {
             return false;
@@ -152,7 +145,9 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
             alert($scope.messages.LIKELIST_ListNamesMustBeUnique);
             return false
         }
-        $scope.storedProductLists.push({name: name, products:[]});
+        let id = new Date().getTime() + '-' + Math.random();
+        let newItem = {name: name, products : [], id: id};
+        $scope.storedProductLists.unshift(newItem);
         return false;
     };
 
@@ -206,20 +201,24 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
         }
     }
 
-    $scope.toggleSelectProduct = function(event, product) {
+    $scope.toggleSelectProduct = function(event, productId) {
+        console.log(productId);
         event.preventDefault();
         event.stopPropagation();
         console.log(event);
-        if ($scope.selectedProducts.includes(product)) {
+        if ($scope.selectedProductIds.includes(productId)) {
             $scope.selectedProducts = $scope.selectedProducts
-                .filter( (prod) => prod.ProductId !== product.ProductId);
+                .filter( (prod) => prod.ProductId !== productId);
 
             $scope.selectedProductIds = $scope.selectedProductIds
-                .filter( (prodId) => prodId !== product.ProductId);
+                .filter( (prodId) => prodId !== productId);
 
         } else {
-            $scope.selectedProducts.push(product);
-            $scope.selectedProductIds.push(product.ProductId);
+            if ($scope.productDetails[productId]) {
+                $scope.selectedProducts.push($scope.productDetails[productId]);
+                $scope.selectedProductIds.push(productId);
+            }
+
         }
     };
 

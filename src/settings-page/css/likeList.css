@@ -20,11 +20,6 @@
   float: none;
   height: 250px;
 }
-#likeList .productListHeadName {
-  margin-bottom: 0;
-  min-height: 45px;
-  padding-left: 5px;
-}
 #likeList .productList {
   margin-top: 20px;
   border-bottom: 1px solid #a8a199;
@@ -67,17 +62,18 @@
   font-weight: normal;
 }
 #likeList .image-col {
-  height: 230px;
-  width: 200px;
-  margin: 0 15px 0 0;
+  height: 200px;
+  width: 170px;
+  margin: 0 15px 15px 0;
   cursor: pointer;
+  float: left;
 }
 #likeList .image-col:first-of-type {
   margin-left: 0 !important;
 }
 #likeList .image-col .image-col-content {
-  height: 220px;
-  min-height: 220px;
+  height: 200px;
+  min-height: 200px;
   max-width: 100%;
   display: block;
   padding: 0px;
@@ -103,29 +99,36 @@
 }
 #likeList .image-col .corner.tl {
   width: 35px;
-  height: 180px;
+  height: 150px;
 }
 #likeList .image-col .corner.bl {
   width: 35px;
 }
 #likeList .image-col .corner.tr {
-  width: 163px;
-  height: 180px;
+  width: 133px;
+  height: 160px;
   text-align: right;
 }
 #likeList .image-col .corner.br {
-  width: 35px;
   text-align: right;
-  width: 163px;
+  width: 133px;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 #likeList .image-col .productUnavailable {
   color: #ccc;
-  margin-top: 15px;
-  font-size: 12px;
+  margin: auto;
   text-align: center;
   width: 100%;
+  display: block;
+  position: inherit;
+  float: right;
+}
+#likeList .image-col .productUnavailable .productUnavailableText {
+  position: absolute;
+  text-align: center;
+  margin-top: 82px;
+  margin-left: -20px;
 }
 #likeList .image-col .productImage {
   max-width: 100%;

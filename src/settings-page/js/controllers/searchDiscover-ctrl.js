@@ -344,7 +344,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
             return;
         }
 
-        $scope.storedProductLists.push(newItem);
+        $scope.storedProductLists.unshift(newItem);
         BrowserExtensionService.storage.local.set({
             storedProductLists : $scope.storedProductLists
         });

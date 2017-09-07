@@ -29,6 +29,9 @@ angular.module('AffilinetToolbar', [
     $translateProvider.fallbackLanguage('en');
 
     $translateProvider.translations('en', {
+        SIDEBAR_Account : "Account",
+        SIDEBAR_Tools : "Tools",
+
         LOCALE_DATEFORMAT: 'MM/DD/YYYY',
         ORDERS_PageName: 'Statistics',
         ORDERS_ChartLabelConfCommission: 'Confirmed Commission',
@@ -47,7 +50,7 @@ angular.module('AffilinetToolbar', [
         ORDERS_Commission: 'Commission',
         ORDERS_MoreStatistics: 'More Statistics',
 
-        NEWS_PageName: 'News',
+        NEWS_PageName: 'New Programs',
         NEWS_NewPrograms: 'New Programs',
         NEWS_NewVouchers: 'New Vouchers',
         NEWS_Image: 'Image',
@@ -102,9 +105,11 @@ angular.module('AffilinetToolbar', [
         GETVOUCHERS_ApplyNowCopyCode: 'Apply/Copy Code',
         GETVOUCHERS_AllCustomers: 'All Customers',
         GETVOUCHERS_MinimumOrderValue: 'Minimum Order Value',
+
         SpecificProducts: 'Specific Products',
         AllProducts: 'All Products',
         FreeProduct: 'Free Product',
+
         GETVOUCHERS_ApplyNow: 'Apply Now',
         GETVOUCHERS_CopyVoucherCode: 'Copy Voucher Code',
         IMPRESSUM_LINK: 'https://www.affili.net/uk/about-affilinet/contact',
@@ -112,16 +117,15 @@ angular.module('AffilinetToolbar', [
         SEARCHDISCOVER_PageName : 'Search & Discover',
         SEARCHDISCOVER_PlaceholderSearch : 'Products, Brands...',
         SEARCHDISCOVER_SearchFieldLabel : 'Keyword',
-        SEARCHDISCOVER_LabelShops : 'Product Feed',
-        SEARCHDISCOVER_PlaceholderShops : 'Filter Product Feed',
+        SEARCHDISCOVER_LabelShops : 'Product Feeds',
+        SEARCHDISCOVER_PlaceholderShops : 'Product Feeds',
         SEARCHDISCOVER_ResetButton: 'Reset',
         SEARCHDISCOVER_SearchButton : 'Search',
         SEARCHDISCOVER_AllPrograms : 'All Programs',
-        SEARCHDISCOVER_LabelAllPrograms : 'Filter to Programs',
+        SEARCHDISCOVER_LabelAllPrograms : 'Advertisers',
         SEARCHDISCOVER_AllCategories : 'All Categories',
         SEARCHDISCOVER_CreateWidgetHeadline : 'Add Products to Widget',
         SEARCHDISCOVER_BtnAddToWidget : 'Add to Widget',
-
         SEARCHDISCOVER_ShopCategories : 'Categories',
         SEARCHDISCOVER_PlaceholderShopCategories : 'Select Categories',
         SEARCHDISCOVER_PriceLabel: 'Price',
@@ -133,11 +137,9 @@ angular.module('AffilinetToolbar', [
         SEARCHDISCOVER_AddToList: 'Add to List',
         SEARCHDISCOVER_NoProductsSelected: 'No products selected',
         SEARCHDISCOVER_LoadMoreBtn: 'Show more...',
-
         SEARCHDISCOVER_Results: 'Results',
         SEARCHDISCOVER_GoToProductList: 'Show List ',
         SEARCHDISCOVER_ProductsAddedToProductList: 'Products added to List',
-
         SEARCHDISCOVER_DisplayName : 'Product Name',
         SEARCHDISCOVER_DisplayBrand : 'Brand',
         SEARCHDISCOVER_DisplayPrice : 'Price',
@@ -151,7 +153,7 @@ angular.module('AffilinetToolbar', [
         LIKELIST_SureYouWantToDeleteProduct : 'Do you really want to delete this product',
         LIKELIST_NoProductsInList: 'No products yet in this list',
         LIKELIST_NoProductsInListBtnToSearchDiscover: 'Find products',
-        LIKELIST_ProductNotAvailableAnymore: 'Not available anymore',
+        LIKELIST_ProductNotAvailableAnymore: 'Sold out',
         LIKELIST_CreateNewProductList: 'New List',
         LIKELIST_PopoverShareOn: 'Share on:',
         LIKELIST_PopoverGetWidgetCode: 'Get Widget / Image Code / Deeplink',
@@ -176,7 +178,6 @@ angular.module('AffilinetToolbar', [
         WIDGET_GetCodeHeadline: 'Widget Code',
         WIDGET_SelectProductListPlaceholder: 'Product List',
         WIDGET_CopyToClipboard: 'Copy to Clipboard',
-
         WIDGET_GeneratorLabelWidth: 'Width',
         WIDGET_GeneratorLabelHeight: 'Height',
         WIDGET_GeneratorLabelType: 'Type',
@@ -204,6 +205,10 @@ angular.module('AffilinetToolbar', [
     });
 
     $translateProvider.translations('de', {
+
+        SIDEBAR_Account : "Account",
+        SIDEBAR_Tools : "Tools",
+
         LOCALE_DATEFORMAT: 'DD.MM.YYYY',
         ORDERS_PageName: 'Statistik',
         ORDERS_ChartLabelConfCommission: 'Bestätigte Provision',
@@ -221,7 +226,7 @@ angular.module('AffilinetToolbar', [
         ORDERS_Sales_Leads: 'Sales/Leads',
         ORDERS_Commission: 'Provision',
         ORDERS_MoreStatistics: 'Mehr Statistiken',
-        NEWS_PageName: 'News',
+        NEWS_PageName: 'Neue Programme',
         NEWS_NewPrograms: 'Neue Programme',
         NEWS_NewVouchers: 'Neue Gutscheine',
         NEWS_Image: 'Bild',
@@ -286,6 +291,11 @@ angular.module('AffilinetToolbar', [
     });
 
     $translateProvider.translations('fr', {
+
+        SIDEBAR_Account : "Account",
+        SIDEBAR_Tools : "Tools",
+
+
         LOCALE_DATEFORMAT: 'DD.MM.YYYY',
         ORDERS_PageName: 'Statistiques',
         ORDERS_ChartLabelConfCommission: 'Gains confirmés',
@@ -361,13 +371,13 @@ angular.module('AffilinetToolbar', [
 
 
 
-
-
-
     });
 
 
     $translateProvider.translations('es', {
+
+        SIDEBAR_Account : "Account",
+        SIDEBAR_Tools : "Tools",
         LOCALE_DATEFORMAT: 'DD.MM.YYYY',
         ORDERS_PageName: 'Estadística',
         ORDERS_ChartLabelConfCommission: 'Comisión confirmada',
@@ -448,6 +458,11 @@ angular.module('AffilinetToolbar', [
 
 
     $translateProvider.translations('nl', {
+
+        SIDEBAR_Account : "Account",
+        SIDEBAR_Tools : "Tools",
+
+
         LOCALE_DATEFORMAT: 'DD.MM.YYYY',
         ORDERS_PageName: 'Statistiek',
         ORDERS_ChartLabelConfCommission: 'Bevestigde commissie',

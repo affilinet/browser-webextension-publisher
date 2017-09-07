@@ -97,12 +97,36 @@
                 </a>
             </li>
 
+            <li >
+                <span class="sidebar-title" translate="SIDEBAR_Account"></span>
+            </li>
+
             <li class="sidebar-list" ng-if="validCredentials">
                 <a ui-sref="news">{{'NEWS_PageName'|translate}} <span class="menu-icon fa fa-envelope"></span></a>
             </li>
             <li class="sidebar-list"  ng-if="validCredentials">
                 <a ui-sref="orders"><span translate="ORDERS_PageName"></span><span class="menu-icon fa fa-money"></span></a>
             </li>
+
+            <li class="sidebar-list">
+                <a ui-sref="settings">{{'SETTINGS_PageName'|translate}} <span class="menu-icon fa fa-cog"></span></a>
+            </li>
+
+
+            <li class="sidebar-list"  ng-if="validCredentials">
+                <a href="https://publisher.affili.net/Login/NewLogin.aspx" target="_blank">Publisher Portal<span
+                        class="menu-icon fa fa-external-link"></span></a>
+            </li>
+
+
+            <li >
+                <span class="sidebar-title" translate="SIDEBAR_Tools"></span>
+            </li>
+
+
+
+
+
             <li class="sidebar-list" ng-if="validCredentials">
                 <a ui-sref="searchDiscover"><span translate="SEARCHDISCOVER_PageName"></span><span class="menu-icon fa fa-search"></span></a>
             </li>
@@ -113,14 +137,8 @@
             <li class="sidebar-list" ng-if="validCredentials">
                 <a ui-sref="widget"><span translate="WIDGET_PageName"></span><span class="menu-icon fa fa-file-code-o"></span></a>
             </li>
-            <li class="sidebar-list">
-                <a ui-sref="settings">{{'SETTINGS_PageName'|translate}} <span class="menu-icon fa fa-cog"></span></a>
-            </li>
 
-            <li class="sidebar-list"  ng-if="validCredentials">
-                <a href="https://publisher.affili.net/Login/NewLogin.aspx" target="_blank">Publisher Portal<span
-                        class="menu-icon fa fa-external-link"></span></a>
-            </li>
+
 
         </ul>
         <div class="sidebar-footer">
