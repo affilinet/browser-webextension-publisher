@@ -16,15 +16,15 @@
     "description": "Popup Button Name for applyNow"
   },
   "popup_getCreatives": {
-    "message": "Get Creatives",
+    "message": "Creatives",
     "description": "Popup Button Name for getCreatives"
   },
   "popup_getVouchers": {
-    "message": "Get Vouchers",
+    "message": "Vouchers",
     "description": "Popup Button Name for getVouchers"
   },
   "popup_getTrackingLink": {
-    "message": "Tracking Link",
+    "message": "Standard Link",
     "description": "Popup Button Name for get tracking link"
   },
   "popup_getDeeplink": {

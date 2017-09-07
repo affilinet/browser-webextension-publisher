@@ -24,7 +24,7 @@
     "description": "Popup Button Name for getVouchers"
   },
   "popup_getTrackingLink": {
-    "message": "Trackinglink",
+    "message": "Standaardlink",
     "description": "Popup Button Name for get tracking link"
   },
   "popup_getDeeplink": {
