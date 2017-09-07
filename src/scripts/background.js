@@ -37,7 +37,8 @@ ext.runtime.onMessage.addListener(
                 sendResponse(globalHasProgramPartnerShipAndDeeplink);
                 break;
             case "save-in-like-list" :
-                return _saveInLikeList(request.data, sendResponse);
+                 _saveInLikeList(request.data, sendResponse);
+                 break;
 
             case "share-on-twitter" :
                 return generateTrackingUrl(request.data.uri).then( (redirectUrl) => {

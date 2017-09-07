@@ -4,102 +4,106 @@
      <div class="row-fluid">
         <div class="col-xs-8">
 
+            <div class="widget">
+                <div class="widget-header">
 
-            <div class="row-fluid">
+                </div>
+                <div class="widget-body">
+
                     <form class="form-horizontal row" ng-submit="searchProducts()">
 
-                    <div class="form-group">
+                        <div class="form-group">
 
-                        <label for="search" translate="SEARCHDISCOVER_SearchFieldLabel" class="col-sm-12"></label>
-                        <div class="col-sm-12">
-                            <input type="text"
-                                   ng-model="search"
-                                   autocomplete="off"
-                                   class="form-control"
-                                   id="search"
-                                   placeholder="{{'SEARCHDISCOVER_PlaceholderSearch'|translate}}"/>
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label class="col-sm-12" translate="SEARCHDISCOVER_LabelAllPrograms"></label>
-                        <div class="col-sm-12">
-                            <oi-select
-
-                                    oi-options="item.programTitle for item in myPrograms track by item.programId"
-                                    ng-model="selectedPrograms"
-                                    multiple
-                                    placeholder="{{'SEARCHDISCOVER_AllPrograms'|translate}}"
-                            ></oi-select>
+                            <label for="search" translate="SEARCHDISCOVER_SearchFieldLabel" class="col-sm-12"></label>
+                            <div class="col-sm-12">
+                                <input type="text"
+                                       ng-model="search"
+                                       autocomplete="off"
+                                       class="form-control"
+                                       id="search"
+                                       placeholder="{{'SEARCHDISCOVER_PlaceholderSearch'|translate}}"/>
+                            </div>
 
                         </div>
-                    </div>
 
-                    <div class="form-group">
 
-                        <label class="col-sm-12" translate="SEARCHDISCOVER_LabelShops"></label>
-                        <div class="col-sm-12">
-                            <i class="fa fa-spin fa-spinner" ng-if="allShopsLoading"></i>
-                            <oi-select
-                                    oi-options="item.ShopTitle for item in shopsFilteredToSelectedPrograms track by item.ShopId"
+                        <div class="form-group">
 
-                                    ng-model="selectedShops"
-                                    ng-disabled="selectedPrograms.length === 0"
-                                    multiple
-                                    placeholder="{{'SEARCHDISCOVER_PlaceholderShops'|translate}}"
-                            ></oi-select>
+                            <label class="col-sm-12" translate="SEARCHDISCOVER_LabelAllPrograms"></label>
+                            <div class="col-sm-12">
+                                <oi-select
 
+                                        oi-options="item.programTitle for item in myPrograms track by item.programId"
+                                        ng-model="selectedPrograms"
+                                        multiple
+                                        placeholder="{{'SEARCHDISCOVER_AllPrograms'|translate}}"
+                                ></oi-select>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="col-sm-12" translate="SEARCHDISCOVER_LabelShops"></label>
+                            <div class="col-sm-12">
+                                <i class="fa fa-spin fa-spinner" ng-if="allShopsLoading"></i>
+                                <oi-select
+                                        oi-options="item.ShopTitle for item in shopsFilteredToSelectedPrograms track by item.ShopId"
+
+                                        ng-model="selectedShops"
+                                        ng-disabled="selectedPrograms.length === 0"
+                                        multiple
+                                        placeholder="{{'SEARCHDISCOVER_PlaceholderShops'|translate}}"
+                                ></oi-select>
+
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="col-sm-12" translate="SEARCHDISCOVER_ShopCategories"></label>
+                            <div class="col-sm-12">
+                                <i class="fa fa-spin fa-spinner" ng-if="shopCategoriesLoading"></i>
+                                <oi-select
+                                        oi-options="item.Title for item in shopCategories track by item.Id"
+                                        ng-model="selectedShopCategories"
+                                        ng-disabled="selectedShops.length !== 1"
+                                        multiple
+                                        placeholder="{{'SEARCHDISCOVER_PlaceholderShopCategories'|translate}}"
+                                ></oi-select>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-6" translate="SEARCHDISCOVER_PriceLabel"></label>
 
                         </div>
-                    </div>
-
-                    <div class="form-group">
-
-                        <label class="col-sm-12" translate="SEARCHDISCOVER_ShopCategories"></label>
-                        <div class="col-sm-12">
-                            <i class="fa fa-spin fa-spinner" ng-if="shopCategoriesLoading"></i>
-                            <oi-select
-                                    oi-options="item.Title for item in shopCategories track by item.Id"
-                                    ng-model="selectedShopCategories"
-                                    ng-disabled="selectedShops.length !== 1"
-                                    multiple
-                                    placeholder="{{'SEARCHDISCOVER_PlaceholderShopCategories'|translate}}"
-                            ></oi-select>
-
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label class="col-sm-6" translate="SEARCHDISCOVER_PriceLabel"></label>
-
-                    </div>
                         <div class="row form-group">
-                        <rzslider rz-slider-model="priceSlider.minValue"
-                                  rz-slider-high="priceSlider.maxValue"
-                                  rz-slider-options="priceSlider.options"></rzslider>
+                            <rzslider rz-slider-model="priceSlider.minValue"
+                                      rz-slider-high="priceSlider.maxValue"
+                                      rz-slider-options="priceSlider.options"></rzslider>
                         </div>
-                    <div class="form-group">
-                        <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="col-sm-12">
 
-                            <button type="button"
-                                    ng-click="reset()"
-                                    class="btn btn-default" translate="SEARCHDISCOVER_ResetButton"></button>
+                                <button type="button"
+                                        ng-click="reset()"
+                                        class="btn btn-default" translate="SEARCHDISCOVER_ResetButton"></button>
 
-                            <button type="submit"
-                                    ng-disabled="search == '' && selectedShopCategories.length === 0"
-                                    class="btn btn-primary" translate="SEARCHDISCOVER_SearchButton"></button>
+                                <button type="submit"
+                                        ng-disabled="search == '' && selectedShopCategories.length === 0"
+                                        class="btn btn-primary" translate="SEARCHDISCOVER_SearchButton"></button>
+                            </div>
                         </div>
-                    </div>
 
-            </form>
-
+                    </form>
+                </div>
             </div>
 
-            <hr class="line">
+
 
 
             <div class="" ng-if="searchFinished">

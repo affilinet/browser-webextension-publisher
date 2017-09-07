@@ -39,7 +39,7 @@ const paths = {
     cssOutput: 'src/settings-page/css/',
     images: 'src/settings-page/img/**/*.*',
     templates: 'src/settings-page/templates/**/*.html',
-    angularLocales: 'src/settings-page/locales/**/*.*',
+    angularLocales: 'src/_locales/**/settings-page.json',
     index: 'src/settings-page/*.html',
     bower_fonts: 'src/settings-page/fonts/*.{ttf,woff,eof,svg}'
 };

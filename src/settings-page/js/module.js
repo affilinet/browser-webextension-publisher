@@ -30,9 +30,10 @@ angular.module('AffilinetToolbar', [
 
     $translateProvider.useStaticFilesLoader({
         prefix: 'locales/',
-        suffix: '.json'
+        suffix: '/settings-page.json'
     });
 
+    $translateProvider.forceAsyncReload(true);
 
 
     $translateProvider.fallbackLanguage('en');
