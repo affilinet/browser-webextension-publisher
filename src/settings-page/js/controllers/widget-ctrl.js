@@ -455,9 +455,11 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
         let widgetConfig = $scope.getWidgetConfig();
 
-        let code = '<div id="affilinet-product-widget-' + $scope.widget.id + '"' +
+        let randomInt = Math.ceil(Math.random() * 10000000000);
+
+        let code = '<div id="affilinet-product-widget-' + $scope.widget.id + '-' + randomInt + '"' +
         ' class="affilinet-product-widget"' +
-        ' data-affilinet-widget-id="' + $scope.widget.id +'"' +
+        ' data-affilinet-widget-id="' + $scope.widget.id + '"' +
         ' data-config="'+  btoa(JSON.stringify(widgetConfig)) +'">' +
         '<sty' + 'le type="text/css">@import "https://productwidget.com/style-1.0.0.css";</style>' +
         '<scr' + 'ipt type="text/javascript">' +
