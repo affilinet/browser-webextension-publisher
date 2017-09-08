@@ -152,13 +152,10 @@
   "WIDGET_BtnSave": "Save",
   "WIDGET_DropProductHere": "No Product added",
   "WIDGET_SureYouWantToClearProductsFromWidget": "Do you want to remove all products from your widget?",
-  "WIDGET_SureYouWantToDeleteWidget": "Do you really want to delete this widget?",
+  "WIDGET_SureYouWantToDeleteWidget": "Are you sure you want to delete this widget?",
   "WIDGET_BtnDeleteWidget": "Delete Widget",
-  "WIDGET_WarningChangesNotSaved": "You have unsaved changes, do you really want to create a new Widget",
-
-
+  "WIDGET_WarningChangesNotSaved": "You have unsaved changes, are you sure you want to create a new Widget",
   "WIDGET_WidgetCreated" : "Widget created",
   "WIDGET_WidgetSaved" : "Widget saved",
   "SEARCHDISCOVER_SelectAllProducts" : "Select all"
-
 }
