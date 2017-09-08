@@ -1,8 +1,9 @@
 @import "variables";
+
 #likeList {
 
-  .mpl0{
-    margin-left:0;
+  .mpl0 {
+    margin-left: 0;
     padding-left: 0;
   }
   .carousel > .row {
@@ -18,8 +19,6 @@
     height: 250px;
   }
 
-
-
   .productList {
     margin-top: 20px;
     border-bottom: 1px solid #a8a199;
@@ -32,9 +31,6 @@
     color: @text-color;
   }
 
-
-
-
   .productPopoverMenu {
     .btn {
       color: @text-color;
@@ -45,41 +41,39 @@
       border-bottom: 1px solid #dadada;
       margin-bottom: 10px;
       &:last-of-type {
-        border-bottom:0;
+        border-bottom: 0;
       }
     }
   }
 
-
   .popover-wrapper {
     z-index: 1000;
-    margin-top:20px;
+    margin-top: 20px;
     font-size: 14px;
 
     color: @text-color;
     .btn-link, a, p {
       color: @text-color;
       font-size: 15px;
-      font-weight: bold;
-      margin-right: 5px;
+      font-weight: normal;
+
       i {
+        margin-left: 10px;
         font-weight: normal;
       }
 
     }
   }
 
-
   .image-col {
     height: 200px;
     width: 170px;
-    margin:0 15px 15px 0;
+    margin: 0 15px 15px 0;
     cursor: pointer;
-    float:left;
-
+    float: left;
 
     &:first-of-type {
-      margin-left:0 !important;
+      margin-left: 0 !important;
     }
     .image-col-content {
       height: 200px;
@@ -100,24 +94,23 @@
     }
 
     .bg-gradient {
-      display:block;
+      display: block;
       height: 100%;
       width: 100%;
       background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 19px, rgba(255, 255, 255, 0) 66px);
 
-
     }
     .corner {
 
-      float:left;
-      padding:5px;
+      float: left;
+      padding: 5px;
       &.tl {
         width: 35px;
         height: 150px;
       }
       &.bl {
         width: 35px;
-     }
+      }
 
       &.tr {
         width: 133px;
@@ -129,10 +122,9 @@
         text-align: right;
         width: 133px;
         text-overflow: ellipsis;
-        overflow:hidden;
+        overflow: hidden;
       }
     }
-
 
     .productUnavailable {
       color: #ccc;
@@ -145,10 +137,9 @@
 
       .productUnavailableText {
         position: absolute;
-
         text-align: center;
         margin-top: 82px;
-        margin-left: -20px;
+        margin-left: -33px;
       }
     }
     .productImage {
@@ -161,7 +152,7 @@
       text-align: right;
       color: #aba9a9;
       margin: 0;
-      display:none;
+      display: none;
 
     }
 
@@ -170,7 +161,6 @@
         display: block;
       }
     }
-
 
   }
 }

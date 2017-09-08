@@ -4,12 +4,10 @@
 
             <uib-tab heading="{{'LIKELIST_TabProducts'|translate}}" >
 
-                <div class="row text-right">
-                    <div class="col-xs-12">
+                <div class="row" style="padding-top:20px;">
+                    <div class="col-xs-12 text-right">
                         <button class="btn btn-primary" style="color:white;font-style: normal;" editable-text="newProductListName"  onbeforesave="createProductList($data)" >{{ 'LIKELIST_CreateNewProductList'|translate}} <i class="fa fa-plus"></i></button>
-
-                        <button ui-sref="widget({productIds : selectedProductIds})" class="btn btn-primary pull-right" translate="LIKELIST_BtnCreateWidget"></button>
-
+                        <button ui-sref="widget({productIds : selectedProductIds})" class="btn btn-primary" translate="LIKELIST_BtnCreateWidget"></button>
                     </div>
                 </div>
 
@@ -70,7 +68,9 @@
                                         </p>
                                     </div>
                                     <div class="br corner shopTitle">
-                                        {{productDetails[productId].ShopTitle}}
+
+                                        {{ programUrls[productDetails[productId].ProgramId]}}
+
 
                                     </div>
                                 </div>
@@ -88,75 +88,67 @@
             </uib-tab>
 
 
-            <uib-tab heading="{{'LIKELIST_TabPins'|translate}}" >
+            <uib-tab heading="{{'LIKELIST_TabPins'|translate}}"  >
 
-                <div class="row productList">
-                    <div class="col-xs-12 productListHeadName ">
-                        <div class="popover-wrapper">
-                            <p translate="LIKELIST_HeadlineImages"></p>
+                <div class="row " style="padding-top:20px;">
+                    <div class="widget">
+                        <div class="widget-header">
+                            {{ 'LIKELIST_HeadlineImages'|translate}}
                         </div>
+                        <div class="widget-body">
+                            <div ng-if="likeImageCount === 0">
+                                <p class="productUnavailable">{{'LIKELIST_NoLikesInImageList'|translate}}</p>
+                            </div>
 
-                    </div>
-                    <div class="col-xs-12 mpl0 ">
+                            <div class="image-col " ng-repeat="(key, like) in likeList track by like.createdAt"  ng-if="likeList[key].type === 'image'">
 
-                            <div class="row">
-                                <div ng-if="likeImageCount === 0">
-                                    <p class="productUnavailable">{{'LIKELIST_NoLikesInImageList'|translate}}</p>
-                                </div>
+                                <div class="image-col-content "
+                                     ng-style="{'background-image':'url({{likeList[key].image.src }})'}">
 
-                                <div class="image-col " ng-repeat="(key, like) in likeList track by like.createdAt"  ng-if="likeList[key].type === 'image'">
+                                    <div class="bg-gradient">
+                                        <div class="corner tl">
+                                            <a class="text-color" uib-popover-template="pinMenuPopoverTemplate"
+                                               popover-placement="bottom-left"
 
-                                    <div class="image-col-content "
-                                         ng-style="{'background-image':'url({{likeList[key].image.src }})'}">
+                                               popover-is-open="isOpen[key]"
+                                               popover-trigger="outsideClick"
+                                            ><i class="fa fa-2x fa-bars"></i></a>
+                                        </div>
+                                        <div class="tr corner">
 
-                                        <div class="bg-gradient">
-                                            <div class="corner tl">
-                                                <a class="text-color" uib-popover-template="pinMenuPopoverTemplate"
-                                                   popover-placement="bottom-left"
-
-                                                   popover-is-open="isOpen[key]"
-                                                   popover-trigger="outsideClick"
-                                                ><i class="fa fa-2x fa-bars"></i></a>
-                                            </div>
-                                            <div class="tr corner">
-
-                                            </div>
-                                            <div class="bl corner">
+                                        </div>
+                                        <div class="bl corner">
                                                <span class="delete bl" ng-click="deleteLike(key)">
                                                 <i class="fa  fa-2x  fa-trash-o"></i>
                                             </span>
-                                            </div>
-                                            <div class="br corner">
-                                            </div>
+                                        </div>
+                                        <div class="br corner">
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-
+                            <div class="clearfix"></div>
+                        </div>
                     </div>
+
+
                 </div>
 
 
 
-                <div class="row productList">
-                    <div class="col-xs-12 productListHeadName ">
-                        <div class="popover-wrapper">
-                            <p translate="LIKELIST_HeadlineSites"></p>
+                <div class="row ">
+                    <div class="widget">
+
+                        <div class="widget-header">
+                            {{ 'LIKELIST_HeadlineSites'|translate}}
                         </div>
-
-
-                    </div>
-                    <div class="col-xs-12 mpl0 ">
-
-
-                        <div class="row">
+                        <div class="widget-body">
                             <div ng-if="likeWebsiteCount === 0">
                                 <p class="productUnavailable">{{'LIKELIST_NoLikesInSiteList'|translate}}</p>
                             </div>
 
                             <div class="image-col " ng-repeat="(key, like) in likeList track by like.createdAt"  ng-if="likeList[key].type === 'link'">
-
                                 <div class="image-col-content "
                                      ng-style="{'background-image':'url({{likeList[key].image.src }})'}">
 
@@ -185,16 +177,13 @@
 
 
                                 </div>
-
-
-
-
                             </div>
+                            <div class="clearfix"></div>
                         </div>
-
-
-
                     </div>
+
+
+
                 </div>
             </uib-tab>
 

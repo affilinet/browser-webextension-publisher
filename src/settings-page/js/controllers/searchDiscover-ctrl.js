@@ -9,7 +9,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
     });
 
 
-
+    $scope.allShopsLoading = true;
     $scope.searchFinsihed = false;
     $scope.searching = false;
     $scope.myPrograms = [];
@@ -43,7 +43,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
     $scope.selectedProductIds = [];
     $scope.totalRecords = 0;
     $scope.totalPages = 0;
-
+    let searchChangedTimeoutPromise;
 
     $scope.selectedProductList = null;
 
@@ -80,211 +80,210 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
     };
 
 
-    BrowserExtensionService.storage.local.get(
-        ['storedProductLists',
-            'searchDiscoverShowDetails',
-            'searchDiscoverLastKeyword',
-            'searchDiscoverSelectedShopCategories',
-            'searchDiscoverSelectedShops',
-            'searchDiscoverSelectedPrograms',
-            'searchDiscoverSelectedProgramIds',
-            'searchDiscoverSelectedProductIds',
-            'searchDiscoverShopsFilteredToSelectedPrograms',
-            'searchDiscoverShopsMinPrice',
-            'searchDiscoverShopsMaxPrice',
-        ]
-        , function(result) {
-            if (result.storedProductLists) {
-                $scope.storedProductLists = result.storedProductLists;
-            } else {
-                $scope.storedProductLists = [];
-            }
-            if (result.searchDiscoverShowDetails) {
-                $scope.searchDiscoverShowDetails = result.searchDiscoverShowDetails;
-            }
-            if (result.searchDiscoverLastKeyword) {
-                $scope.searchKeyword = result.searchDiscoverLastKeyword;
-            }
-            if (result.searchDiscoverSelectedShopCategories) {
-                $scope.selectedShopCategories = result.searchDiscoverSelectedShopCategories;
-            }
-            if (result.searchDiscoverSelectedShops) {
-                $scope.selectedShops = result.searchDiscoverSelectedShops;
-            }
-
-            if (result.searchDiscoverSelectedProgramIds) {
-                $scope.selectedProgramsIds = result.searchDiscoverSelectedProgramIds;
-            }
-            if (result.searchDiscoverSelectedPrograms) {
-                $scope.selectedPrograms = result.searchDiscoverSelectedPrograms;
-            }
-            if (result.searchDiscoverSelectedProductIds) {
-                $scope.selectedProductIds = result.searchDiscoverSelectedProductIds;
-                console.log('selected product ids', $scope.selectedProductIds);
-
-                if ($scope.selectedProductIds.length > 0 ) {
-                    loadProducts($scope.selectedProductIds)
-
+    let loadInitialValues = function  () {
+        BrowserExtensionService.storage.local.get(
+            ['storedProductLists',
+                'searchDiscoverShowDetails',
+                'searchDiscoverLastKeyword',
+                'searchDiscoverSelectedShopCategories',
+                'searchDiscoverSelectedShops',
+                'searchDiscoverSelectedPrograms',
+                'searchDiscoverSelectedProgramIds',
+                'searchDiscoverSelectedProductIds',
+                'searchDiscoverShopsFilteredToSelectedPrograms',
+                'searchDiscoverShopsMinPrice',
+                'searchDiscoverShopsMaxPrice',
+            ]
+            , function(result) {
+                console.log('result from storage', result);
+                if (result.storedProductLists) {
+                    $scope.storedProductLists = result.storedProductLists;
+                } else {
+                    $scope.storedProductLists = [];
+                }
+                if (result.searchDiscoverShowDetails) {
+                    $scope.searchDiscoverShowDetails = result.searchDiscoverShowDetails;
+                }
+                if (result.searchDiscoverLastKeyword) {
+                    $scope.searchKeyword = result.searchDiscoverLastKeyword;
+                }
+                if (result.searchDiscoverSelectedShopCategories) {
+                    $scope.selectedShopCategories = result.searchDiscoverSelectedShopCategories;
+                }
+                if (result.searchDiscoverSelectedShops) {
+                    $scope.selectedShops = result.searchDiscoverSelectedShops;
                 }
 
+                if (result.searchDiscoverShopsFilteredToSelectedPrograms) {
+                    $scope.shopsFilteredToSelectedPrograms = result.searchDiscoverShopsFilteredToSelectedPrograms;
+                }
 
-            }
+                if (result.searchDiscoverSelectedProgramIds) {
+                    $scope.selectedProgramsIds = result.searchDiscoverSelectedProgramIds;
+                }
+                if (result.searchDiscoverSelectedPrograms) {
+                    $scope.selectedPrograms = result.searchDiscoverSelectedPrograms;
+                }
+                if (result.searchDiscoverSelectedProductIds) {
+                    $scope.selectedProductIds = result.searchDiscoverSelectedProductIds;
+                    console.log('selected product ids', $scope.selectedProductIds);
 
-            if (result.searchDiscoverShopsFilteredToSelectedPrograms) {
-                $scope.shopsFilteredToSelectedPrograms = result.searchDiscoverShopsFilteredToSelectedPrograms;
-            }
-            if (result.searchDiscoverShopsMinPrice) {
-                $scope.minPrice = result.searchDiscoverShopsMinPrice;
-            } else {
-                $scope.minPrice = 0
-            }
-            if (result.searchDiscoverShopsMaxPrice) {
-                $scope.maxPrice = result.searchDiscoverShopsMaxPrice;
-            } else {
-                $scope.maxPrice = 2000;
-            }
-            $scope.priceSlider = {
-                minValue: $scope.minPrice,
-                maxValue: $scope.maxPrice,
-                options: {
-                    floor: 0,
-                    ceil: 2000,
-                    pushRange: true,
-                    onEnd: function(modelValue,min, max) {
-                        console.log(modelValue,min, max)
-                        $scope.searchIfValid();
-                        BrowserExtensionService.storage.local.set({
-                            searchDiscoverShopsMinPrice : min,
-                            searchDiscoverShopsMaxPrice : max
-                        })
+                    if ($scope.selectedProductIds.length > 0 ) {
+                        loadProducts($scope.selectedProductIds)
+
                     }
+
+
                 }
-            };
 
-            $scope.loadingFinished = true
 
+                if (result.searchDiscoverShopsMinPrice) {
+                    $scope.minPrice = result.searchDiscoverShopsMinPrice;
+                } else {
+                    $scope.minPrice = 0
+                }
+                if (result.searchDiscoverShopsMaxPrice) {
+                    $scope.maxPrice = result.searchDiscoverShopsMaxPrice;
+                } else {
+                    $scope.maxPrice = 2000;
+                }
+                $scope.priceSlider = {
+                    minValue: $scope.minPrice,
+                    maxValue: $scope.maxPrice,
+                    options: {
+                        floor: 0,
+                        ceil: 2000,
+                        pushRange: true,
+                        onEnd: function(modelValue,min, max) {
+                            console.log(modelValue,min, max)
+                            searchIfValid ();
+                            BrowserExtensionService.storage.local.set({
+                                searchDiscoverShopsMinPrice : min,
+                                searchDiscoverShopsMaxPrice : max
+                            })
+                        }
+                    }
+                };
+                searchIfValid ();
+                bindWatch();
+                $scope.$apply(function(){
+                    $scope.loadingFinished = true;
+                })
+
+
+
+            });
+    }
+
+
+    function bindWatch() {
+        $scope.$watch( 'searchDiscoverShowDetails', (searchDiscoverShowDetails)  => {
+                BrowserExtensionService.storage.local.set({searchDiscoverShowDetails : searchDiscoverShowDetails})
+            }, true
+        );
+
+        $scope.$watch( 'selectedProgramIds', (selectedProgramIds)  => {
+                BrowserExtensionService.storage.local.set({searchDiscoverSelectedProgramIds : selectedProgramIds})
+            }, true
+        );
+
+        $scope.$watch( 'selectedProductIds', (selectedProductIss)  => {
+                BrowserExtensionService.storage.local.set({searchDiscoverSelectedProductIds : selectedProductIss})
+            }, true
+        );
+
+        $scope.$watch( 'selectedPrograms',
+            (selectedPrograms)  => {
+                BrowserExtensionService.storage.local.set({searchDiscoverSelectedPrograms : selectedPrograms})
+                if (selectedPrograms.length === 0) {
+                    $scope.shopsFilteredToSelectedPrograms = $scope.allShops;
+                    BrowserExtensionService.storage.local.set({searchDiscoverShopsFilteredToSelectedPrograms : $scope.shopsFilteredToSelectedPrograms})
+                    $scope.selectedProgramsIds = $scope.allMyProgramIds;
+                    $scope.selectedShops = [];
+                } else {
+                    $scope.selectedProgramsIds = [];
+                    selectedPrograms.forEach((program) => {
+                        "use strict";
+                        $scope.selectedProgramsIds.push(program.programId)
+                    });
+                    $scope.shopsFilteredToSelectedPrograms = [];
+                    $scope.allShopsLoading = true;
+                    $scope.allShops.forEach((shop) => {
+                        "use strict";
+
+                        if ($scope.selectedProgramsIds.indexOf(shop.ProgramId.toString()) >= 0) {
+                            $scope.shopsFilteredToSelectedPrograms.push(shop);
+                        }
+                    })
+                    BrowserExtensionService.storage.local.set({searchDiscoverShopsFilteredToSelectedPrograms : $scope.shopsFilteredToSelectedPrograms})
+                    $scope.allShopsLoading = false;
+                    searchIfValid ();
+                }
+            }
+        );
+
+
+
+
+        $scope.$watch('selectedShops', (selectedShops) => {
+
+            BrowserExtensionService.storage.local.set({searchDiscoverSelectedShops : selectedShops});
+            if (selectedShops.length !== 1 ) {
+                $scope.selectedShopCategories = [];
+            }
+
+            if (selectedShops.length === 1) {
+                $scope.shopCategoriesLoading = true;
+                productWebservice.GetCategoryList(selectedShops[0].ShopId).then(
+                    (result) => {
+                        console.log('GetCategoryList list fetched', result);
+                        $scope.shopCategories = result.data.Categories;
+                        $scope.shopCategoriesLoading = false;
+                    }
+                )
+            }
+            searchIfValid ();
+
+        });
+        $scope.$watch('selectedShopCategories', function(shopCategories){
+            BrowserExtensionService.storage.local.set({searchDiscoverSelectedShopCategories : shopCategories});
+            searchIfValid ();
+        });
+
+        $scope.$watch('searchKeyword', (searchKeyword)=> {
+            console.log('Search Keyword changed', searchKeyword);
+            BrowserExtensionService.storage.local.set({searchDiscoverLastKeyword : searchKeyword});
+            searchIfValid ();
         });
 
 
+    }
 
-    $scope.$watch( 'searchDiscoverShowDetails', (searchDiscoverShowDetails)  => {
-            BrowserExtensionService.storage.local.set({searchDiscoverShowDetails : searchDiscoverShowDetails})
-        }, true
-    );
+    
 
-    $scope.$watch( 'selectedProgramIds', (selectedProgramIds)  => {
-            BrowserExtensionService.storage.local.set({searchDiscoverSelectedProgramIds : selectedProgramIds})
-        }, true
-    );
-    $scope.$watch( 'selectedPrograms', (selectedPrograms)  => {
-            BrowserExtensionService.storage.local.set({searchDiscoverSelectedPrograms : selectedPrograms})
-        }, true
-    );
-
-    $scope.$watch( 'selectedProductIds', (selectedProductIss)  => {
-            BrowserExtensionService.storage.local.set({searchDiscoverSelectedProductIds : selectedProductIss})
-        }, true
-    );
-
-
-    $scope.$watch('shopsFilteredToSelectedPrograms', (shopsFilteredToSelectedPrograms) => {
-        BrowserExtensionService.storage.local.set({searchDiscoverShopsFilteredToSelectedPrograms : shopsFilteredToSelectedPrograms})
-    },true);
-
-
-    $scope.$watch( 'selectedPrograms',
-        (selectedPrograms)  => {
-            if (selectedPrograms.length === 0) {
-                $scope.shopsFilteredToSelectedPrograms = $scope.allShops;
-                $scope.selectedProgramsIds = $scope.allMyProgramIds;
-                $scope.selectedShops = [];
-            } else {
-                $scope.selectedProgramsIds = [];
-                selectedPrograms.forEach((program) => {
-                    "use strict";
-                    $scope.selectedProgramsIds.push(program.programId)
-                });
-                $scope.shopsFilteredToSelectedPrograms = [];
-                $scope.allShopsLoading = true;
-                $scope.allShops.forEach((shop) => {
-                    "use strict";
-
-                    if ($scope.selectedProgramsIds.indexOf(shop.ProgramId.toString()) >= 0) {
-                        $scope.shopsFilteredToSelectedPrograms.push(shop);
-                    }
-                })
-                $scope.allShopsLoading = false;
-                $scope.searchIfValid();
-            }
+    let searchIfValid  = function() {
+        if ($scope.loadingFinished === false) {
+            return;
         }
-    );
 
-    let searchChangedTimeoutPromise;
-    $scope.searchIfValid = function() {
-        "use strict";
         $timeout.cancel(searchChangedTimeoutPromise);  //does nothing, if timeout already done
-        console.log('search if valid', $scope.searchKeyword , $scope.selectedShopCategories)
+
         if ($scope.searchKeyword === '' && $scope.selectedShopCategories.length === 0) {
             return
         }
+
+
         searchChangedTimeoutPromise = $timeout(function(){   //Set timeout
             $scope.searching = true;
+            console.debug('search if valid runs with', $scope.searchKeyword , $scope.selectedShopCategories, $scope.selectedPrograms, $scope.shopsFilteredToSelectedPrograms);
             $scope.searchProducts();
         },500);
 
 
     }
 
-    $scope.$watch('selectedShops', (selectedShops) => {
-
-        BrowserExtensionService.storage.local.set({searchDiscoverSelectedShops : selectedShops});
-        if (selectedShops.length !== 1 ) {
-            $scope.selectedShopCategories = [];
-        }
-
-        if (selectedShops.length === 1) {
-            $scope.shopCategoriesLoading = true;
-            productWebservice.GetCategoryList(selectedShops[0].ShopId).then(
-                (result) => {
-                    console.log('GetCategoryList list fetched', result);
-                    $scope.shopCategories = result.data.Categories;
-                    $scope.shopCategoriesLoading = false;
-                }
-            )
-        }
-        $scope.searchIfValid();
-
-    });
-    $scope.$watch('selectedShopCategories', function(shopCategories){
-        BrowserExtensionService.storage.local.set({searchDiscoverSelectedShopCategories : shopCategories});
-        $scope.searchIfValid();
-    });
-
-    $scope.$watch('searchKeyword', (searchKeyword)=> {
-        console.log('Search Keyword changed', searchKeyword);
-        BrowserExtensionService.storage.local.set({searchDiscoverLastKeyword : searchKeyword});
-        $scope.searchIfValid();
-    });
-
-    BrowserExtensionService.storage.local.get('myPrograms', function(result) {
-        "use strict";
-        if (result.myPrograms ) {
-            console.log('myPrograms', result.myPrograms);
-            $scope.myPrograms = result.myPrograms;
-            $scope.selectedProgramsIds = [];
-            result.myPrograms.forEach((program) => {
-                $scope.selectedProgramsIds.push(program.programId);
-                $scope.allMyProgramIds.push(program.programId);
-            });
-        } else {
-           $scope.myPrograms = [];
-        }
-    });
-
-
-
-
-    $scope.showError = function(error) {
+    
+    let showError  = function(error) {
         "use strict";
         let message = 'Error getting result from Product Webservice.';
         if (error.data && error.data.ErrorMessages && error.data.ErrorMessages.length > 0) {
@@ -294,16 +293,43 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
     }
 
 
-    $scope.allShopsLoading = true;
-    productWebservice.GetShopList().then(
-        (shopListResult)  => {
-            $scope.allShops = shopListResult.data.Shops;
-            $scope.allShopsLoading = false;
-        },
-        (error)  => {
-            $scope.showError(error);
-        }
-    );
+
+
+
+    let init = function() {
+
+
+
+        BrowserExtensionService.storage.local.get('myPrograms', function(result) {
+            "use strict";
+            if (result.myPrograms ) {
+                console.log('myPrograms', result.myPrograms);
+                $scope.myPrograms = result.myPrograms;
+                $scope.selectedProgramsIds = [];
+                result.myPrograms.forEach((program) => {
+                    $scope.selectedProgramsIds.push(program.programId);
+                    $scope.allMyProgramIds.push(program.programId);
+                });
+            } else {
+                $scope.myPrograms = [];
+            }
+        });
+        productWebservice.GetShopList().then(
+            (shopListResult)  => {
+                $scope.allShops = shopListResult.data.Shops;
+                $scope.allShopsLoading = false;
+                console.log('INIT');
+                loadInitialValues()
+
+            },
+            (error)  => {
+                showError (error);
+            }
+        );
+
+    }
+
+
 
 
 
@@ -326,16 +352,15 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
                  getProgramUrlForProgramId(product.ProgramId);
 
             });
-             console.log('DETAILS', $scope.productDetails);
         }, (error)  => {
-            $scope.showError(error);
+            showError (error);
             $scope.searching = false;
             $scope.searchFinished = true;
 
         })
     };
 
-    getProgramUrlForProgramId = function(ProgramId) {
+    let getProgramUrlForProgramId = function(ProgramId) {
         if (!$scope.programUrlsRequested[ProgramId]) {
             $scope.programUrlsRequested[ProgramId] = true;
             BrowserExtensionService.runtime.sendMessage({action : 'get-programDetailsForProgramId', data : { programId : ProgramId}},
@@ -361,7 +386,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
                 $scope.productResult.push(product)
             });
         }, (error)  => {
-            $scope.showError(error);
+            showError (error);
         })
     }
 
@@ -486,6 +511,9 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
         }
         // wenn keine shops aber programme ausgewählt filter nur nach shops der programme
         else if($scope.selectedPrograms.length > 0) {
+            if ($scope.shopsFilteredToSelectedPrograms.length === 0) {
+                console.error('NOT YET LOADED $scope.shopsFilteredToSelectedPrograms', $scope.shopsFilteredToSelectedPrograms)
+            }
             params.ShopIds = _shopsToShopIdCsv($scope.shopsFilteredToSelectedPrograms)
             params.ShopIdMode = 'Include';
         }
@@ -529,4 +557,6 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
         $scope.$broadcast('rzSliderForceRender');
     }, 1000);
 
+
+    init();
 };

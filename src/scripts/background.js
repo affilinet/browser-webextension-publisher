@@ -519,14 +519,14 @@ function hasProgram(hostname) {
 
 function getDetailsForProgramId(programId) {
     return new Promise((resolve,reject) => {
-        storage.get(['allPrograms'], function (result) {
+        storage.get(['allPrograms', 'countryPlatform'], function (result) {
             if (!result.allPrograms) {
                 console.error('allPrograms not loaded');
                 resolve(false);
             } else {
                 // find program in allPrograms
                 let programIndex = result.allPrograms.findIndex((program) => {
-                    return +program.programId === +programId
+                    return +program.programId === +programId && program.platformId === result.countryPlatform
                 });
                 if (programIndex > 0 ) {
                     console.log('programs found ', result.allPrograms[programIndex]);

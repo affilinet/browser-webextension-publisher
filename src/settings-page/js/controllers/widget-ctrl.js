@@ -60,11 +60,6 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
     $scope.widget.products = $stateParams.productIds;
 
-    $scope.debug = function(event, draggabe) {
-        "use strict";
-        //debugger;
-        console.log(event, draggabe);
-    }
 
 
     $scope.addWatchToWidget = function() {
@@ -414,7 +409,7 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
             console.log($scope.productDetails);
 
         });
-    }
+    };
 
 
 
@@ -429,7 +424,6 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
             "shop" : $scope.widget.shop,
             "brand" : $scope.widget.brand,
             "manufacturer" : $scope.widget.manufacturer,
-            "version" : "1",
             "products" : []
         };
         angular.forEach($scope.widget.products, function(productId){
@@ -460,13 +454,13 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
         let code = '<div id="affilinet-product-widget-' + $scope.widget.id + '"' +
         ' class="affilinet-product-widget"' +
         ' data-affilinet-widget-id="' + $scope.widget.id +'"' +
-        ' data-config=\''+  JSON.stringify(widgetConfig) +'\'>' +
+        ' data-config="'+  btoa(JSON.stringify(widgetConfig)) +'">' +
         '<sty' + 'le type="text/css">@import "https://productwidget.com/style-1.0.0.css";</style>' +
         '<scr' + 'ipt type="text/javascript">' +
         '!function(d){var e,i = \'affilinet-product-widget-script\';if(!d.getElementById(i)){' +
         'e = d.createElement(\'script\');' +
         'e.id = i;' +
-        'e.src = \'https://productwidget.com/affilinet-product-widget-min-1.0.0.js\';' +
+        'e.src = \'https://productwidget.com/affilinet-product-widget-1.0.0-min.js\';' +
         'd.body.appendChild(e);}' +
         'if (typeof window.__affilinetWidget===\'object\')if (d.readyState===\'complete\'){' +
         'window.__affilinetWidget.init();}}(document);</scr' + 'ipt></div>'

@@ -100,7 +100,7 @@
     "description": "Context menu success message for Image Code copied"
   },
   "popup_headlineStatus" : {
-    "message" : "Status",
+    "message" : "Account",
     "description" : "Popup Headline above statistics"
   },
   "popup_headlineShop" : {

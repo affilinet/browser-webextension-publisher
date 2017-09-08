@@ -35,6 +35,9 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
     $scope.selectedProducts = [];
     $scope.selectedProductIds = [];
 
+    $scope.programUrlsRequested = [];
+    $scope.programUrls = [];
+
     $scope.newProductListKey = null;
 
     $scope.likeImageCount = 0;
@@ -224,6 +227,20 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
         }
     };
 
+    let getProgramUrlForProgramId = function(ProgramId) {
+        if (!$scope.programUrlsRequested[ProgramId]) {
+            $scope.programUrlsRequested[ProgramId] = true;
+            BrowserExtensionService.runtime.sendMessage({action : 'get-programDetailsForProgramId', data : { programId : ProgramId}},
+                function(programDetails){
+                    if (programDetails !== false) {
+                        $scope.$apply(function(){
+                            $scope.programUrls[ProgramId] = programDetails.programUrl;
+                        });
+                    }
+                })
+        }
+    }
+
     BrowserExtensionService.storage.local.get(['likeList', 'storedProductLists'], function (res) {
         console.log('loading likelist');
         "use strict";
@@ -265,6 +282,7 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
                 (response) => {
                     angular.forEach(response.data.Products, (product) => {
                         $scope.productDetails[product.ProductId] = product
+                        getProgramUrlForProgramId(product.ProgramId)
                     });
                 }
             )

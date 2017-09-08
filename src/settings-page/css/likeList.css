@@ -53,12 +53,12 @@
 #likeList .popover-wrapper p {
   color: #3b302d;
   font-size: 15px;
-  font-weight: bold;
-  margin-right: 5px;
+  font-weight: normal;
 }
 #likeList .popover-wrapper .btn-link i,
 #likeList .popover-wrapper a i,
 #likeList .popover-wrapper p i {
+  margin-left: 10px;
   font-weight: normal;
 }
 #likeList .image-col {
@@ -128,7 +128,7 @@
   position: absolute;
   text-align: center;
   margin-top: 82px;
-  margin-left: -20px;
+  margin-left: -33px;
 }
 #likeList .image-col .productImage {
   max-width: 100%;

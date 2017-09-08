@@ -151,24 +151,33 @@
 <div class="row widgetPage" id="widgetDragDrop" ng-show="loadingFinished" >
     <div class="col-xs-12">
         <div class="widget">
-            <div class="widget-body">
-                <div class="row">
-                    <label class="col-xs-2">{{ 'WIDGET_ProductsHeadline'|translate}}</label>
-                    <div class="col-xs-10">
+            <div class="widget-header">
+                <div class="col-xs-4" style="padding-left: 0">
+                    {{ 'WIDGET_ProductsHeadline'|translate}}
+                </div>
 
-                        <oi-select
-                                id="productList"
-                                oi-options="item.name for item in storedProductLists track by item.name"
-                                ng-model="selectedProductList"
-                                oi-select-options="{
+                <div class="col-xs-8" style="line-height: normal">
+                    <oi-select class="pull-left"
+                               id="productList"
+                               oi-options="item.name for item in storedProductLists track by item.name"
+                               ng-model="selectedProductList"
+                               oi-select-options="{
                                     newItem: true,
                                     saveTrigger: 'enter',
                                     newItemFn: 'createProductList($query)',
                                     }"
-                        ></oi-select>
-                    </div>
+                    ></oi-select>
+
                 </div>
 
+
+
+
+
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="widget-body">
 
                 <div class="row productListContainer" id="">
                     <div class="col-xs-12">
