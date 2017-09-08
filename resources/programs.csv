@@ -1566,8 +1566,6 @@ AT;13681;drive-now.com;DriveNow.com  - Carsharing
 DE;13682;sixt.de;Sixt - DE
 DE;13685;ateliergs.de;Atelier Goldner Schnitt
 CH;13686;betz-designmoebel.ch;Betz Designmöbel
-DE;13696;booking.com;Booking.com DE
-AT;13698;booking.com;Booking.com AT
 DE;13707;123Blumenversand.de;123Blumenversand.de
 FR;13708;cultureindoor.com;Culture Indoor
 DE;13718;preiswertepc.de;Preiswerte PC - gebraucht und gut
@@ -1680,7 +1678,6 @@ UK;14087;sky.com;Sky
 UK;14088;sky.com;Sky Ireland
 DE;14089;fastbill.com;FastBill - Buchhaltung für kleine Unternehmen
 DE;14090;de.crosslend.com;CrossLend DE - Where money meets.
-NL;14092;booking.com;Booking.com NL
 AT;14093;toysrus.at;ToysRUs AT
 FR;14094;aanoxx.com;AANOXX
 CH;14097;toysrus.ch;ToysRUs CH
@@ -1720,7 +1717,6 @@ DE;14158;zizzz.de;Zizzz.de
 DE;14162;hem.com;Hem.com - Design Leicht Gemacht
 NL;14171;shop.fitgirlcode.com;Fitgirlcode
 DE;14173;hobbybaecker.de;Hobbybaecker.de - Backen wie die Profis!
-FR;14174;booking.com;Booking.com FR
 UK;14175;secure.debenhamshomeinsurance.co.uk;Debenhams Home Insurance
 UK;14177;debenhams.quote-my-pet.co.uk;Debenhams Pet Insurance
 UK;14178;secure.debenhamscarinsurance.co.uk;Debenhams Car Insurance
@@ -2000,7 +1996,11 @@ DE;14902;crowdfox.com;Crowdfox und Crowdfox Business
 NL;14905;247budget.nl;247Budget
 DE;14911;clevertronic.de;Clevertronic, Handy und Co verkaufen oder kaufen.
 UK;14912;goodenergy.co.uk;Good Energy
+DE;14917;booking.com;Booking.com DE
 CH;14918;booking.com;Booking.com CH | room sales
+AT;14919;booking.com;Booking.com AT
+NL;14921;booking.com;Booking.com NL
+FR;14922;booking.com;Booking.com FR
 DE;14928;deerberg.de;Deerberg - Ihre Mode und Schuhe
 CH;14934;your-credit.ch;Your-Credit.ch - Ihr Kreditpartner
 DE;14935;m.exactag.com;BILDplus
