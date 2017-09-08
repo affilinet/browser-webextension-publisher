@@ -1,0 +1,299 @@
+<div class="row" id="likeList" ng-show="loadingFinished">
+    <div class="col-lg-12">
+        <uib-tabset active="activeTabIndex">
+
+            <uib-tab heading="{{'LIKELIST_TabProducts'|translate}}" >
+
+                <div class="row" style="padding-top:20px;">
+                    <div class="col-xs-12 text-right">
+                        <button class="btn btn-primary" style="color:white;font-style: normal;" editable-text="newProductListName"  onbeforesave="createProductList($data)" >{{ 'LIKELIST_CreateNewProductList'|translate}} <i class="fa fa-plus"></i></button>
+                        <button ui-sref="widget({productIds : selectedProductIds})" class="btn btn-primary" translate="LIKELIST_BtnCreateWidget"></button>
+                    </div>
+                </div>
+
+                <div class="widget productList"  ng-repeat="(key, list) in storedProductLists track by list.id">
+                    <div class="widget-header">
+
+                            <div class="popover-wrapper ">
+
+                                <a editable-text="storedProductLists[key].name"  onbeforesave="checkProductListName($data, storedProductLists[key])">
+                                    {{storedProductLists[key].name}} <i class="fa fa-pencil"></i></a>
+
+                                <a ng-click="deleteProductList(key)"><i class="fa fa-trash-o"></i></a>
+                                <a ui-sref="widget({productIds : storedProductLists[key].products  })"><i class="fa fa-file-code-o"></i></a>
+                            </div>
+
+                            <span class="clearfix"></span>
+
+                    </div>
+                    <div class="widget-body clearfix">
+                        <div ng-if="list.products.length < 1">
+                            <p class="productUnavailable">{{'LIKELIST_NoProductsInList'|translate}} <a  ui-sref="searchDiscover">{{'LIKELIST_NoProductsInListBtnToSearchDiscover'|translate}}</a>
+                            </p>
+                        </div>
+
+                        <div class="image-col " ng-repeat="(productKey, productId) in list.products" ng-click="toggleSelectProduct($event, productId)">
+
+                            <div class="image-col-content "
+                                 ng-style="{'background-image':'url( ' +  productDetails[productId].Images[0][0].URL + ')'}">
+
+                                <span class="productUnavailable" ng-if="!productDetails[productId]">
+                                    <span class="productUnavailableText" translate="LIKELIST_ProductNotAvailableAnymore"></span>
+                                </span>
+
+
+                                <div class="bg-gradient">
+
+
+                                    <div class="corner tl">
+                                        <a class="text-color"
+                                           ng-if="productDetails[productId]"
+                                           uib-popover-template="productMenuPopoverTemplate"
+                                           popover-placement="bottom-left"
+                                           popover-trigger="outsideClick"
+                                           popover-is-open="isOpen[productId]"
+                                           ng-click="$event.stopPropagation();"><i
+                                                class="fa fa-2x fa-bars"></i></a>
+                                    </div>
+                                    <div class="tr corner">
+                                        <i class="fa fa-2x fa-check-circle"
+                                           ng-if="selectedProducts.includes(productDetails[productId]) && productDetails[productId]"></i>
+                                        <i class="fa fa-2x fa-circle-o"
+                                           ng-if="!selectedProducts.includes(productDetails[productId]) && productDetails[productId]"></i>
+
+                                    </div>
+                                    <div class="bl corner">
+                                        <p ng-click="deleteProduct($event, productKey, key)" >
+                                            <i class="fa  fa-2x  fa-trash-o"></i>
+                                        </p>
+                                    </div>
+                                    <div class="br corner shopTitle">
+
+                                        {{ programUrls[productDetails[productId].ProgramId]}}
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+            </uib-tab>
+
+
+            <uib-tab heading="{{'LIKELIST_TabPins'|translate}}"  >
+
+                <div class="row " style="padding-top:20px;">
+                    <div class="widget">
+                        <div class="widget-header">
+                            {{ 'LIKELIST_HeadlineImages'|translate}}
+                        </div>
+                        <div class="widget-body">
+                            <div ng-if="likeImageCount === 0">
+                                <p class="productUnavailable">{{'LIKELIST_NoLikesInImageList'|translate}}</p>
+                            </div>
+
+                            <div class="image-col " ng-repeat="(key, like) in likeList track by like.createdAt"  ng-if="likeList[key].type === 'image'">
+
+                                <div class="image-col-content "
+                                     ng-style="{'background-image':'url({{likeList[key].image.src }})'}">
+
+                                    <div class="bg-gradient">
+                                        <div class="corner tl">
+                                            <a class="text-color" uib-popover-template="pinMenuPopoverTemplate"
+                                               popover-placement="bottom-left"
+
+                                               popover-is-open="isOpen[key]"
+                                               popover-trigger="outsideClick"
+                                            ><i class="fa fa-2x fa-bars"></i></a>
+                                        </div>
+                                        <div class="tr corner">
+
+                                        </div>
+                                        <div class="bl corner">
+                                               <span class="delete bl" ng-click="deleteLike(key)">
+                                                <i class="fa  fa-2x  fa-trash-o"></i>
+                                            </span>
+                                        </div>
+                                        <div class="br corner">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="row ">
+                    <div class="widget">
+
+                        <div class="widget-header">
+                            {{ 'LIKELIST_HeadlineSites'|translate}}
+                        </div>
+                        <div class="widget-body">
+                            <div ng-if="likeWebsiteCount === 0">
+                                <p class="productUnavailable">{{'LIKELIST_NoLikesInSiteList'|translate}}</p>
+                            </div>
+
+                            <div class="image-col " ng-repeat="(key, like) in likeList track by like.createdAt"  ng-if="likeList[key].type === 'link'">
+                                <div class="image-col-content "
+                                     ng-style="{'background-image':'url({{likeList[key].image.src }})'}">
+
+
+                                    <div class="bg-gradient">
+                                        <div class="corner tl">
+                                            <a class="text-color" uib-popover-template="pinMenuPopoverTemplate"
+                                               popover-placement="bottom-left"
+
+                                               popover-is-open="isOpen[key]"
+                                               popover-trigger="outsideClick"
+                                            ><i class="fa fa-2x fa-bars"></i></a>
+                                        </div>
+                                        <div class="tr corner">
+
+                                        </div>
+                                        <div class="bl corner">
+                                           <span class="delete bl" ng-click="deleteLike(key)">
+                                            <i class="fa  fa-2x  fa-trash-o"></i>
+                                        </span>
+                                        </div>
+                                        <div class="br corner">
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </uib-tab>
+
+
+        </uib-tabset>
+
+    </div>
+</div>
+
+<script type="text/ng-template" id="productMenuPopoverTemplate.html" >
+
+
+    <div class="productPopoverMenu" ng-click="$event.stopPropagation()">
+
+
+            <div class="text-right">
+                <i class="fa fa-times" ng-click="isOpen[productId] = !isOpen[productId]"></i>
+            </div>
+
+        <div class="row">
+            <p translate="LIKELIST_PopoverShareOn"></p>
+            <div class="btn-group">
+                <button ng-click="shareOn('pinterest', productId)" class="btn btn-link"><i class="fa fa-2x fa-pinterest"></i></button>
+                <button ng-click="shareOn('facebook', productId)" class="btn btn-link"><i class="fa fa-2x fa-facebook"></i></button>
+                <button ng-click="shareOn('google', productId)" class="btn btn-link"><i class="fa fa-2x fa-google-plus"></i></button>
+                <button ng-click="shareOn('twitter', productId)" class="btn btn-link"><i class="fa fa-2x fa-twitter-square"></i></button>
+            </div>
+
+        </div>
+        <div class="row">
+            <p translate="LIKELIST_PopoverGetWidgetCode"></p>
+            <button  class="btn btn-link" ui-sref="widget({productIds : [productId] })"><i class="fa fa-2x fa-file-code-o"></i></button>
+            <span  class="btn btn-link" ng-click="copyImageCodeForProduct(productId)"  ><i class="fa fa-2x fa-code"></i></span>
+            <span  class="btn btn-link" ng-click="copyDeeplinkForProduct(productId)"  ><i class="fa fa-2x fa-link"></i></span>
+            <a  class="btn btn-link" target="_blank" ng-href="{{productDetails[productId].Deeplink1}}" ng-if="productDetails[productId]"><i class="fa fa-2x fa-external-link"></i></a>
+
+
+        </div>
+
+        <div class="row">
+
+            <p translate="LIKELIST_PopoverMoveToList"></p>
+
+
+            <select
+                    ng-model="newProductListKey"
+                    class="form-control"
+                    ng-change="selectedNewListForProduct(productId, key, newProductListKey, productKey)"
+                    placeholder="{{'LIKELIST_PopoverSelectProductListPlaceholder'|translate}}"
+            >
+                <option ng-repeat="(listKey, item) in storedProductLists" ng-value="listKey">{{item.name}}</option>
+            </select>
+
+
+
+        </div>
+    </div>
+</script>
+
+
+
+
+<script type="text/ng-template" id="pinMenuPopoverTemplate.html" >
+
+
+    <div class="productPopoverMenu" ng-click="$event.stopPropagation()">
+
+        <div class="text-right">
+            <i class="fa fa-times" ng-click="isOpen[key] = !isOpen[key]"></i>
+        </div>
+
+        <div class="row">
+
+            <p translate="LIKELIST_PopoverShareOn"></p>
+
+
+            <div class="btn-group">
+                <button ng-click="shareLikeOn('pinterest', like)" class="btn btn-link"><i class="fa fa-2x fa-pinterest"></i></button>
+                <button ng-click="shareLikeOn('facebook', like)" class="btn btn-link"><i class="fa fa-2x fa-facebook"></i></button>
+                <button ng-click="shareLikeOn('google', like)" class="btn btn-link"><i class="fa fa-2x fa-google-plus"></i></button>
+                <button ng-click="shareLikeOn('twitter', like)" class="btn btn-link"><i class="fa fa-2x fa-twitter-square"></i></button>
+            </div>
+
+
+
+        </div>
+        <div class="row">
+            <p ng-if="like.type != 'image'"translate="LIKELIST_PopoverVisitWebsite"></p>
+            <p ng-if="like.type == 'image'" translate="LIKELIST_PopoverVisitWebsiteViewImage"></p>
+
+            <a  class="btn btn-link" target="_blank" ng-href="{{like.uri}}"><i class="fa fa-2x fa-external-link"></i></a>
+            <a ng-if="like.type == 'image'" class="btn btn-link" target="_blank" ng-href="{{like.image.src}}"><i class="fa fa-2x fa-image"></i></a>
+
+        </div>
+
+        <div class="row" ng-if="like.hasDeeplink == true">
+            <p  translate="LIKELIST_PopoverCopyImageCodeDeeplink"></p>
+
+            <span  class="btn btn-link" ng-click="copyImageCode(like)"  ><i class="fa fa-2x fa-code"></i></span>
+            <span  class="btn btn-link" ng-click="copyDeeplink(like)"  ><i class="fa fa-2x fa-link"></i></span>
+
+        </div>
+
+    </div>
+</script>
+
+
+
+<div class="row" ng-hide="loadingFinished">
+    <div class="col-lg-12 text-center">
+        <i class="fa fa-4x fa-spinner fa-spin"></i>
+    </div>
+</div>

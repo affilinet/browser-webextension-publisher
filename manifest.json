@@ -1,6 +1,6 @@
 {
   "name": "__MSG_appName__",
-  "version": "3.1.0.8",
+  "version": "3.2.0.0",
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "icons": {
@@ -31,7 +31,29 @@
     },
     "default_title": "affilinet",
     "default_popup": "popup.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "css": [
+        "styles/contentscript.css"
+      ],
+      "js": [
+        "scripts/contentscript.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources" : [
+    "icons/*",
+    "styles/*.css",
+    "images/*"
+  ]
+
 }
 
 

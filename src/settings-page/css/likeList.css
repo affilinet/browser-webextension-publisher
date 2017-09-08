@@ -1,0 +1,147 @@
+/* #592727 RED */
+/* #2f5927 GREEN */
+/* #30426a BLUE (default)*/
+/* Sidebar background color */
+/* Sidebar header and
+  footer color */
+/* Sidebar title text colour */
+/* Sidebar menu item hover color */
+#likeList .mpl0 {
+  margin-left: 0;
+  padding-left: 0;
+}
+#likeList .carousel > .row {
+  overflow-x: auto;
+  white-space: nowrap;
+  overflow-y: hidden;
+}
+#likeList .carousel > .row > .image-col {
+  display: inline-block;
+  float: none;
+  height: 250px;
+}
+#likeList .productList {
+  margin-top: 20px;
+  border-bottom: 1px solid #a8a199;
+}
+#likeList .productList:last-of-type {
+  border-bottom: 0;
+}
+#likeList .text-color {
+  color: #3b302d;
+}
+#likeList .productPopoverMenu .btn {
+  color: #3b302d;
+  cursor: pointer;
+}
+#likeList .productPopoverMenu .row {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #dadada;
+  margin-bottom: 10px;
+}
+#likeList .productPopoverMenu .row:last-of-type {
+  border-bottom: 0;
+}
+#likeList .popover-wrapper {
+  z-index: 1000;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #3b302d;
+}
+#likeList .popover-wrapper .btn-link,
+#likeList .popover-wrapper a,
+#likeList .popover-wrapper p {
+  color: #3b302d;
+  font-size: 15px;
+  font-weight: normal;
+}
+#likeList .popover-wrapper .btn-link i,
+#likeList .popover-wrapper a i,
+#likeList .popover-wrapper p i {
+  margin-left: 10px;
+  font-weight: normal;
+}
+#likeList .image-col {
+  height: 200px;
+  width: 170px;
+  margin: 0 15px 15px 0;
+  cursor: pointer;
+  float: left;
+}
+#likeList .image-col:first-of-type {
+  margin-left: 0 !important;
+}
+#likeList .image-col .image-col-content {
+  height: 200px;
+  min-height: 200px;
+  max-width: 100%;
+  display: block;
+  padding: 0px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border: 1px solid #dadada;
+  background-size: 100%;
+}
+#likeList .image-col .bg-gradient {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.75) 25px, rgba(255, 255, 255, 0) 35px);
+}
+#likeList .image-col .corner {
+  float: left;
+  padding: 5px;
+}
+#likeList .image-col .corner.tl {
+  width: 35px;
+  height: 150px;
+}
+#likeList .image-col .corner.bl {
+  width: 35px;
+}
+#likeList .image-col .corner.tr {
+  width: 133px;
+  height: 160px;
+  text-align: right;
+}
+#likeList .image-col .corner.br {
+  text-align: right;
+  width: 133px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#likeList .image-col .productUnavailable {
+  color: #ccc;
+  margin: auto;
+  text-align: center;
+  width: 100%;
+  display: block;
+  position: inherit;
+  float: right;
+}
+#likeList .image-col .productUnavailable .productUnavailableText {
+  position: absolute;
+  text-align: center;
+  margin-top: 82px;
+  margin-left: -33px;
+}
+#likeList .image-col .productImage {
+  max-width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+}
+#likeList .image-col .shopTitle {
+  font-size: 9px;
+  text-align: right;
+  color: #aba9a9;
+  margin: 0;
+  display: none;
+}
+#likeList .image-col .image-col-content:hover .shopTitle {
+  display: block;
+}

@@ -38,7 +38,7 @@ ul.sidebar li a {
   width: 250px;
 }
 ul.sidebar .sidebar-main {
-  height: 65px;
+  height: 110px;
 }
 ul.sidebar .sidebar-main img {
   max-width: 75%;
@@ -57,12 +57,17 @@ ul.sidebar .sidebar-main .menu-icon {
   line-height: 60px;
 }
 ul.sidebar .sidebar-title {
-  color: #92776f;
-  font-size: 12px;
-  height: 35px;
+  margin-top: 10px;
+  font-weight: bold;
+  color: white;
+  font-size: 14px;
+  height: 40px;
+  width: 100%;
   line-height: 40px;
   text-transform: uppercase;
   transition: all .6s ease 0s;
+  display: block;
+  background: #a8a199;
 }
 ul.sidebar .sidebar-list {
   height: 40px;

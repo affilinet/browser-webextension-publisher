@@ -20,7 +20,7 @@
     "description": "Popup Button Name for getCreatives"
   },
   "popup_getTrackingLink": {
-    "message": "Tracking Link",
+    "message": "Standard Link",
     "description": "Popup Button Name for get tracking link"
   },
   "popup_getDeeplink": {
@@ -40,8 +40,8 @@
     "description": "Popup Button Name for statistics"
   },
   "popup_news": {
-    "message": "News",
-    "description": "Popup Button Name for news"
+    "message": "Neue Programme",
+    "description": "Popup Button Name for new programs"
   },
   "popup_settings": {
     "message": "Einstellungen",
@@ -58,5 +58,57 @@
   "popup_trackingLinkOnly": {
     "message": "Dieser Advertiser unterstützt noch keine Deeplinks.",
     "description": "Deeplink is Trackinglink only"
+  },
+  "popup_searchDiscover": {
+    "message": "Search & Discover",
+    "description": "Popup Button Name for Search&Discover"
+  },
+  "popup_likeList": {
+    "message": "Like List",
+    "description": "Popup Button Name for Like List"
+  },
+  "popup_widgetGenerator": {
+    "message": "Widget Generator",
+    "description": "Popup Button Name for Widget Generator"
+  },
+  "context_shareOn": {
+    "message": "Share",
+    "description": "Context menu headline for share icons"
+  },
+  "context_likeList": {
+    "message": "In meiner Like Liste speichern",
+    "description": "Context menu headline Like List icons"
+  },
+  "context_codes": {
+    "message": "Codes",
+    "description": "Context menu headline get codes"
+  },
+  "context_messageImageSaved": {
+    "message": "Image wurde der Like Liste hinzugefügt",
+    "description": "Context menu success message for Image Pin saved"
+  },
+  "context_messageWebsiteSaved": {
+    "message": "Link wurde der Like Liste hinzugefügt",
+    "description": "Context menu success message for Website Pin saved"
+  },
+  "context_messageDeeplinkCopied": {
+    "message": "Deeplink wurde ins Clipboard kopiert",
+    "description": "Context menu success message for Deeplink copied"
+  },
+  "context_messageImageCodeCopied": {
+    "message": "Image Code wurde ins Clipboard kopiert",
+    "description": "Context menu success message for Image Code copied"
+  },
+  "popup_headlineStatus" : {
+    "message" : "Account",
+    "description" : "Popup Headline above statistics"
+  },
+  "popup_headlineShop" : {
+    "message" : "Advertiser",
+    "description" : "Popup Headline above Shop Details"
+  },
+  "popup_headlineTools" : {
+    "message" : "Tools",
+    "description" : "Popup Headline above Tools/links"
   }
 }

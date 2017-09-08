@@ -6,12 +6,12 @@ const programId = document.getElementById("programId");
 const programName = document.getElementById("programName");
 
 const errorSection = document.getElementById("errorSection");
-const programSection = document.getElementById("programSection");
+const programSection = document.getElementById("shopSection");
 const linkSection = document.getElementById("linkSection");
 const linkInput = document.getElementById("linkInput");
 const copyLink = document.getElementById("copyLink");
 const statisticSection = document.getElementById("statisticSection");
-const footerSection = document.getElementById("footerSection");
+const footerSection = document.getElementById("toolsSection");
 
 const applyNow = document.getElementById("applyNow");
 const getCreatives = document.getElementById("getCreatives");
@@ -94,7 +94,7 @@ function onGetProgramDetailsResponse(response, hasPartnership) {
     if (response.programDetails && response.programDetails.programId) {
         setProgramDetails(response.programDetails);
         if (hasPartnership) {
-            popuplateLink(response.programDetails);
+            popuplateLink(response.programDetails.programId);
         }
         show(programSection);
     } else {
@@ -129,35 +129,51 @@ popup.addEventListener("click", function (e) {
     e.preventDefault();
 
     if (e.target) {
-        if (e.target.matches("#settings") || e.target.matches("#settings2") || e.target.matches("#settings3")) {
+        console.log(e.target);
+
+        if (e.target.matches(".linksettings")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "settings"}});
         }
-        else if (e.target.matches("#logo")) {
+        else if (e.target.matches(".linklogo")) {
             ext.runtime.sendMessage({action: "open-link", data: {link: "https://www.affili.net/"}});
         }
-        else if (e.target.matches("#news")) {
+        else if (e.target.matches(".linknews")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "news"}});
         }
-        else if (e.target.matches("#statistics")) {
+        else if (e.target.matches(".linkstatistics")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "orders"}});
         }
-        else if (e.target.matches("#applyNow")) {
+        else if (e.target.matches(".linkapplyNow")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "applynow/" + programId.getAttribute('value')}});
         }
-        else if (e.target.matches("#getCreatives")) {
+        else if (e.target.matches(".linkgetCreatives")) {
             ext.runtime.sendMessage({
                 action: "open-page",
                 data: {page: "getCreatives/" + programId.getAttribute('value')}
             });
         }
-        else if (e.target.matches("#getVouchers")) {
+        else if (e.target.matches(".linkgetVouchers")) {
             ext.runtime.sendMessage({
                 action: "open-page",
                 data: {page: "getVouchers/" + programId.getAttribute('value')}
             });
         }
-        else if (e.target.matches("#getDeeplink") || e.target.matches("#getTrackingLink")) {
+        else if (e.target.matches(".linkgetDeeplink") || e.target.matches(".linkgetTrackingLink")) {
             show(linkSection);
+        }
+        else if (e.target.matches(".linklikeList")) {
+            ext.runtime.sendMessage({action: "open-page", data: {page: "likeList"}});
+        }
+        else if (e.target.matches(".linkwidgetGenerator")) {
+            ext.runtime.sendMessage({action: "open-page", data: {page: "widget"}});
+        }
+        else if (e.target.matches(".linksearchDiscover")) {
+            ext.runtime.sendMessage({action: "open-page", data: {page: "searchDiscover"}});
+        }
+
+        else if (e.target.matches(".linkaddToWebsitePins")) {
+            ext.runtime.sendMessage({action: "save-current-tab-in-like-list"});
+            ext.runtime.sendMessage({action: "open-page", data: {page: "likeList?tab=1"}});
         }
     }
     return true;
@@ -184,8 +200,8 @@ function setProgramDetails(programDetails) {
     programName.innerText = programDetails.programTitle ? programDetails.programTitle : '';
 }
 
-function popuplateLink(programInfo) {
-    console.log('pop deeplink', programInfo);
+function popuplateLink(programId) {
+    console.log('pop deeplink', programId);
     storage.get(['programsWithDeeplink', 'publisherId', 'countryPlatform'], function (storageResult) {
         if (
             !storageResult.hasOwnProperty('programsWithDeeplink')
@@ -197,7 +213,7 @@ function popuplateLink(programInfo) {
             return;
         }
 
-        let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === programInfo.programId && entry.platform !== '');
+        let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === programId && entry.platform !== '');
         console.log('found deeplink info', deeplinkInfo);
         if (deeplinkInfo) {
             // has deeplink
@@ -210,7 +226,7 @@ function popuplateLink(programInfo) {
 
         } else {
             console.log('gen default link');
-            let url = generateDefaultTextLink(storageResult.publisherId, programInfo, storageResult.countryPlatform);
+            let url = generateDefaultTextLink(storageResult.publisherId, programId, storageResult.countryPlatform);
             linkInput.setAttribute('value', url);
             show(getTrackingLink);
             show(noDeeplinkSupport);
@@ -254,11 +270,11 @@ function generateDeeplink(publisherId, deeplinkInfo) {
 }
 
 
-function generateDefaultTextLink(publisherId, programInfo, countryPlatform) {
+function generateDefaultTextLink(publisherId, programId, countryPlatform) {
 
-    console.log(publisherId, programInfo, countryPlatform);
+    console.log(publisherId, programId, countryPlatform);
     let link = 'http://' + getHostnameForPlatform(countryPlatform) + '/click.asp';
-    link += "?site=" + programInfo.programId;
+    link += "?site=" + programId;
     link += "&ref=" + publisherId;
     link += "&type=text&tnb=1";
     return link

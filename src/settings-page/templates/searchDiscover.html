@@ -1,0 +1,288 @@
+
+<div class="row searchDiscover" ng-show="loadingFinished">
+
+     <div class="row-fluid">
+        <div class="col-xs-8">
+
+            <div class="row">
+
+                <div class="widget">
+                    <form class="form-horizontal row" ng-submit="searchProducts()">
+                        <div class="widget-header"  translate="SEARCHDISCOVER_FindProducts" ></div>
+                    <div class="widget-body">
+
+
+                        <div class="form-group">
+
+                            <label class="col-xs-6" for="search" translate="SEARCHDISCOVER_SearchFieldLabel" ></label>
+
+                            <label class="col-xs-6" translate="SEARCHDISCOVER_LabelAllPrograms"></label>
+                            <div class="col-xs-6">
+                                <input type="text"
+                                       ng-model="searchKeyword"
+                                       autocomplete="off"
+                                       class="form-control"
+                                       id="search"
+                                       placeholder="{{ 'SEARCHDISCOVER_PlaceholderSearch'|translate }}"/>
+                            </div>
+
+
+                            <div class="col-xs-6">
+                                <oi-select
+
+                                        oi-options="item.programTitle for item in myPrograms track by item.programId"
+                                        ng-model="selectedPrograms"
+                                        multiple
+                                ></oi-select>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label class="col-sm-6" >{{'SEARCHDISCOVER_LabelShops'|translate}} <i class="fa fa-spin fa-spinner" ng-if="allShopsLoading"></i></label>
+                            <label class="col-sm-6" >{{'SEARCHDISCOVER_ShopCategories'|translate}} <i class="fa fa-spin fa-spinner" ng-if="shopCategoriesLoading"></i></label>
+                            <div class="col-sm-6">
+                                <oi-select
+                                        oi-options="item.ShopTitle for item in shopsFilteredToSelectedPrograms track by item.ShopId"
+
+                                        ng-model="selectedShops"
+                                        ng-disabled="selectedPrograms.length === 0"
+                                        multiple
+                                ></oi-select>
+                            </div>
+
+                            <div class="col-sm-6">
+
+                                <oi-select
+                                        oi-options="item.Title for item in shopCategories track by item.Id"
+                                        ng-model="selectedShopCategories"
+                                        ng-disabled="selectedShops.length !== 1"
+                                        multiple
+                                ></oi-select>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-6" translate="SEARCHDISCOVER_PriceLabel"></label>
+
+                        </div>
+                        <div class="row form-group">
+                            <rzslider rz-slider-model="priceSlider.minValue"
+                                      rz-slider-high="priceSlider.maxValue"
+                                      rz-slider-options="priceSlider.options"></rzslider>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12 text-right">
+
+                                <button type="button"
+                                        ng-click="reset()"
+                                        class="btn btn-default" translate="SEARCHDISCOVER_ResetButton"></button>
+
+                                <button type="submit"
+                                        ng-disabled="searchKeyword === '' && selectedShopCategories.length === 0"
+                                        class="btn btn-primary" translate="SEARCHDISCOVER_SearchButton"></button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="widget">
+                    <div class="widget-header" >
+                        <span class="col-xs-3" style="padding: 0;">
+                            <span ng-if="searchFinished" >{{ totalRecords}} {{ 'SEARCHDISCOVER_Results'|translate}}</span>
+                        </span>
+
+                        <div class="col-xs-6"  style="padding:0;line-height: 17px;padding-top: 7px;">
+                            <div class="form-inline" ng-if="searchFinished" style="line-height: 21px;">
+                                <div class="checkbox-inline">
+                                    <label><input type="checkbox" ng-model="searchDiscoverShowDetails.name" > {{ 'SEARCHDISCOVER_DisplayName'|translate}}</label>
+                                </div>
+                                <div class="checkbox-inline">
+                                    <label><input type="checkbox" ng-model="searchDiscoverShowDetails.brand" > {{ 'SEARCHDISCOVER_DisplayBrand'|translate}}</label>
+                                </div>
+                                <div class="checkbox-inline">
+                                    <label><input type="checkbox" ng-model="searchDiscoverShowDetails.price" > {{ 'SEARCHDISCOVER_DisplayPrice'|translate}}</label>
+                                </div>
+                                <div class="checkbox-inline">
+                                    <label><input type="checkbox" ng-model="searchDiscoverShowDetails.manufacturer" > {{ 'SEARCHDISCOVER_DisplayManufacturer'|translate}}</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-xs-3"  style="padding:0">
+                            <button type="button" ng-if="searchFinished" ng-click="addAllProducts()" class="btn btn-primary pull-right" translate="SEARCHDISCOVER_SelectAllProducts"></button>
+                            <i  ng-if="searching " class="fa fa-2x fa-spin fa-spinner pull-right"></i>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+
+
+
+
+                    <div class="widget-body">
+
+
+
+                        <div class="image-col " ng-repeat="(index, product) in productResult" ng-click="toggleProduct(product.ProductId)">
+                            <div class="widget">
+
+
+                                <div class="widget-body text-center"
+                                     ng-style="{'background-image':'url({{product.Images[0][0].URL }})'}">
+
+                                        <span class="selectProduct">
+                                            <i class="fa fa-2x fa-check-circle" ng-if="selectedProductIds.includes(product.ProductId)"></i>
+                                            <i class="fa fa-2x fa-circle-o" ng-if="!selectedProductIds.includes(product.ProductId)"></i>
+                                        </span>
+
+                                </div>
+                                <div class="widget-footer">
+                                    <span class="info" ng-if="searchDiscoverShowDetails.name == true">{{product.ProductName}}</span>
+                                    <span class="info" ng-if="searchDiscoverShowDetails.brand == true">{{product.Brand}}</span>
+                                    <span class="info" ng-if="searchDiscoverShowDetails.price == true">
+                                        {{product.PriceInformation.DisplayPrice}}
+                                        <span class="baseprice">
+                                            {{product.PriceInformation.DisplayBasePrice}}
+                                        </span>
+                                    </span>
+
+                                    <span class="info" ng-if="searchDiscoverShowDetails.manufacturer == true">
+                                        {{product.Manufacturer}}
+                                    </span>
+
+                                    <span class="info" >{{programUrls[product.ProgramId]}}</span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <span class="clearfix"></span>
+                    </div>
+                    <div class="widget-footer text-center" ng-if="totalPages > productPage">
+
+                            <button ng-click="loadMore()" class="btn btn-primary" translate="SEARCHDISCOVER_LoadMoreBtn"></button>
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xs-4">
+
+
+            <div class="row"  bs-affix data-offset-top="0" data-offset-bottom="0">
+
+
+                <div class="widget">
+                    <div class="widget-header">
+                        {{ 'SEARCHDISCOVER_HeadlineSelectedProducts'|translate }}
+                    </div>
+                    <div class="widget-body">
+                        <div class="row-fluid">
+
+                            <div class="col-xs-12" style="max-height: 500px; overflow-y: auto ; margin-bottom:20px;">
+
+                                <div class="alert alert-success" ng-show="showSuccessMessage == true" translate="SEARCHDISCOVER_ProductsAddedToProductList"></div>
+
+                                <p translate="SEARCHDISCOVER_NoProductsSelected" ng-if="selectedProductIds.length === 0"></p>
+                                <div class="small-image-col " ng-repeat="productId in selectedProductIds track by productId"
+                                     ng-click="toggleProduct(productId)">
+                                    <div class="widget">
+                                        <div class="widget-body text-center"
+                                             ng-style="{'background-image':'url(' + productDetails[productId].Images[0][0].URL + ')'}">
+                                    <span class="hoverOnly">
+                                    <i class="fa fa-2x fa-trash-o"></i>
+                                    </span>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+
+                            <div class="col-xs-12">
+                                <strong  translate="SEARCHDISCOVER_SelectProductListLabel"></strong>
+                            </div>
+
+                            <div class="col-xs-12">
+
+                                <oi-select
+                                        id="productList"
+                                        oi-options="item.name for item in storedProductLists track by item.id"
+                                        ng-model="selectedProductList"
+                                        oi-select-options="{
+                                    newItem: true,
+                                    saveTrigger: 'blur enter',
+                                    newItemFn: 'createProductList($query)',
+                                    }"
+                                ></oi-select>
+                                <a ng-if="selectedProductList" ui-sref="likeList">{{'SEARCHDISCOVER_GoToProductList'|translate}} "{{selectedProductList.name}}"</a>
+
+
+                            </div>
+
+                            <div class="col-xs-12" style="padding-top:10px;">
+
+                                    <button class="btn btn-primary"
+                                            ng-click="addProductsToProductList()" translate="SEARCHDISCOVER_AddToList"></button>
+
+                                    <a ui-sref="widget({ productIds: selectedProductIds })" class="btn btn-primary" translate="SEARCHDISCOVER_BtnAddToWidget"></a>
+
+
+                            </div>
+
+
+                            <div class="clearfix"></div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<div class="row" ng-hide="loadingFinished">
+    <div class="col-lg-12 text-center">
+        <i class="fa fa-4x fa-spinner fa-spin"></i>
+    </div>
+</div>
+

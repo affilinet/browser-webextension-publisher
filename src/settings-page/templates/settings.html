@@ -49,6 +49,28 @@
                                    placeholder="{{'SETTINGS_WebservicePassword'|translate}}"/>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="productWebservicePassword" class="col-sm-3 control-label">{{'SETTINGS_productWebservicePassword'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="password" ng-model="credentials.productWebservicePassword" class="form-control"
+                                   autocomplete="off" id="productWebservicePassword"
+                                   required
+                                   placeholder="{{'SETTINGS_productWebservicePassword'|translate}}"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="col-sm-3 control-label"></span>
+                        <div class="col-sm-9">
+                            <div class="checkbox">
+                                <label><input ng-model="credentials.disableImageContextMenu"
+                                              id="useimagePin"
+                                              type="checkbox" value="">{{'SETTINGS_disableImageContextMenu'|translate}}</label>
+                            </div>
+
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-9">
                             <button type="submit" id="save" class="btn btn-default">{{'SETTINGS_save'|translate}}
@@ -74,6 +96,10 @@
                        target="_blank"><i class="fa fa-question-circle"></i>
                         {{'SETTINGS_findYouPassLinkText'|translate}}</a>
                 </p>
+                <div class="text-right">
+                    <button class="btn btn-default" ng-click="updateProgramData()">{{'SETTINGS_updateProgramDataBtn'|translate}}</button>
+                </div>
+
             </div>
 
         </div>
