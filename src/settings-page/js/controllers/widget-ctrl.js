@@ -26,10 +26,6 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
         $scope.messages.WIDGET_WidgetSaved = text;
     });
 
-    $translate('WIDGET_OpenWidgetPlaceholder').then(function (text) {
-        $scope.messages.WIDGET_OpenWidgetPlaceholder = text;
-        console.log($scope.messages);
-    });
 
     $scope.storedProductLists = [];
     $scope.storedWidgets = [];
@@ -40,6 +36,8 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
     $scope.currentlyDraggedItem = {};
 
+    $scope.programUrlsRequested = [];
+    $scope.programUrls = [];
 
     $scope.selectedWidget = {};
 
@@ -359,7 +357,6 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
         $scope.loadProductData(allProductIds);
 
-        // TODO Load widget
         if ($stateParams.productIds.length === 0 ) {
             $scope.selectedWidget = $scope.storedWidgets[0];
             $scope.openWidget()
@@ -368,6 +365,21 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
         $scope.loadingFinished = true;
     });
+
+    getProgramUrlForProgramId = function(ProgramId) {
+        if ($scope.programUrlsRequested[ProgramId] !== true ) {
+            $scope.programUrlsRequested[ProgramId] = true;
+            BrowserExtensionService.runtime.sendMessage({action : 'get-programDetailsForProgramId', data : { programId : ProgramId}},
+                function(programDetails){
+                    if (programDetails !== false) {
+                        $scope.$apply(function(){
+                            $scope.programUrls[ProgramId] = programDetails.programUrl;
+                        });
+                    }
+                })
+        }
+    }
+
 
     $scope.loadProductData = function(productIdArray) {
         "use strict";
@@ -394,6 +406,7 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
                 (response) => {
                     angular.forEach(response.data.Products, (product) => {
                         $scope.productDetails[product.ProductId] = product
+                        getProgramUrlForProgramId(product.ProgramId);
                     });
                     $scope.createWidgetCode();
                 }
@@ -430,7 +443,7 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
                         "brand": $scope.productDetails[productId].Brand,
                         "name": $scope.productDetails[productId].ProductName,
                         "manufacturer" : $scope.productDetails[productId].Manufacturer,
-                        "shop" : $scope.productDetails[productId].ShopTitle,
+                        "shop" : $scope.programUrls[$scope.productDetails[productId].ProgramId]
                     }
                 )
             }

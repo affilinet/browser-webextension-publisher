@@ -151,7 +151,9 @@ gulp.task('copyStaticFiles',  () => {
 
     gulp.src('./resources/*.csv')
         .pipe(gulp.dest(`build/${target}/data`));
-    
+
+    gulp.src('./src/fonts/**/*')
+        .pipe(gulp.dest(`build/${target}/fonts`));
     
     gulp.src(paths.angularLocales)
         .pipe(gulp.dest(`build/${target}/settings-page/locales/`));

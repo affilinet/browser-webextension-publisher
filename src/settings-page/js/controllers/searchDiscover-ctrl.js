@@ -20,13 +20,14 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
     $scope.allShopsLoading = false;
     $scope.showSuccessMessage = false;
     $scope.shopsFilteredToSelectedPrograms = [];
-
+    $scope.programUrls = [];
+    $scope.programUrlsRequested = [];
 
 
 
     $scope.searchDiscoverShowDetails = {};
 
-    $scope.search = '';
+    $scope.searchKeyword = '';
     $scope.selectedPrograms = [];
     $scope.selectedShops = [];
 
@@ -71,6 +72,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
                 (response) => {
                     response.data.Products.forEach((product) => {
                         $scope.productDetails[product.ProductId] = product;
+                        getProgramUrlForProgramId(product.ProductId)
                     })
                 }
             )
@@ -101,7 +103,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
                 $scope.searchDiscoverShowDetails = result.searchDiscoverShowDetails;
             }
             if (result.searchDiscoverLastKeyword) {
-                $scope.search = result.searchDiscoverLastKeyword;
+                $scope.searchKeyword = result.searchDiscoverLastKeyword;
             }
             if (result.searchDiscoverSelectedShopCategories) {
                 $scope.selectedShopCategories = result.searchDiscoverSelectedShopCategories;
@@ -221,7 +223,8 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
     $scope.searchIfValid = function() {
         "use strict";
         $timeout.cancel(searchChangedTimeoutPromise);  //does nothing, if timeout already done
-        if ($scope.search === '' && $scope.selectedShopCategories.length === 0) {
+        console.log('search if valid', $scope.searchKeyword , $scope.selectedShopCategories)
+        if ($scope.searchKeyword === '' && $scope.selectedShopCategories.length === 0) {
             return
         }
         searchChangedTimeoutPromise = $timeout(function(){   //Set timeout
@@ -257,10 +260,11 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
         $scope.searchIfValid();
     });
 
-    $scope.$watch('search', (search)=> {
-        BrowserExtensionService.storage.local.set({searchDiscoverLastKeyword : search});
+    $scope.$watch('searchKeyword', (searchKeyword)=> {
+        console.log('Search Keyword changed', searchKeyword);
+        BrowserExtensionService.storage.local.set({searchDiscoverLastKeyword : searchKeyword});
         $scope.searchIfValid();
-    })
+    });
 
     BrowserExtensionService.storage.local.get('myPrograms', function(result) {
         "use strict";
@@ -317,7 +321,10 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
             $scope.totalPages = result.data.ProductsSummary.TotalPages;
             $scope.productResult = result.data.Products;
              result.data.Products.forEach((product) => {
-                 $scope.productDetails[product.ProductId] = product
+                 $scope.productDetails[product.ProductId] = product;
+
+                 getProgramUrlForProgramId(product.ProgramId);
+
             });
              console.log('DETAILS', $scope.productDetails);
         }, (error)  => {
@@ -327,6 +334,20 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
 
         })
     };
+
+    getProgramUrlForProgramId = function(ProgramId) {
+        if (!$scope.programUrlsRequested[ProgramId]) {
+            $scope.programUrlsRequested[ProgramId] = true;
+            BrowserExtensionService.runtime.sendMessage({action : 'get-programDetailsForProgramId', data : { programId : ProgramId}},
+                function(programDetails){
+                    if (programDetails !== false) {
+                        $scope.$apply(function(){
+                            $scope.programUrls[ProgramId] = programDetails.programUrl;
+                        });
+                    }
+                })
+        }
+    }
 
     $scope.loadMore = function() {
         "use strict";
@@ -479,8 +500,8 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
             }
         }
 
-        if ($scope.search.length > 0) {
-            params.Query  =  $scope.search;
+        if ($scope.searchKeyword.length > 0) {
+            params.Query  =  $scope.searchKeyword;
         }
 
         return params;
@@ -489,7 +510,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
     $scope.reset = function () {
         $scope.priceSlider.minValue = 0;
         $scope.priceSlider.maxValue = $scope.priceSlider.options.ceil;
-        $scope.search = '';
+        $scope.searchKeyword = '';
         $scope.selectedShops = [];
         $scope.selectedProgramsIds= [];
         $scope.selectedPrograms= [];

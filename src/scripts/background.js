@@ -90,6 +90,18 @@ ext.runtime.onMessage.addListener(
                             });
                 })
                 break;
+            case 'get-programDetailsForProgramId':
+                getDetailsForProgramId(request.data.programId)
+                    .then(
+                        (programDetails) => {
+                            sendResponse(programDetails);
+                        },
+                        (error) => {
+                            sendResponse(false)
+                        });
+                return true;
+                break;
+
             case 'save-credentials' :
                 console.log('received save credentials');
                 PublisherWebservice.UpdateCredentials(
@@ -497,6 +509,30 @@ function hasProgram(hostname) {
                 if (programIndex > 0 ) {
                     resolve(result.allPrograms[programIndex]);
                 } else {
+                    resolve(false);
+                }
+            }
+        });
+    })
+}
+
+
+function getDetailsForProgramId(programId) {
+    return new Promise((resolve,reject) => {
+        storage.get(['allPrograms'], function (result) {
+            if (!result.allPrograms) {
+                console.error('allPrograms not loaded');
+                resolve(false);
+            } else {
+                // find program in allPrograms
+                let programIndex = result.allPrograms.findIndex((program) => {
+                    return +program.programId === +programId
+                });
+                if (programIndex > 0 ) {
+                    console.log('programs found ', result.allPrograms[programIndex]);
+                    resolve(result.allPrograms[programIndex]);
+                } else {
+                    console.error('programs not found loaded');
                     resolve(false);
                 }
             }

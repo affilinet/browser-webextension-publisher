@@ -243,6 +243,7 @@
                 <div class="widget-header" translate="WIDGET_PreviewHeadline" ></div>
                 <div class="widget-body" id="widgetContainer">
 
+
                     <div class="row" ng-if="widget.type === 'carousel'">
 
                         <div class="col-xs-12">
@@ -271,7 +272,9 @@
                             <span class=""  ng-if="widget.name">{{ productDetails[widget.products[$index]].ProductName }}</span>
                             <span class=""  ng-if="widget.brand">{{ productDetails[widget.products[$index]].Brand }}</span>
                             <span class=""  ng-if="widget.manufacturer">{{ productDetails[widget.products[$index]].Manufacturer }}</span>
-                            <span class=""  ng-if="widget.shop">{{ productDetails[widget.products[$index]].ShopTitle }}</span>
+                            <span class=""  ng-if="widget.shop">
+                                {{  programUrls[productDetails[widget.products[$index]].ProgramId ] }}
+                            </span>
                             <span class=""  ng-if="widget.price">{{ productDetails[widget.products[$index]].PriceInformation.DisplayPrice }}</span>
                         </span>
                                     <img ng-if="widget.products[$index] === undefined || productDetails[widget.products[$index]] === undefined"
@@ -308,7 +311,9 @@
                             <span class=""  ng-if="widget.name">{{ productDetails[widget.products[$index]].ProductName }}</span>
                             <span class=""  ng-if="widget.brand">{{ productDetails[widget.products[$index]].Brand }}</span>
                             <span class=""  ng-if="widget.manufacturer">{{ productDetails[widget.products[$index]].Manufacturer }}</span>
-                            <span class=""  ng-if="widget.shop">{{ productDetails[widget.products[$index]].ShopTitle }}</span>
+                            <span class=""  ng-if="widget.shop">
+                                {{  programUrls[productDetails[widget.products[$index]].ProgramId] }}
+                            </span>
                             <span class=""  ng-if="widget.price">{{ productDetails[widget.products[$index]].PriceInformation.DisplayPrice }}</span>
                         </span>
                                     <img ng-if="widget.products[$index] === undefined || productDetails[widget.products[$index]] === undefined"

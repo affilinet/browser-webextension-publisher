@@ -11,18 +11,22 @@
                         <div class="widget-header"  translate="SEARCHDISCOVER_FindProducts" ></div>
                     <div class="widget-body">
 
+
                         <div class="form-group">
 
                             <label class="col-xs-6" for="search" translate="SEARCHDISCOVER_SearchFieldLabel" ></label>
+
                             <label class="col-xs-6" translate="SEARCHDISCOVER_LabelAllPrograms"></label>
                             <div class="col-xs-6">
                                 <input type="text"
-                                       ng-model="search"
+                                       ng-model="searchKeyword"
                                        autocomplete="off"
                                        class="form-control"
                                        id="search"
-                                       translate translate-attr-placeholder="SEARCHDISCOVER_PlaceholderSearch"/>
+                                       placeholder="{{ 'SEARCHDISCOVER_PlaceholderSearch'|translate }}"/>
                             </div>
+
+
                             <div class="col-xs-6">
                                 <oi-select
 
@@ -81,7 +85,7 @@
                                         class="btn btn-default" translate="SEARCHDISCOVER_ResetButton"></button>
 
                                 <button type="submit"
-                                        ng-disabled="search == '' && selectedShopCategories.length === 0"
+                                        ng-disabled="search === '' && selectedShopCategories.length === 0"
                                         class="btn btn-primary" translate="SEARCHDISCOVER_SearchButton"></button>
                             </div>
                         </div>
@@ -153,15 +157,17 @@
                                     <span class="info" ng-if="searchDiscoverShowDetails.name == true">{{product.ProductName}}</span>
                                     <span class="info" ng-if="searchDiscoverShowDetails.brand == true">{{product.Brand}}</span>
                                     <span class="info" ng-if="searchDiscoverShowDetails.price == true">
-
-                                    {{product.PriceInformation.DisplayPrice}}
-                                    <span class="baseprice">
-                                        {{product.PriceInformation.DisplayBasePrice}}
+                                        {{product.PriceInformation.DisplayPrice}}
+                                        <span class="baseprice">
+                                            {{product.PriceInformation.DisplayBasePrice}}
+                                        </span>
                                     </span>
-                                </span>
+
                                     <span class="info" ng-if="searchDiscoverShowDetails.manufacturer == true">
-                                    {{product.Manufacturer}}</span>
-                                    <span class="info">{{ product.ShopTitle}}</span>
+                                        {{product.Manufacturer}}
+                                    </span>
+
+                                    <span class="info" >{{programUrls[product.ProgramId]}}</span>
                                 </div>
 
                             </div>

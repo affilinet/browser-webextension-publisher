@@ -14,6 +14,7 @@ function initContextMenu() {
     let contextMenuIsOpened = false;
     let currentImage = null;
 
+    let successMessageTimeout = null;
     let hoverImageContainer = createHoverImageContainer();
     let contextMenu = createContextMenu();
     let currentPageHasProgramPartnershipAndDeeplink = false;
@@ -158,6 +159,9 @@ function initContextMenu() {
             contextMenu.style.display = 'none';
             contextMenuIsOpened = false;
             document.removeEventListener('click', closeContextMenu);
+            document.getElementById('affilinet-webext-success-message').innerText = '';
+            document.getElementById('affilinet-webext-success-message').classList.add('affilinet-webext-hidden');
+
         }
 
     }
@@ -196,13 +200,9 @@ function initContextMenu() {
 
     function showSuccessMessage(response, message) {
         console.log('RESPONSE', response);
-
         document.getElementById('affilinet-webext-success-message').innerText = message
         document.getElementById('affilinet-webext-success-message').classList.remove('affilinet-webext-hidden');
-        window.setTimeout(function () {
-            document.getElementById('affilinet-webext-success-message').innerText = '';
-            document.getElementById('affilinet-webext-success-message').classList.add('affilinet-webext-hidden');
-        }, 4000)
+
     }
     function getShareDetails() {
         return {

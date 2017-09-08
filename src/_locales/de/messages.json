@@ -60,7 +60,7 @@
     "description": "Deeplink is Trackinglink only"
   },
   "popup_searchDiscover": {
-    "message": "Search&Discover",
+    "message": "Search & Discover",
     "description": "Popup Button Name for Search&Discover"
   },
   "popup_likeList": {

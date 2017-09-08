@@ -159,6 +159,7 @@
 
   "WIDGET_WidgetCreated" : "Widget created",
   "WIDGET_WidgetSaved" : "Widget saved",
-  "SEARCHDISCOVER_SelectAllProducts" : "Select all"
+  "SEARCHDISCOVER_SelectAllProducts" : "Select all",
+  "SEARCHDISCOVER_FindProducts" : "Find Products"
 
 }

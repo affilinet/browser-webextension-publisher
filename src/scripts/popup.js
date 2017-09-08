@@ -129,48 +129,51 @@ popup.addEventListener("click", function (e) {
     e.preventDefault();
 
     if (e.target) {
-        if (e.target.matches("#settings") || e.target.matches("#settings2") || e.target.matches("#settings3")) {
+        console.log(e.target);
+
+        if (e.target.matches(".linksettings")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "settings"}});
         }
-        else if (e.target.matches("#logo")) {
+        else if (e.target.matches(".linklogo")) {
             ext.runtime.sendMessage({action: "open-link", data: {link: "https://www.affili.net/"}});
         }
-        else if (e.target.matches("#news")) {
+        else if (e.target.matches(".linknews")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "news"}});
         }
-        else if (e.target.matches("#statistics")) {
+        else if (e.target.matches(".linkstatistics")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "orders"}});
         }
-        else if (e.target.matches("#applyNow")) {
+        else if (e.target.matches(".linkapplyNow")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "applynow/" + programId.getAttribute('value')}});
         }
-        else if (e.target.matches("#getCreatives")) {
+        else if (e.target.matches(".linkgetCreatives")) {
             ext.runtime.sendMessage({
                 action: "open-page",
                 data: {page: "getCreatives/" + programId.getAttribute('value')}
             });
         }
-        else if (e.target.matches("#getVouchers")) {
+        else if (e.target.matches(".linkgetVouchers")) {
             ext.runtime.sendMessage({
                 action: "open-page",
                 data: {page: "getVouchers/" + programId.getAttribute('value')}
             });
         }
-        else if (e.target.matches("#getDeeplink") || e.target.matches("#getTrackingLink")) {
+        else if (e.target.matches(".linkgetDeeplink") || e.target.matches(".linkgetTrackingLink")) {
             show(linkSection);
         }
-        else if (e.target.matches("#likeList")) {
+        else if (e.target.matches(".linklikeList")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "likeList"}});
         }
-        else if (e.target.matches("#widgetGenerator")) {
+        else if (e.target.matches(".linkwidgetGenerator")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "widget"}});
         }
-        else if (e.target.matches("#searchDiscover")) {
+        else if (e.target.matches(".linksearchDiscover")) {
             ext.runtime.sendMessage({action: "open-page", data: {page: "searchDiscover"}});
         }
 
-        else if (e.target.matches("#addToWebsitePins")) {
+        else if (e.target.matches(".linkaddToWebsitePins")) {
             ext.runtime.sendMessage({action: "save-current-tab-in-like-list"});
+            ext.runtime.sendMessage({action: "open-page", data: {page: "likeList?tab=1"}});
         }
     }
     return true;
