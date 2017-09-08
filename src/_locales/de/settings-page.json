@@ -1,5 +1,4 @@
 {
-
   "SIDEBAR_Account": "Account",
   "SIDEBAR_Tools": "Tools",
   "LOCALE_DATEFORMAT": "DD.MM.YYYY",
@@ -155,8 +154,7 @@
   "WIDGET_SureYouWantToClearProductsFromWidget": "Wollen Sie alle Produkte aus Ihrem Widget löschen?",
   "WIDGET_SureYouWantToDeleteWidget": "Wollen Sie das Widget wirklich löschen?",
   "WIDGET_BtnDeleteWidget": "Widget löschen",
-  "WIDGET_WarningChangesNotSaved": "Sie haben ungesicherte Änderungen. Wollen Sie wirklich ein neues Widget anlegen"
-
+  "WIDGET_WarningChangesNotSaved": "Sie haben ungesicherte Änderungen. Wollen Sie wirklich ein neues Widget anlegen",
   "SEARCHDISCOVER_FindProducts" : "Produkte finden",
   "SEARCHDISCOVER_SelectAllProducts" : "All selektieren",
   "SETTINGS_updateProgramDataBtn" : "Programmliste aktualisieren"

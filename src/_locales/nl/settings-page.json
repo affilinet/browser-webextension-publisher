@@ -157,9 +157,7 @@
   "WIDGET_SureYouWantToClearProductsFromWidget": "Weet je zeker dat je alle producten van de widget wilt verwijderen?",
   "WIDGET_SureYouWantToDeleteWidget": "Weet je zeker dat je deze widget wilt verwijderen?",
   "WIDGET_BtnDeleteWidget": "Verwijder Widget",
-  "WIDGET_WarningChangesNotSaved": "Er zijn niet-opgeslagen wijzigingen. Weet je zeker dat je een nieuwe widget aan wilt maken?"
-
-
+  "WIDGET_WarningChangesNotSaved": "Er zijn niet-opgeslagen wijzigingen. Weet je zeker dat je een nieuwe widget aan wilt maken?",
   "SEARCHDISCOVER_FindProducts" : "Find Products",
   "SEARCHDISCOVER_SelectAllProducts" : "Select all",
   "SETTINGS_updateProgramDataBtn" : "Update program list data"

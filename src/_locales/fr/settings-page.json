@@ -158,7 +158,7 @@
   "WIDGET_SureYouWantToClearProductsFromWidget": "Do you want to remove all products from your widget?",
   "WIDGET_SureYouWantToDeleteWidget": "Do you really want to delete this widget?",
   "WIDGET_BtnDeleteWidget": "Delete Widget",
-  "WIDGET_WarningChangesNotSaved": "You have unsaved changes, do you really want to create a new Widget"
+  "WIDGET_WarningChangesNotSaved": "You have unsaved changes, do you really want to create a new Widget",
 
   "SEARCHDISCOVER_FindProducts" : "Find Products",
   "SEARCHDISCOVER_SelectAllProducts" : "Select all",

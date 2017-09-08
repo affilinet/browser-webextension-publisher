@@ -216,11 +216,15 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
         "use strict";
         console.log('open widget', $scope.selectedWidget);
 
-        const index = $scope.storedWidgets.findIndex((widget) => {return widget.id === $scope.selectedWidget.id});
-        $scope.loadProductData($scope.storedWidgets[index].products);
-        $scope.widget = angular.copy($scope.storedWidgets[index]);
-        $scope.addWatchToWidget();
-        $scope.refreshSlider();
+        if ($scope.selectedWidget && $scope.selectedWidget.id) {
+            const index = $scope.storedWidgets.findIndex((widget) => {return widget.id === $scope.selectedWidget.id});
+
+            $scope.loadProductData($scope.storedWidgets[index].products);
+            $scope.widget = angular.copy($scope.storedWidgets[index]);
+            $scope.addWatchToWidget();
+            $scope.refreshSlider();
+        }
+
     };
 
 
