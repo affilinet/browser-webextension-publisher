@@ -14,8 +14,7 @@ var
     templateCache = require('gulp-angular-templatecache'),
     template = require('gulp-template'),
     modify = require('gulp-modify'),
-    jsonFormat = require('gulp-json-format'),
-    csv2json = require('gulp-csv2json');
+    jsonFormat = require('gulp-json-format');
 
 
 
@@ -34,7 +33,6 @@ const $ = require('gulp-load-plugins')();
 
 const paths = {
     scripts: 'src/settings-page/js/**/*.*',
-    csvFiles: 'resources/*.csv',
     less: 'src/settings-page/less/**/*.*',
     cssOutput: 'src/settings-page/css/',
     images: 'src/settings-page/img/**/*.*',
@@ -146,11 +144,6 @@ gulp.task('copyDependencies', () => {
 
 gulp.task('copyStaticFiles',  () => {
 
-    gulp.src('./resources/*.csv')
-        .pipe(gulp.dest('./src/data'));
-
-    gulp.src('./resources/*.csv')
-        .pipe(gulp.dest(`build/${target}/data`));
 
     gulp.src('./src/fonts/**/*')
         .pipe(gulp.dest(`build/${target}/fonts`));

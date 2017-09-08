@@ -175,7 +175,7 @@ body {
 .widgetPage .productListContainer {
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: 536px;
+  max-height: 336px;
 }
 .widgetPage .image-col {
   height: 100px;

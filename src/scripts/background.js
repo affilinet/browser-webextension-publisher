@@ -127,8 +127,7 @@ ext.runtime.onMessage.addListener(
                     },
                     (error) => console.debug(error));
 
-                importAllPrograms();
-                importProgramsWithDeeplink();
+                forceUpdateData()
 
                 break;
         }
@@ -612,32 +611,6 @@ function getInfoaboutTab() {
     });
 }
 
-function importProgramsWithDeeplink() {
-    Papa.parse('../data/deeplinks.csv', {
-        download: true,
-        header: true,
-        complete: function(results) {
-            console.log('imported deeplink programs');
-            storage.set({programsWithDeeplink: results.data })
-        }
-    });
-}
-
-function importAllPrograms() {
-    Papa.parse('../data/programs.csv', {
-        download: true,
-        header: true,
-        complete: function(results) {
-            console.log('imported programs');
-            storage.set({
-                allPrograms : results.data,
-            })
-        }
-    });
-}
-
-
-
 function updateProgramsWithDeeplink() {
     console.log('downloading all programs with deeplink');
     Papa.parse('https://raw.githubusercontent.com/affilinet/browser-webextension-publisher/master/resources/deeplinks.csv', {
@@ -698,10 +671,6 @@ function forceUpdateData() {
 }
 
 
-// import All Programs|Programs with deeplink from file for a fast start
-importAllPrograms();
-importProgramsWithDeeplink();
-
 
 /**
  * Inititally load all Programs and MyPrograms
@@ -709,13 +678,11 @@ importProgramsWithDeeplink();
  */
 window.setTimeout(function () {
 
-
+    // update now
+    forceUpdateData();
 
     // update data all 15 min
     setInterval(updateData, 15 * 60 * 1000); // 15 mins
-
-    // update now
-    updateData();
 
 }, 2000);
 
