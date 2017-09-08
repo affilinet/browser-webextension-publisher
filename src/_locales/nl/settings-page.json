@@ -159,4 +159,9 @@
   "WIDGET_BtnDeleteWidget": "Verwijder Widget",
   "WIDGET_WarningChangesNotSaved": "Er zijn niet-opgeslagen wijzigingen. Weet je zeker dat je een nieuwe widget aan wilt maken?"
 
+
+  "SEARCHDISCOVER_FindProducts" : "Find Products",
+  "SEARCHDISCOVER_SelectAllProducts" : "Select all",
+  "SETTINGS_updateProgramDataBtn" : "Update program list data"
+
 }

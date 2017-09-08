@@ -160,4 +160,8 @@
   "WIDGET_BtnDeleteWidget": "Delete Widget",
   "WIDGET_WarningChangesNotSaved": "You have unsaved changes, do you really want to create a new Widget"
 
+  "SEARCHDISCOVER_FindProducts" : "Find Products",
+  "SEARCHDISCOVER_SelectAllProducts" : "Select all",
+  "SETTINGS_updateProgramDataBtn" : "Update program list data"
+
 }

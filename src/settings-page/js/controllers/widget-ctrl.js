@@ -469,7 +469,14 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
     }
 
+    $scope.copySuccess = false;
 
+    $scope.copiedCode = function () {
+        $scope.copySuccess = true;
+        $timeout(function(){
+            $scope.copySuccess = false;
+        }, 2000);
+    }
     /***
      * Inititalizing functions
      */

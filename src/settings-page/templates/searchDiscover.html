@@ -101,43 +101,42 @@
             <div class="row">
                 <div class="widget">
                     <div class="widget-header" >
+                        <span class="col-xs-3" style="padding: 0;">
+                            <span ng-if="searchFinished" >{{ totalRecords}} {{ 'SEARCHDISCOVER_Results'|translate}}</span>
+                        </span>
 
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <h4 ng-if="searchFinished" >{{ totalRecords}} {{ 'SEARCHDISCOVER_Results'|translate}}</h4>
-                            </div>
-                            <div class="col-xs-6 ">
-
-
-                                <i  ng-if="searching " class="fa fa-2x fa-spin fa-spinner pull-right"></i>
-                            </div>
-                        </div>
-
-
-
-
-                    </div>
-                    <div class="widget-body">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-inline" ng-if="searchFinished">
-                                    <div class="checkbox-inline">
-                                        <label><input type="checkbox" ng-model="searchDiscoverShowDetails.name" > {{ 'SEARCHDISCOVER_DisplayName'|translate}}</label>
-                                    </div>
-                                    <div class="checkbox-inline">
-                                        <label><input type="checkbox" ng-model="searchDiscoverShowDetails.brand" > {{ 'SEARCHDISCOVER_DisplayBrand'|translate}}</label>
-                                    </div>
-                                    <div class="checkbox-inline">
-                                        <label><input type="checkbox" ng-model="searchDiscoverShowDetails.price" > {{ 'SEARCHDISCOVER_DisplayPrice'|translate}}</label>
-                                    </div>
-                                    <div class="checkbox-inline">
-                                        <label><input type="checkbox" ng-model="searchDiscoverShowDetails.manufacturer" > {{ 'SEARCHDISCOVER_DisplayManufacturer'|translate}}</label>
-                                    </div>
+                        <div class="col-xs-6"  style="padding:0;line-height: 17px;padding-top: 7px;">
+                            <div class="form-inline" ng-if="searchFinished">
+                                <div class="checkbox-inline">
+                                    <label><input type="checkbox" ng-model="searchDiscoverShowDetails.name" > {{ 'SEARCHDISCOVER_DisplayName'|translate}}</label>
                                 </div>
-                                <button type="button" ng-if="searchFinished" ng-click="addAllProducts()" class="btn btn-primary pull-right" translate="SEARCHDISCOVER_SelectAllProducts"></button>
+                                <div class="checkbox-inline">
+                                    <label><input type="checkbox" ng-model="searchDiscoverShowDetails.brand" > {{ 'SEARCHDISCOVER_DisplayBrand'|translate}}</label>
+                                </div>
+                                <div class="checkbox-inline">
+                                    <label><input type="checkbox" ng-model="searchDiscoverShowDetails.price" > {{ 'SEARCHDISCOVER_DisplayPrice'|translate}}</label>
+                                </div>
+                                <div class="checkbox-inline">
+                                    <label><input type="checkbox" ng-model="searchDiscoverShowDetails.manufacturer" > {{ 'SEARCHDISCOVER_DisplayManufacturer'|translate}}</label>
+                                </div>
                             </div>
 
                         </div>
+
+
+                        <div class="col-xs-3"  style="padding:0">
+                            <button type="button" ng-if="searchFinished" ng-click="addAllProducts()" class="btn btn-primary pull-right" translate="SEARCHDISCOVER_SelectAllProducts"></button>
+                            <i  ng-if="searching " class="fa fa-2x fa-spin fa-spinner pull-right"></i>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+
+
+
+
+                    <div class="widget-body">
+
 
 
                         <div class="image-col " ng-repeat="(index, product) in productResult" ng-click="toggleProduct(product.ProductId)">
@@ -226,7 +225,7 @@
                                 <strong  translate="SEARCHDISCOVER_SelectProductListLabel"></strong>
                             </div>
 
-                            <div class="col-xs-4">
+                            <div class="col-xs-12">
 
                                 <oi-select
                                         id="productList"
@@ -243,7 +242,7 @@
 
                             </div>
 
-                            <div class="col-xs-8 ">
+                            <div class="col-xs-12" style="padding-top:10px;">
 
                                     <button class="btn btn-primary"
                                             ng-click="addProductsToProductList()" translate="SEARCHDISCOVER_AddToList"></button>

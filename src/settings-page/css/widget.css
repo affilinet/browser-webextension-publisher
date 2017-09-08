@@ -173,7 +173,8 @@ body {
   visibility: visible !important;
 }
 .widgetPage .productListContainer {
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   max-height: 536px;
 }
 .widgetPage .image-col {

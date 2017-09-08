@@ -18,6 +18,9 @@ ext.runtime.onMessage.addListener(
             case "open-popup" :
                 console.log(request.data.tabs);
                 break;
+            case "update-programData" :
+                forceUpdateData();
+                break;
             case "open-page" :
                 openPage(request.data.page);
                 break;
@@ -672,12 +675,7 @@ function updateData () {
         const timestampMS = Date.now();
         if (!storageResult.lastDailyDataUpdate || storageResult.lastDailyDataUpdate < timestampMS - (24 * 60 *60 *1000)) {
             // last update is longer ago than one day!
-            PublisherWebservice.UpdateMyPrograms();
-            updateProgramsWithDeeplink();
-            updateAllPrograms();
-            storage.set({
-                lastDailyDataUpdate : timestampMS
-            })
+            forceUpdateData()
         } else {
             console.log('All Programs and Programs with deeplink is fresh; Last update was',
                 new Date(storageResult.lastDailyDataUpdate));
@@ -686,15 +684,32 @@ function updateData () {
         }
     });
 }
+function forceUpdateData() {
+    console.log('update my programs from webserice')
+    PublisherWebservice.UpdateMyPrograms();
+    console.log('updateProgramsWithDeeplink');
+    updateProgramsWithDeeplink();
+    console.log('updateAllPrograms');
+    updateAllPrograms();
+    console.log('set lastDailyDataUpdate');
+    storage.set({
+        lastDailyDataUpdate : Date.now()
+    })
+}
+
+
+// import All Programs|Programs with deeplink from file for a fast start
+importAllPrograms();
+importProgramsWithDeeplink();
+
+
 /**
  * Inititally load all Programs and MyPrograms
  * Start loading 2 seconds after program start to improve browser startup speed
  */
 window.setTimeout(function () {
 
-    // import All Programs|Programs with deeplink from file for a fast start
-    importAllPrograms();
-    importProgramsWithDeeplink();
+
 
     // update data all 15 min
     setInterval(updateData, 15 * 60 * 1000); // 15 mins

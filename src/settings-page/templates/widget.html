@@ -358,8 +358,9 @@
 
                     <div class="row">
                         <div class="col-xs-12 text-right">
-                            <a clipboard text="widgetCode"
-                               class="btn btn-primary">{{'WIDGET_CopyToClipboard'|translate}}</a>
+                            <a clipboard text="widgetCode" on-copied="copiedCode()"
+                               ng-class="copySuccess ? 'btn-success' : 'btn-primary'"
+                               class="btn btn-primary" id="copyBtn">{{'WIDGET_CopyToClipboard'|translate}}</a>
                         </div>
                     </div>
 

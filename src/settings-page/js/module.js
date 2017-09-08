@@ -17,7 +17,7 @@ angular.module('AffilinetToolbar', [
     'ngSanitize'
 ], function ($compileProvider) {
     "use strict";
-    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|resource):/);
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|resource|chrome-extension):/);
 
 }).config(function ($httpProvider, $sceDelegateProvider, $translateProvider) {
 

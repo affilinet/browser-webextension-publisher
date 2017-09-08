@@ -15,6 +15,11 @@ function SettingsController($scope, $rootScope, $window, $translate, LogonServic
 
     LogonService.LoadCreadentialsFromRootScope();
 
+    $scope.updateProgramData = function () {
+        BrowserExtensionService.runtime.sendMessage({action : 'update-programData'});
+        $scope.$parent.sendAlert('Downloading Program Data', 'success');
+    };
+
     $scope.submitLoginData = function () {
         $rootScope.validCredentials = false;
 
