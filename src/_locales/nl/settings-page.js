@@ -1,5 +1,4 @@
 ﻿{
-
   "SIDEBAR_Account": "Account",
   "SIDEBAR_Tools": "Tools",
   "LOCALE_DATEFORMAT": "DD.MM.YYYY",
@@ -73,8 +72,6 @@
   "GETVOUCHERS_ApplyNow": "Nu aanmelden",
   "GETVOUCHERS_CopyVoucherCode": "Kortingscode kopiëren",
   "IMPRESSUM_LINK": "https://www.affili.net/nl/footeritem/contact",
-
-
   "SEARCHDISCOVER_PageName": "Zoek & Vind",
   "SEARCHDISCOVER_PlaceholderSearch": "Producten, Merken...",
   "SEARCHDISCOVER_SearchFieldLabel": "Zoekwoord",
@@ -161,5 +158,4 @@
   "SEARCHDISCOVER_FindProducts" : "Find Products",
   "SEARCHDISCOVER_SelectAllProducts" : "Select all",
   "SETTINGS_updateProgramDataBtn" : "Update program list data"
-
 }

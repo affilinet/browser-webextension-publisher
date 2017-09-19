@@ -1,8 +1,6 @@
 {
   "SIDEBAR_Account": "Account",
   "SIDEBAR_Tools": "Tools",
-
-
   "LOCALE_DATEFORMAT": "DD.MM.YYYY",
   "ORDERS_PageName": "Statistiques",
   "ORDERS_ChartLabelConfCommission": "Gains confirmés",
@@ -35,7 +33,6 @@
   "SETTINGS_save": "Sauvegarder",
   "SETTINGS_about": "Aide",
   "SETTINGS_findYouPassLinkText": "Trouver mon mot de passe Webservice",
-
   "SETTINGS_CountryPlatform": "Plate-forme affilinet",
   "SETTINGS_CountryPlatformDE": "affilinet Allemagne",
   "SETTINGS_CountryPlatformEN": "affilinet Royaume-Uni",
@@ -44,7 +41,6 @@
   "SETTINGS_CountryPlatformAT": "affilinet Autriche",
   "SETTINGS_CountryPlatformES": "affilinet Espagne",
   "SETTINGS_CountryPlatformNL": "affilinet Benelux",
-
   "APPLY_PageName": "Je m'inscris",
   "APPLY_ProgramDesc": "Descriptif du programme",
   "APPLY_ProgramLimits": "Restrictions du programme",
@@ -75,7 +71,6 @@
   "FreeProduct": "Produit offert",
   "GETVOUCHERS_ApplyNow": "Je m'inscris",
   "GETVOUCHERS_CopyVoucherCode": "Copier le code",
-
   "SEARCHDISCOVER_PageName": "Moteur de recherche",
   "SEARCHDISCOVER_PlaceholderSearch": "Produits, marques...",
   "SEARCHDISCOVER_SearchFieldLabel": "Mot-clé",
@@ -159,9 +154,7 @@
   "WIDGET_SureYouWantToDeleteWidget": "Voulez-vous vraiment supprimer ce widget ?",
   "WIDGET_BtnDeleteWidget": "Supprimer le widget",
   "WIDGET_WarningChangesNotSaved": "Vous avez effectué des modifications sans les enregistrer, voulez-vous vraiment créer un nouveau widget ?",
-
   "SEARCHDISCOVER_FindProducts" : "Trouvez des produits",
   "SEARCHDISCOVER_SelectAllProducts" : "Tout sélectionner",
   "SETTINGS_updateProgramDataBtn" : "Update program list data"
-
 }

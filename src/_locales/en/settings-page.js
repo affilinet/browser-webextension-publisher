@@ -159,7 +159,5 @@
   "WIDGET_WidgetSaved" : "Widget saved",
   "SEARCHDISCOVER_FindProducts" : "Find Products",
   "SEARCHDISCOVER_SelectAllProducts" : "Select all",
-
   "SETTINGS_updateProgramDataBtn" : "Update program list data"
-
 }

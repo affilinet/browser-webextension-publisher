@@ -150,7 +150,7 @@
   "WIDGET_OpenWidgetPlaceholder": "Selecciona Widget",
   "WIDGET_WidgetNameLabel": "Nombre del Widget",
   "WIDGET_BtnSave": "Guardar",
-  "WIDGET_DropProductHere": "No hay productos añadidos"
+  "WIDGET_DropProductHere": "No hay productos añadidos",
   "WIDGET_SureYouWantToClearProductsFromWidget": "¿Quieres elimitar todos los productos de tu widget?",
   "WIDGET_SureYouWantToDeleteWidget": "¿Seguro que quieres borrar este widget?",
   "WIDGET_BtnDeleteWidget": "Borrar Widget",
