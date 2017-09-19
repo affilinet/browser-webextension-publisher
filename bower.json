@@ -28,7 +28,6 @@
     "oi.select": "^0.2.21",
     "angular-dragdrop": "^1.0.13",
     "angularjs-slider": "^6.4.0",
-    "angular-translate-loader-static-files": "^2.15.2",
     "angular-sanitize": "^1.6.6"
   },
   "resolutions": {

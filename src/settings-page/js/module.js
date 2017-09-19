@@ -1,4 +1,4 @@
-angular.module('AffilinetToolbar', [
+var app = angular.module('AffilinetToolbar', [
     'ui.bootstrap',
     'ui.bootstrap.popover',
     'ui.router',
@@ -17,7 +17,7 @@ angular.module('AffilinetToolbar', [
     'ngSanitize'
 ], function ($compileProvider) {
     "use strict";
-    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|resource|chrome-extension):/);
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|resource|chrome-extension|moz-extension):/);
 
 }).config(function ($httpProvider, $sceDelegateProvider, $translateProvider) {
 
@@ -28,23 +28,9 @@ angular.module('AffilinetToolbar', [
         'self'
     ]);
 
-
     $translateProvider.useSanitizeValueStrategy(null);
-    $translateProvider.forceAsyncReload(true);
-
-
-    $translateProvider.useLoader('customLoader');
-
-    $translateProvider.useStaticFilesLoader({
-        prefix: 'locales/',
-        suffix: '/settings-page.json'
-    });
-
-
-
 
     $translateProvider.fallbackLanguage('en');
-
 
     switch (navigator.language) {
         case 'de-DE':

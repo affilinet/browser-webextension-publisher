@@ -297,7 +297,7 @@ function openPage(page) {
 
         if (settingsPageTabId === null) {
             ext.tabs.create({
-                url: ext.extension.getURL('/settings-page/index.html#!/' + page)
+                url: ext.extension.getURL('/settings-page/index.html#' + page)
             }, function (tab) {
 
                 settingsPageTabId = tab.id;
@@ -312,7 +312,7 @@ function openPage(page) {
             }, function (window) {
                 ext.tabs.update(settingsPageTabId,
                     {
-                        url: ext.extension.getURL('/settings-page/index.html#!/' + page),
+                        url: ext.extension.getURL('/settings-page/index.html#' + page),
                         active: true,
                     }, function (tab) {
 
