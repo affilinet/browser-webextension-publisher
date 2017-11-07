@@ -503,6 +503,7 @@ function hasProgram(hostname) {
             if (!result.allPrograms) {
                 resolve(false);
             } else {
+
                 // find program in allPrograms
                 let programIndex = result.allPrograms.findIndex((program) => {
                     return program.platformId === result.countryPlatform && (hostname.endsWith('/' + program.programUrl)  === true || hostname.endsWith('.' + program.programUrl)  === true  )
