@@ -420,9 +420,8 @@ function updatePublisherSummary(apiResponseString) {
 function getCleanedHostnameforUrl(string) {
     const parser = document.createElement('a');
     parser.href = string;
-    let host = parser.host;
-    host = host.replace('www.', '');
-    return host;
+    const host = parser.host.replace('www.', '');
+    return '//' + host;
 }
 
 /**
@@ -506,7 +505,7 @@ function hasProgram(hostname) {
             } else {
                 // find program in allPrograms
                 let programIndex = result.allPrograms.findIndex((program) => {
-                    return program.platformId === result.countryPlatform && hostname.search(program.programUrl) >= 0
+                    return program.platformId === result.countryPlatform && (hostname.endsWith('/' + program.programUrl)  === true || hostname.endsWith('.' + program.programUrl)  === true  )
                 });
                 if (programIndex > 0 ) {
                     resolve(result.allPrograms[programIndex]);
