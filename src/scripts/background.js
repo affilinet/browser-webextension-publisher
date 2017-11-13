@@ -10,6 +10,8 @@ let globalHasPartnership = false;
 let globalHasProgram = false;
 let globalHasProgramPartnerShipAndDeeplink = false;
 
+const linkShortener =  'https://widget-server.dev/api/v1.0/shortlink';
+
 
 ext.runtime.onMessage.addListener(
     function (request,  sender, sendResponse) {
@@ -36,6 +38,11 @@ ext.runtime.onMessage.addListener(
                     sendResponse(true);
                 });
                 break;
+
+            case "shorten-link" :
+                shortenLink(request.data.link, sendResponse);
+                break;
+
             case "hasProgramPartnershipAndDeeplink" :
                 sendResponse(globalHasProgramPartnerShipAndDeeplink);
                 break;
@@ -213,6 +220,26 @@ function generateTrackingUrl(url) {
             }
         )
     });
+
+}
+
+function shortenLink(url, sendResponse) {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', linkShortener);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            let linkInfo = JSON.parse(xhr.responseText);
+            sendResponse(linkInfo.link);
+        } else {
+            sendResponse(false);
+        }
+    };
+    xhr.send(JSON.stringify({
+        link: url
+    }));
+
 
 }
 

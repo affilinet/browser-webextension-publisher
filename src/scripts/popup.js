@@ -10,6 +10,7 @@ const programSection = document.getElementById("shopSection");
 const linkSection = document.getElementById("linkSection");
 const linkInput = document.getElementById("linkInput");
 const copyLink = document.getElementById("copyLink");
+const shortenLink = document.getElementById("shortenLink");
 const statisticSection = document.getElementById("statisticSection");
 const footerSection = document.getElementById("toolsSection");
 
@@ -316,4 +317,33 @@ copyLink.addEventListener('click', function () {
     } catch (err) {
         console.log('Oops, unable to copy');
     }
+});
+
+shortenLink.addEventListener('click', function () {
+
+    shortenLink.classList.remove('success');
+    shortenLink.classList.add('loading');
+
+
+    ext.runtime.sendMessage({action: "shorten-link", data: {link: linkInput.value}}, (response) => {
+        console.log('received answer', response);
+
+        shortenLink.classList.remove('loading');
+        shortenLink.classList.add('success');
+
+        if (response !== false) {
+            linkInput.setAttribute('value', response);
+            linkInput.select();
+            let successful = document.execCommand('copy');
+
+            if (successful) {
+                copyLink.classList.add('success');
+            }
+        } else {
+            shortenLink.classList.remove('success');
+            shortenLink.classList.remove('loading');
+        }
+
+    });
+
 });

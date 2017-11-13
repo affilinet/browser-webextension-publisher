@@ -35,6 +35,10 @@
     "message": "Copy",
     "description": "Popup Button Name copy link"
   },
+  "popup_shortenLink": {
+    "message": "Shorten",
+    "description": "Popup Button Name shorten link"
+  },
   "popup_statistics": {
     "message": "Statistics",
     "description": "Popup Button Name for statistics"

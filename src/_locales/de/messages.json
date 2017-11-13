@@ -31,6 +31,10 @@
     "message": "Kopieren",
     "description": "Popup Button Name copy link"
   },
+  "popup_shortenLink": {
+    "message": "Kürzen",
+    "description": "Popup Button Name shorten link"
+  },
   "popup_getVouchers": {
     "message": "Gutscheine",
     "description": "Popup Button Name for getVouchers"
