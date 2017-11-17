@@ -7,9 +7,10 @@
 Alternately, if you want to try out the extension, here are the download links. After you download it, unzip the file and load it in your browser using the steps mentioned below.
  - [**Download Chrome Extension**](https://github.com/affilinet/browser-webextension-publisher/raw/master/dist/chrome.zip)
  - [**Download Firefox Extension**](https://github.com/affilinet/browser-webextension-publisher/raw/master/dist/firefox.zip)
+ - [**Download Opera Extension**](https://github.com/affilinet/browser-webextension-publisher/raw/master/dist/opera.zip)
 
 
-##### Load the extension in Chrome
+##### Load the extension in Chrome & Opera
 1. Open Chrome/Opera browser and navigate to chrome://extensions
 2. Select "Developer Mode" and then click "Load unpacked extension..."
 3. From the file browser, choose to `browser-webextension-publisher/build/chrome` or (`browser-webextension-publisher/build/opera`)
@@ -25,6 +26,7 @@ The following tasks can be used when you want to start developing the extension 
 
 - `npm run chrome-watch`
 - `npm run firefox-watch`
+- `npm run opera-watch`
 
 
 ## Packaging

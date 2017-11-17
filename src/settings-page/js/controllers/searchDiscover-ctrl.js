@@ -38,7 +38,17 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
     $scope.selectedShopCategories = [];
 
     $scope.productResult = [];
+    $scope.facetsResult = [];
     $scope.productPage = 1;
+
+
+    $scope.selectedBrand = '';
+    $scope.selectedDistributor = '';
+    $scope.selectedManufacturer = '';
+    $scope.selectedAffilinetCategoryPath = '';
+
+
+
 
     $scope.selectedProductIds = [];
     $scope.totalRecords = 0;
@@ -80,6 +90,44 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
     };
 
 
+    $scope.setBrand = function(value) {
+        "use strict";
+        if ($scope.selectedBrand === value) {
+            $scope.selectedBrand = '';
+        } else {
+            $scope.selectedBrand =  value;
+        }
+        searchIfValid()
+    };
+    $scope.setManufacturer = function(value) {
+        if ($scope.selectedManufacturer === value) {
+            $scope.selectedManufacturer = '';
+        } else {
+            $scope.selectedManufacturer =  value;
+        }
+        searchIfValid()
+    };
+    $scope.setDistributor = function(value) {
+        if ($scope.selectedDistributor === value) {
+            $scope.selectedDistributor = '';
+        } else {
+            $scope.selectedDistributor =  value;
+        }
+        searchIfValid()
+    };
+    $scope.setAffilinetCategoryPath = function(value) {
+        if ($scope.selectedAffilinetCategoryPath === value) {
+            $scope.selectedAffilinetCategoryPath = '';
+        } else {
+            $scope.selectedAffilinetCategoryPath =  value;
+        }
+        searchIfValid()
+    };
+
+    $scope.toggleFilters = function () {
+        $scope.showFilters= !$scope.showFilters
+    };
+
     let loadInitialValues = function  () {
         BrowserExtensionService.storage.local.get(
             ['storedProductLists',
@@ -90,6 +138,11 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
                 'searchDiscoverSelectedPrograms',
                 'searchDiscoverSelectedProgramIds',
                 'searchDiscoverSelectedProductIds',
+                'searchDiscoverSelectedBrand',
+                'searchDiscoverSelectedDistributor',
+                'searchDiscoverSelectedManufacturer',
+                'searchDiscoverSelectedAffilinetCategoryPath',
+                'searchDiscoverShowFilters',
                 'searchDiscoverShopsFilteredToSelectedPrograms',
                 'searchDiscoverShopsMinPrice',
                 'searchDiscoverShopsMaxPrice',
@@ -121,6 +174,25 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
                 if (result.searchDiscoverSelectedProgramIds) {
                     $scope.selectedProgramsIds = result.searchDiscoverSelectedProgramIds;
                 }
+                if (result.searchDiscoverSelectedBrand) {
+                    $scope.selectedBrand = result.searchDiscoverSelectedBrand;
+                }
+
+                if (result.searchDiscoverSelectedDistributor) {
+                    $scope.selectedDistributor = result.searchDiscoverSelectedDistributor;
+                }
+
+                if (result.searchDiscoverSelectedManufacturer) {
+                    $scope.selectedManufacturer = result.searchDiscoverSelectedManufacturer;
+                }
+
+                if (result.searchDiscoverSelectedAffilinetCategoryPath) {
+                    $scope.selectedAffilinetCategoryPath = result.searchDiscoverSelectedAffilinetCategoryPath;
+                }
+                if (result.searchDiscoverShowFilters) {
+                    $scope.showFilters = result.searchDiscoverShowFilters;
+                }
+
                 if (result.searchDiscoverSelectedPrograms) {
                     $scope.selectedPrograms = result.searchDiscoverSelectedPrograms;
                 }
@@ -184,6 +256,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
 
         $scope.$watch( 'selectedProgramIds', (selectedProgramIds)  => {
                 BrowserExtensionService.storage.local.set({searchDiscoverSelectedProgramIds : selectedProgramIds})
+                resetFilters()
             }, true
         );
 
@@ -192,9 +265,38 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
             }, true
         );
 
+
+        $scope.$watch( 'selectedBrand', (selectedBrand)  => {
+                BrowserExtensionService.storage.local.set({searchDiscoverSelectedBrand : selectedBrand})
+                searchIfValid (true);
+            }, true
+        );
+
+        $scope.$watch( 'selectedManufacturer', (selectedManufacturer)  => {
+                BrowserExtensionService.storage.local.set({searchDiscoverSelectedManufacturer : selectedManufacturer})
+                searchIfValid (true);
+            }, true
+        );
+        $scope.$watch( 'selectedDistributor', (selectedDistributor)  => {
+                BrowserExtensionService.storage.local.set({searchDiscoverSelectedDistributor : selectedDistributor})
+                searchIfValid (true);
+            }, true
+        );
+        $scope.$watch( 'selectedAffilinetCategoryPath', (selectedAffilinetCategoryPath)  => {
+                BrowserExtensionService.storage.local.set({searchDiscoverSelectedAffilinetCategoryPath : selectedAffilinetCategoryPath})
+                searchIfValid (true);
+            }, true
+        );
+
+        $scope.$watch( 'showFilters', (showFilters)  => {
+                BrowserExtensionService.storage.local.set({searchDiscoverShowFilters : showFilters});
+            }
+        );
+
         $scope.$watch( 'selectedPrograms',
             (selectedPrograms)  => {
                 BrowserExtensionService.storage.local.set({searchDiscoverSelectedPrograms : selectedPrograms})
+                resetFilters()
                 if (selectedPrograms.length === 0) {
                     $scope.shopsFilteredToSelectedPrograms = $scope.allShops;
                     BrowserExtensionService.storage.local.set({searchDiscoverShopsFilteredToSelectedPrograms : $scope.shopsFilteredToSelectedPrograms})
@@ -226,7 +328,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
 
 
         $scope.$watch('selectedShops', (selectedShops) => {
-
+            resetFilters()
             BrowserExtensionService.storage.local.set({searchDiscoverSelectedShops : selectedShops});
             if (selectedShops.length !== 1 ) {
                 $scope.selectedShopCategories = [];
@@ -246,11 +348,13 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
 
         });
         $scope.$watch('selectedShopCategories', function(shopCategories){
+            resetFilters()
             BrowserExtensionService.storage.local.set({searchDiscoverSelectedShopCategories : shopCategories});
             searchIfValid ();
         });
 
         $scope.$watch('searchKeyword', (searchKeyword)=> {
+            resetFilters()
             console.log('Search Keyword changed', searchKeyword);
             BrowserExtensionService.storage.local.set({searchDiscoverLastKeyword : searchKeyword});
             searchIfValid ();
@@ -261,10 +365,17 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
 
     
 
-    let searchIfValid  = function() {
+    let searchIfValid  = function(immidiately = false) {
+        let delay;
+        if (!immidiately) {
+            delay = 500
+        } else {
+            delay = 0;
+        }
         if ($scope.loadingFinished === false) {
             return;
         }
+
 
         $timeout.cancel(searchChangedTimeoutPromise);  //does nothing, if timeout already done
 
@@ -277,7 +388,7 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
             $scope.searching = true;
             console.debug('search if valid runs with', $scope.searchKeyword , $scope.selectedShopCategories, $scope.selectedPrograms, $scope.shopsFilteredToSelectedPrograms);
             $scope.searchProducts();
-        },500);
+        },delay);
 
 
     }
@@ -297,8 +408,6 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
 
 
     let init = function() {
-
-
 
         BrowserExtensionService.storage.local.get('myPrograms', function(result) {
             "use strict";
@@ -346,11 +455,14 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
             $scope.totalRecords = result.data.ProductsSummary.TotalRecords;
             $scope.totalPages = result.data.ProductsSummary.TotalPages;
             $scope.productResult = result.data.Products;
-             result.data.Products.forEach((product) => {
+
+            if (result.data.Facets) {
+                $scope.facetsResult = _buildFacets(result.data.Facets)
+            }
+
+            result.data.Products.forEach((product) => {
                  $scope.productDetails[product.ProductId] = product;
-
                  getProgramUrlForProgramId(product.ProgramId);
-
             });
         }, (error)  => {
             showError (error);
@@ -493,14 +605,35 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
             SortBy : 'Score',
             SortOrder : 'descending',
             ImageScales : 'Image180',
-            WithImageOnly : 'true'
-
+            WithImageOnly : 'true',
+            FacetFields : 'Brand,AffilinetCategoryPathFacet,Manufacturer,Distributor',
+            FacetValueLimit : 10,
         };
+
         if ( $scope.priceSlider.minValue !== $scope.priceSlider.options.floor) {
             params.MinimumPrice =  $scope.priceSlider.minValue
         }
         if ( $scope.priceSlider.maxValue !== $scope.priceSlider.options.ceil) {
             params.MaximumPrice =  $scope.priceSlider.maxValue
+        }
+
+        // Filter Query
+
+        let fq = '';
+        if ($scope.selectedBrand !== '') {
+            fq += ',Brand:' + ($scope.selectedBrand);
+        }
+        if ($scope.selectedDistributor !== '') {
+            fq += ',Distributor:' + ($scope.selectedDistributor);
+        }
+        if ( $scope.selectedManufacturer !== '') {
+            fq += ',Manufacturer:' + ($scope.selectedManufacturer);
+        }
+        if ( $scope.selectedAffilinetCategoryPath !== '') {
+            fq += ',AffilinetCategoryPathFacet:' + $scope.selectedAffilinetCategoryPath;
+        }
+        if (fq !== '' ) {
+            params.FQ = fq.slice(1);
         }
 
 
@@ -533,13 +666,65 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
         }
 
         return params;
-    }
+    };
 
+
+    _buildFacets = function (facetResult) {
+        "use strict";
+        let facets = [];
+        facetResult.forEach(function (facet) {
+            let res = { facetField : facet.FacetField, values : []};
+            facet.FacetValues.forEach(function(facetValue) {
+                let displayName;
+
+                if (facet.FacetField === 'AffilinetCategoryPathFacet') {
+                    displayName = $scope.affilinetCategoryPathToDisplayValue(facetValue.FacetValueName)
+                } else {
+                    displayName = $scope.ucfirst(facetValue.FacetValueName) ;
+                }
+                let val = {
+                    displayName :  displayName + ' (' +  facetValue.FacetValueCount  +')',
+                    FacetValueName : facetValue.FacetValueName ,
+                    FacetValueCount: facetValue.FacetValueCount
+                };
+                res.values.push(val)
+            });
+            facets.push(res);
+        });
+        return facets;
+    };
+
+    $scope.ucfirst = function(string) {
+        "use strict";
+
+        if (typeof string !== 'undefined'){
+            return string.charAt(0).toUpperCase() + string.slice(1)
+        }
+        return string
+
+    };
+
+    $scope.affilinetCategoryPathToDisplayValue = function(name) {
+        "use strict";
+        let displayName;
+        let $values = name.split('^');
+        if ($values[3] === $values[1]) return $values[1];
+        return $values[3];
+    };
+
+
+    let resetFilters = function () {
+        $scope.selectedBrand = '';
+        $scope.selectedManufacturer = '';
+        $scope.selectedDistributor = '';
+        $scope.selectedAffilinetCategoryPath = '';
+    };
     $scope.reset = function () {
         $scope.priceSlider.minValue = 0;
         $scope.priceSlider.maxValue = $scope.priceSlider.options.ceil;
         $scope.searchKeyword = '';
         $scope.selectedShops = [];
+        resetFilters()
         $scope.selectedProgramsIds= [];
         $scope.selectedPrograms= [];
         $scope.selectedProductIds= [];
@@ -559,4 +744,4 @@ function SearchDiscoverController($scope, $rootScope, LogonService, $timeout,  $
 
 
     init();
-};
+}

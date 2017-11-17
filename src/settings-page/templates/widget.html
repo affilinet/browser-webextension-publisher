@@ -111,7 +111,7 @@
                                     <oi-select
                                             id="openWidget"
                                             ng-change="openWidget()"
-                                            oi-options="item.widgetName for item in storedWidgets"
+                                            oi-options="item.widgetName for item in allWidgets"
                                             ng-model="selectedWidget"
                                             oi-select-options="{newItem: false}"
                                     ></oi-select>
@@ -129,7 +129,8 @@
                                     <div class="input-group">
                                         <input type="text" class="form-control" ng-model="widget.widgetName" id="widgetName">
                                         <div class="input-group-btn">
-                                            <button class="btn btn-primary" ng-click="saveWidget()" translate="WIDGET_BtnSave" ng-disabled="widget.widgetName === ''"></button>
+                                            <button class="btn btn-primary" ng-click="saveWidget()" translate="WIDGET_BtnSave" ng-disabled="widget.widgetName === ''|| widget.products.length < 1"></button>
+
                                         </div>
 
                                     </div>
@@ -201,7 +202,7 @@
 
                             <div class="image-col "
                                  ng-repeat="productId in selectedProductList.products track by productId"
-                                 data-drag="true"
+                                 data-drag="{{productDetails[productId].id}}"
 
                                  jqyoui-draggable="{ }"
 
@@ -212,13 +213,11 @@
 
                                  data-drop="true"
                                  jqyoui-droppable="{onDrop: 'dropProductOnTrash'}"
-
-
                             >
 
                                     <div class="affilinetWidgetElement"
                                         ng-if="productDetails[productId]"
-                                        ng-style="{'background-image':'url( '+ productDetails[productId].Images[0][0].URL + ')'}">
+                                        ng-style="{'background-image':'url( '+ productDetails[productId].img + ')'}">
                                     </div>
 
                                     <div class="affilinetWidgetElement"     ng-if="!productDetails[productId]">
@@ -272,21 +271,21 @@
                                      data-drag="true"
 
                                      ng-mouseenter="activateDragOnSlick()"
-                                     data-product-id="{{widget.products[$index]}}"
+                                     data-product-id="{{widget.products[$index].id}}"
                                      data-from="widget"
                                 >
-                                    <div class="productHoverTrash" ng-click="deleteProductFromWidget($index)"><i class="fa fa-times-circle"></i></div>
-                                    <img ng-src="{{ trustAsUrl(productDetails[widget.products[$index]].Images[0][0].URL) }}">
+                                    <div class="productHoverTrash" ng-if="widget.products[$index]" ng-click="deleteProductFromWidget($index)"><i class="fa fa-times-circle"></i></div>
+                                    <img ng-src="{{ trustAsUrl(widget.products[$index].img) }}">
                                     <span class="affilinet-product-widget-info"  ng-if="widget.products[$index] !== undefined">
-                            <span class=""  ng-if="widget.name">{{ productDetails[widget.products[$index]].ProductName }}</span>
-                            <span class=""  ng-if="widget.brand">{{ productDetails[widget.products[$index]].Brand }}</span>
-                            <span class=""  ng-if="widget.manufacturer">{{ productDetails[widget.products[$index]].Manufacturer }}</span>
+                            <span class=""  ng-if="widget.name">{{ widget.products[$index].name }}</span>
+                            <span class=""  ng-if="widget.brand">{{ widget.products[$index].brand }}</span>
+                            <span class=""  ng-if="widget.manufacturer">{{ widget.products[$index].manufacturer }}</span>
                             <span class=""  ng-if="widget.shop">
-                                {{  programUrls[productDetails[widget.products[$index]].ProgramId ] }}
+                                {{  widget.products[$index].url  }}
                             </span>
-                            <span class=""  ng-if="widget.price">{{ productDetails[widget.products[$index]].PriceInformation.DisplayPrice }}</span>
+                            <span class=""  ng-if="widget.price">{{ widget.products[$index].price }}</span>
                         </span>
-                                    <img ng-if="widget.products[$index] === undefined || productDetails[widget.products[$index]] === undefined"
+                                    <img ng-if="widget.products[$index] === undefined"
                                          src="/settings-page/img/placeholder.png">
                                 </div>
                             </div>
@@ -311,21 +310,21 @@
                                      data-drag="true"
 
                                      ng-mouseenter="activateDragOnSlick()"
-                                     data-product-id="{{widget.products[$index]}}"
+                                     data-product-id="{{widget.products[$index].id}}"
                                      data-from="widget"
                                 >
                                     <div class="productHoverTrash" ng-click="deleteProductFromWidget($index)"><i ng-hide="$last" class="fa fa-times-circle"></i></div>
-                                    <img  ng-if="widget.products[$index]" ng-src="{{ trustAsUrl(productDetails[widget.products[$index]].Images[0][0].URL) }}">
+                                    <img  ng-if="widget.products[$index]" ng-src="{{ trustAsUrl(widget.products[$index].img) }}">
                                     <span class="affilinet-product-widget-info"  ng-if="widget.products[$index] !== undefined">
-                            <span class=""  ng-if="widget.name">{{ productDetails[widget.products[$index]].ProductName }}</span>
-                            <span class=""  ng-if="widget.brand">{{ productDetails[widget.products[$index]].Brand }}</span>
-                            <span class=""  ng-if="widget.manufacturer">{{ productDetails[widget.products[$index]].Manufacturer }}</span>
+                            <span class=""  ng-if="widget.name">{{ widget.products[$index].name }}</span>
+                            <span class=""  ng-if="widget.brand">{{ widget.products[$index].brand }}</span>
+                            <span class=""  ng-if="widget.manufacturer">{{ widget.products[$index].manufacturer }}</span>
                             <span class=""  ng-if="widget.shop">
-                                {{  programUrls[productDetails[widget.products[$index]].ProgramId] }}
+                                {{  widget.products[$index]].url }}
                             </span>
-                            <span class=""  ng-if="widget.price">{{ productDetails[widget.products[$index]].PriceInformation.DisplayPrice }}</span>
+                            <span class=""  ng-if="widget.price">{{ widget.products[$index].price }}</span>
                         </span>
-                                    <img ng-if="widget.products[$index] === undefined || productDetails[widget.products[$index]] === undefined"
+                                    <img ng-if="widget.products[$index] === undefined"
                                          src="/settings-page/img/placeholder.png">
                                 </div>
                             </div>

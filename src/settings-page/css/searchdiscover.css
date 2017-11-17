@@ -1,3 +1,19 @@
+.searchDiscover {
+  /**
+  facets
+   */
+  /**
+  products
+   */
+}
+.searchDiscover #filters-widget-body {
+  padding: 20px 0;
+}
+.searchDiscover .facet .facet-item {
+  display: block;
+  width: 100%;
+  font-size: 12px;
+}
 .searchDiscover .line {
   border-bottom: 1px solid #7f7f7f;
 }

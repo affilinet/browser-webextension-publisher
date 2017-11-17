@@ -1,7 +1,8 @@
 angular.module('AffilinetToolbar')
-    .controller('WidgetController', ['$scope', '$sce', '$translate', '$timeout', 'BrowserExtensionService', 'productWebservice', '$stateParams', WidgetController]);
+    .controller('WidgetController', ['$scope',  '$sce', '$translate', '$timeout', 'BrowserExtensionService', 'productWebservice', '$stateParams', 'LogonService', WidgetController]);
 
-function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionService, productWebservice, $stateParams) {
+function WidgetController($scope, $sce, $translate, $timeout, BrowserExtensionService, productWebservice, $stateParams,  LogonService) {
+
 
     $scope.loadingFinished = false;
     $translate('WIDGET_PageName').then(function (text) {
@@ -28,7 +29,20 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
 
     $scope.storedProductLists = [];
+    /**
+     * @deprecated
+     * @type {Array}
+     */
     $scope.storedWidgets = [];
+    $scope.migrationStarted = false;
+
+    /**
+     * widgets from server
+     * @type {Array}
+     */
+    $scope.allWidgets = [];
+
+
     $scope.productDetails = [];
 
     $scope.sliderOffset = 0;
@@ -36,8 +50,8 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
     $scope.currentlyDraggedItem = {};
 
-    $scope.programUrlsRequested = [];
-    $scope.programUrls = [];
+    let programUrlsRequested = [];
+    let programUrls = [];
 
     $scope.selectedWidget = {};
 
@@ -57,17 +71,41 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
         products: []
     };
     $scope.widget = angular.copy($scope.defaultWidget);
+    $scope.widget.products = [];
 
-    $scope.widget.products = $stateParams.productIds;
+
+    $scope.copySuccess = false;
 
 
+    $scope.currentSlideIndex = 1;
+    $scope.slickConfig = {
+        enabled: true,
+        autoPlay: $scope.autoRotate,
+        autoPlaySpeed : 100,
+        dots: false,
+        arrows: true,
+        swipe: true,
+        infinite: true,
+        method: {},
+        respondTo : 'window',
+        slidesToShow: 4,
+        slidesToScroll: 4,
+
+        event: {
+            afterChange: function (event, slick, currentSlide, nextSlide) {
+                $scope.currentSlideIndex = currentSlide; // save current index each time
+            },
+            init: function (event, slick) {
+                slick.slickGoTo($scope.currentSlideIndex); // slide to correct index when init
+            }
+        }
+    };
 
     $scope.addWatchToWidget = function() {
 
         $scope.createWidgetCode();
         $scope.$watch('widget', function(newVal, old) {
             $scope.createWidgetCode();
-            console.log('widget changed');
             if (
                 old.products.length !== newVal.products.length
                 || old.imageSize !== newVal.imageSize
@@ -119,46 +157,45 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
     $scope.saveWidget = function() {
         if ($scope.widget.id !== null) {
-            const index = $scope.storedWidgets.findIndex((widget) => {return widget.id === $scope.selectedWidget.id});
-            let changedWidget = angular.copy($scope.widget);
-            delete changedWidget.$$hashKey;
-            $scope.storedWidgets[index] = changedWidget;
-            $scope.selectedWidget = changedWidget;
-            $scope.$parent.sendAlert($scope.messages.WIDGET_WidgetSaved, 'success')
+            const index = $scope.allWidgets.findIndex((widget) => {return widget.id === $scope.widget.id});
+            LogonService.WidgetUpdate($scope.widget.id, $scope.widget).then(function (result) {
+                "use strict";
+                let changedWidget = result.data;
+                $scope.allWidgets[index] = changedWidget;
+                $scope.selectedWidget = changedWidget;
+                $scope.$parent.sendAlert($scope.messages.WIDGET_WidgetSaved, 'success')
+
+
+            }, function (error) {
+                "use strict";
+                console.error(error);
+                $scope.$parent.sendAlert( 'Could not save widget', 'danger')
+            });
+
+
         } else {
-            let newWidget = angular.copy($scope.widget);
-            delete newWidget.$$hashKey;
-            newWidget.id = new Date().getTime();
-            $scope.storedWidgets.unshift(newWidget);
-            $scope.widget.id = newWidget.id;
-            $scope.selectedWidget = newWidget;
-            $scope.$parent.sendAlert($scope.messages.WIDGET_WidgetCreated, 'success')
+
+            LogonService.WidgetCreate($scope.widget).then(function (result) {
+                "use strict";
+                let newWidget = result.data;
+                // put it to the end
+                $scope.allWidgets.unshift(newWidget);
+                $scope.widget.id = newWidget.id;
+                $scope.selectedWidget = newWidget;
+                $scope.$parent.sendAlert($scope.messages.WIDGET_WidgetCreated, 'success')
+
+            }, function (error) {
+                "use strict";
+                console.error(error);
+                $scope.$parent.sendAlert( 'Could not save widget', 'danger')
+            });
+
         }
+
+
     };
 
-    $scope.currentSlideIndex = 1;
-    $scope.slickConfig = {
-        enabled: true,
-        autoPlay: $scope.autoRotate,
-        autoPlaySpeed : 100,
-        dots: false,
-        arrows: true,
-        swipe: true,
-        infinite: true,
-        method: {},
-        respondTo : 'window',
-        slidesToShow: 4,
-        slidesToScroll: 4,
 
-        event: {
-            afterChange: function (event, slick, currentSlide, nextSlide) {
-                $scope.currentSlideIndex = currentSlide; // save current index each time
-            },
-            init: function (event, slick) {
-                slick.slickGoTo($scope.currentSlideIndex); // slide to correct index when init
-            }
-        }
-    };
 
     $scope.trustAsUrl = function(url) {
         "use strict";
@@ -193,16 +230,29 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
     $scope.deleteWidget = function() {
 
+        /**
+         * delete it serverside, then remove from allWidgets
+         */
+
         if (!confirm($scope.messages.WIDGET_SureYouWantToDeleteWidget)) {
             return;
         }
-        "use strict";
-        const index = $scope.storedWidgets.findIndex((widget) => {return widget.id === $scope.widget.id});
-        console.log(index);
-        $scope.selectedWidget = null;
-        $scope.widget = angular.copy($scope.defaultWidget);
-        $scope.addWatchToWidget();
-        $scope.storedWidgets.splice(index, 1);
+
+        LogonService.WidgetDelete($scope.widget.id).then(
+            function(result) {
+                const index = $scope.allWidgets.findIndex((widget) => {return widget.id === $scope.widget.id});
+                $scope.selectedWidget = null;
+                $scope.widget = angular.copy($scope.defaultWidget);
+                $scope.addWatchToWidget();
+                $scope.allWidgets.splice(index, 1);
+            },
+            function(error) {
+                $scope.$parent.sendAlert('Could not delete widget. Please check internet connection', 'danger')
+            }
+        )
+
+
+
     };
 
     $scope.clearProductsFromWidget =  function() {
@@ -217,10 +267,8 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
         console.log('open widget', $scope.selectedWidget);
 
         if ($scope.selectedWidget && $scope.selectedWidget.id) {
-            const index = $scope.storedWidgets.findIndex((widget) => {return widget.id === $scope.selectedWidget.id});
-
-            $scope.loadProductData($scope.storedWidgets[index].products);
-            $scope.widget = angular.copy($scope.storedWidgets[index]);
+            const index = $scope.allWidgets.findIndex((widget) => {return widget.id === $scope.selectedWidget.id});
+            $scope.widget = angular.copy($scope.allWidgets[index]);
             $scope.addWatchToWidget();
             $scope.refreshSlider();
         }
@@ -257,7 +305,8 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
         let draggedItemInfo = {
             from: draggable.helper[0].getAttribute('data-from'),
             productId: draggable.helper[0].getAttribute('data-product-id'),
-            index: draggable.helper[0].getAttribute('data-index')
+            index: draggable.helper[0].getAttribute('data-index'),
+            targetIndex: targetIndex
         };
         console.log('DROP ON WIDGET draggedItemInfo', draggedItemInfo);
 
@@ -265,34 +314,98 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
             return false;
         }
 
-        const target =  $scope.widget.products[targetIndex];
+        const tartgetProduct =  $scope.widget.products[targetIndex];
+        console.log('tartgetProduct product')
 
         if (draggedItemInfo.from === 'widget') {
             // ziel ist leer?
-            if (target === undefined || target === null) {
+            if (tartgetProduct === undefined || tartgetProduct === null) {
                 // überschreibe die null
-                $scope.widget.products[targetIndex] = draggedItemInfo.productId;
+                $scope.widget.products[targetIndex] =   $scope.getProductDetail(draggedItemInfo.productId);
                 // entferne die alte karte
                 $scope.widget.products.splice(draggedItemInfo.index, 1);
 
             } else {
+                // tausche die karten
                 let temp = $scope.widget.products[targetIndex];
-                $scope.widget.products[targetIndex] = draggedItemInfo.productId;
+                $scope.widget.products[targetIndex] =  $scope.getProductDetail(draggedItemInfo.productId);
                 $scope.widget.products[draggedItemInfo.index] = temp;
             }
         } else {
-            if (!target) {
+            if (tartgetProduct === undefined || tartgetProduct === null) {
                 // überschreibe leere karten
-                $scope.widget.products[targetIndex] = draggedItemInfo.productId;
+                $scope.widget.products[targetIndex] = $scope.getProductDetail(draggedItemInfo.productId);
             } else {
                 // füge die karte ein
-                $scope.widget.products.splice(targetIndex, 0, draggedItemInfo.productId);
+                $scope.widget.products.splice(targetIndex, 0,  $scope.getProductDetail(draggedItemInfo.productId));
             }
         }
         $scope.currentlyDraggedItem = {};
         $scope.refreshSlider();
         return true;
     };
+
+
+    let storeProductDetail = function (ApiProduct, addToWidget = false) {
+
+        if (programUrlsRequested[ApiProduct.ProgramId] !== true ) {
+            programUrlsRequested[ApiProduct.ProgramId] = true;
+            BrowserExtensionService.runtime.sendMessage({action : 'get-programDetailsForProgramId', data : { programId : ApiProduct.ProgramId}},
+                function(programDetails){
+                    console.log('received details', programDetails);
+                    if (programDetails !== false) {
+                            programUrls[ApiProduct.ProgramId] = programDetails.programUrl;
+                            $scope.productDetails[ApiProduct.ProductId] = {
+                                    "id": ApiProduct.ProductId,
+                                    "url": ApiProduct.Deeplink1,
+                                    "img": ApiProduct.Images[0][0].URL,
+                                    "price": ApiProduct.PriceInformation.DisplayPrice,
+                                    "brand": ApiProduct.Brand,
+                                    "name": ApiProduct.ProductName,
+                                    "manufacturer": ApiProduct.Manufacturer,
+                                    "shop": programDetails.programUrl,
+                                    "deleted": false
+                                }
+
+                                if (addToWidget) {
+                                    $scope.widget.products.push($scope.productDetails[ApiProduct.ProductId])
+                                }
+                    }
+                })
+        }
+        else {
+            console.log('store details')
+
+                $scope.productDetails[ApiProduct.ProductId] = {
+                        "id": ApiProduct.ProductId,
+                        "url": ApiProduct.Deeplink1,
+                        "img": ApiProduct.Images[0][0].URL,
+                        "price": ApiProduct.PriceInformation.DisplayPrice,
+                        "brand": ApiProduct.Brand,
+                        "name": ApiProduct.ProductName,
+                        "manufacturer": ApiProduct.Manufacturer,
+                        "shop": programUrls[ApiProduct.ProgramId],
+                        "deleted": false
+                    }
+            if (addToWidget) {
+                $scope.widget.products.push($scope.productDetails[ApiProduct.ProductId])
+            }
+        }
+
+    }
+
+    $scope.getProductDetail = function(productId) {
+        let productDetails = $scope.productDetails[productId];
+
+
+
+        if (typeof productDetails === 'undefined') {
+            console.log('getProductDetail is null ',productId)
+            return null;
+        }
+        return productDetails
+
+    }
 
     $scope.dropProductOnTrash = function($event,draggable) {
         // remove the product from widget
@@ -324,64 +437,7 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
     };
 
 
-    attachWatchHandlers = function() {
-        $scope.$watch('storedWidgets', function(newVal, oldVal) {
-            console.log('save widgets', newVal);
-            BrowserExtensionService.storage.local.set({storedWidgets: newVal });
-        }, true)
-    };
-
-
-    BrowserExtensionService.storage.local.get(['storedProductLists', 'storedWidgets'], function (res) {
-        "use strict";
-        if (res.storedProductLists) {
-            $scope.storedProductLists = res.storedProductLists;
-            if ($scope.storedProductLists[0]) {
-                $scope.selectedProductList = $scope.storedProductLists[0];
-            }
-        }
-        if (res.storedWidgets) {
-            $scope.storedWidgets = res.storedWidgets;
-
-
-        }
-        attachWatchHandlers();
-
-        let allProductIds = [];
-        angular.forEach($scope.storedProductLists, function (productList) {
-            productList.products.forEach(function (prodId) {
-                allProductIds.push(prodId)
-            })
-        });
-
-        $scope.loadProductData(allProductIds);
-
-        if ($stateParams.productIds.length === 0 ) {
-            $scope.selectedWidget = $scope.storedWidgets[0];
-            $scope.openWidget()
-        }
-
-
-        $scope.loadingFinished = true;
-    });
-
-    getProgramUrlForProgramId = function(ProgramId) {
-        if ($scope.programUrlsRequested[ProgramId] !== true ) {
-            $scope.programUrlsRequested[ProgramId] = true;
-            BrowserExtensionService.runtime.sendMessage({action : 'get-programDetailsForProgramId', data : { programId : ProgramId}},
-                function(programDetails){
-                    if (programDetails !== false) {
-                        $scope.$apply(function(){
-                            $scope.programUrls[ProgramId] = programDetails.programUrl;
-                        });
-                    }
-                })
-        }
-    }
-
-
-    $scope.loadProductData = function(productIdArray) {
-        "use strict";
+    $scope.loadProductData = function(productIdArray, addToWidget = false) {
         let i = 0;
         let batch = 0;
         let productBatches = [];
@@ -403,70 +459,33 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
         angular.forEach(productBatches, function (productIds) {
             productWebservice.GetProducts(productIds).then(
                 (response) => {
-                    angular.forEach(response.data.Products, (product) => {
-                        $scope.productDetails[product.ProductId] = product
-                        getProgramUrlForProgramId(product.ProgramId);
+                    angular.forEach(response.data.Products, (ApiProduct) => {
+                        storeProductDetail(ApiProduct, addToWidget)
+
                     });
                     $scope.createWidgetCode();
                 }
             )
-            console.log($scope.productDetails);
 
         });
+
     };
 
 
-
-    $scope.getWidgetConfig  = function() {
-        "use strict";
-        let widgetConfig = {
-            "autoRotate" : $scope.widget.autoRotate,
-            "productInfoOnHover" : $scope.widget.productInfoOnHover,
-            "type" : $scope.widget.type,
-            "price" : $scope.widget.price,
-            "name" : $scope.widget.name,
-            "shop" : $scope.widget.shop,
-            "brand" : $scope.widget.brand,
-            "manufacturer" : $scope.widget.manufacturer,
-            "products" : []
-        };
-        angular.forEach($scope.widget.products, function(productId){
-            if ($scope.productDetails[productId]) {
-                widgetConfig.products.push(
-                    {
-                        "id" : productId,
-                        "url" : $scope.productDetails[productId].Deeplink1,
-                        "img" : $scope.productDetails[productId].Images[0][0].URL,
-                        "price": $scope.productDetails[productId].PriceInformation.DisplayPrice,
-                        "brand": $scope.productDetails[productId].Brand,
-                        "name": $scope.productDetails[productId].ProductName,
-                        "manufacturer" : $scope.productDetails[productId].Manufacturer,
-                        "shop" : $scope.programUrls[$scope.productDetails[productId].ProgramId]
-                    }
-                )
-            }
-        });
-        return widgetConfig;
-    }
 
 
     $scope.createWidgetCode = function() {
         "use strict";
 
-        let widgetConfig = $scope.getWidgetConfig();
-
-        let randomInt = Math.ceil(Math.random() * 10000000000);
-
-        let code = '<div id="affilinet-product-widget-' + $scope.widget.id + '-' + randomInt + '"' +
+        let code = '<div id="affilinet-product-widget-' + $scope.widget.id + '"' +
         ' class="affilinet-product-widget"' +
-        ' data-affilinet-widget-id="' + $scope.widget.id + '"' +
-        ' data-config="'+  btoa(JSON.stringify(widgetConfig)) +'">' +
-        '<sty' + 'le type="text/css">@import "https://productwidget.com/style-1.0.0.css";</style>' +
+        ' data-affilinet-widget-id="' + $scope.widget.id + '">' +
+        '<sty' + 'le type="text/css">@import "https://productwidget.com/style-2.0.0.css";</style>' +
         '<scr' + 'ipt type="text/javascript">' +
         '!function(d){var e,i = \'affilinet-product-widget-script\';if(!d.getElementById(i)){' +
         'e = d.createElement(\'script\');' +
         'e.id = i;' +
-        'e.src = \'https://productwidget.com/affilinet-product-widget-1.0.0-min.js\';' +
+        'e.src = \'https://productwidget.com/affilinet-product-widget-2.0.0.js\';' +
         'd.body.appendChild(e);}' +
         'if (typeof window.__affilinetWidget===\'object\')if (d.readyState===\'complete\'){' +
         'window.__affilinetWidget.init();}}(document);</scr' + 'ipt></div>'
@@ -475,7 +494,7 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
     }
 
-    $scope.copySuccess = false;
+
 
     $scope.copiedCode = function () {
         $scope.copySuccess = true;
@@ -483,6 +502,134 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
             $scope.copySuccess = false;
         }, 2000);
     }
+
+
+
+    /**
+     * convert old stored widgets to server side saved widgets.
+     * This ugly code is to be removed in the next versions when all old widgets are converted
+     */
+    migrateOldWidgets = function() {
+
+        BrowserExtensionService.storage.local.get(['storedWidgets'], function (res) {
+
+            if (res.storedWidgets && $scope.migrationStarted === false) {
+                $scope.migrationStarted = true;
+                console.log('LEGACY widgets existing', res.storedWidgets);
+
+                let legacyProductIds = [];
+                res.storedWidgets.forEach(function(legacyWidget){
+                    legacyWidget.products.forEach(function (productId) {
+                        if (typeof productId === 'string' || typeof productId === 'number') {
+                            legacyProductIds.push(productId);
+                        }
+                    });
+                });
+                console.log(legacyProductIds);
+
+
+                let batch = 0;
+                let productBatches = [];
+                angular.forEach(legacyProductIds, (productId) => {
+
+                    if (!productBatches[batch]) {
+                        productBatches[batch] = [productId];
+                    } else {
+                        productBatches[batch].push(productId);
+                    }
+                    if (productBatches[batch].length === 50) {
+                        batch++;
+                    }
+                });
+
+                // load the product details from webservice
+                let fetchedBatches = 0;
+
+
+
+                angular.forEach(productBatches,  (productIds) => {
+                    console.log('handling batch', fetchedBatches)
+
+                        productWebservice.GetProducts(productIds).then(
+                            (response) => {
+                                angular.forEach(response.data.Products, (product) => {
+                                    storeProductDetail(product);
+                                });
+
+
+                                if (fetchedBatches === productBatches.length) {
+                                    console.log('finished loading legacy widget products, batches: ', fetchedBatches )
+
+                                    window.setTimeout((res) => {
+                                        res.storedWidgets.forEach((legacyWidget) => {
+
+                                            let convertedWidget = legacyWidget;
+
+                                            // geth das????
+                                            let products = [];
+                                            convertedWidget.products.forEach((productId) =>{
+                                                let product = $scope.getProductDetail(productId);
+                                                if (product !== null) {
+                                                    products.push(product)
+                                                }else {
+                                                    console.error('product not found', productId)
+
+                                                }
+                                            });
+                                            convertedWidget.products = products;
+                                            console.log('converting widget', convertedWidget);
+
+                                            LogonService.WidgetCreate(convertedWidget).then(function (result) {
+                                                "use strict";
+                                                let newWidget = result.data;
+                                                // put it to the end of allwidgets
+                                                $scope.allWidgets.unshift(newWidget);
+                                                $scope.$parent.sendAlert('Migrated widget', 'success');
+
+                                                // remove it from storedWidgets
+                                                const index = $scope.storedWidgets.findIndex((widget) => {
+                                                    return widget.id === legacyWidget.id
+                                                });
+                                                $scope.storedWidgets.splice(index, 1);
+
+                                                // remove it from browserextension storage
+                                                BrowserExtensionService.storage.local.set({storedWidgets: $scope.storedWidgets});
+
+                                            }, function (error) {
+
+
+                                                // remove it from storedWidgets
+                                                const index = $scope.storedWidgets.findIndex((widget) => {
+                                                    return widget.id === legacyWidget.id
+                                                });
+                                                $scope.storedWidgets.splice(index, 1);
+
+                                                // remove it from browserextension storage
+                                                BrowserExtensionService.storage.local.set({storedWidgets: $scope.storedWidgets});
+                                                console.error(error)
+                                            });
+
+
+                                        });
+                                    },2000, res)
+
+                                }
+                            }
+                        );
+                        fetchedBatches++;
+
+                })
+
+
+
+
+
+            }
+        });
+    }
+
+
+
     /***
      * Inititalizing functions
      */
@@ -490,10 +637,76 @@ function WidgetController($scope,  $sce, $translate, $timeout, BrowserExtensionS
 
 
     if ($stateParams.productIds.length > 0) {
-        $scope.loadProductData($stateParams.productIds);
+        $scope.loadProductData($stateParams.productIds, true);
     }
 
+
+
     $scope.addWatchToWidget();
+
+
+    /**
+     * Load the widgets
+     */
+
+    BrowserExtensionService.storage.local.get(['storedProductLists'], function (res) {
+
+
+        if (res.storedProductLists) {
+            $scope.storedProductLists = res.storedProductLists;
+            if ($scope.storedProductLists[0]) {
+                $scope.selectedProductList = $scope.storedProductLists[0];
+            }
+        }
+
+
+        let allProductIds = [];
+        angular.forEach($scope.storedProductLists, function (productList) {
+            productList.products.forEach(function (prodId) {
+                allProductIds.push(prodId)
+            })
+        });
+
+        if ($stateParams.productIds.length === 0) {
+
+            $stateParams.productIds.forEach(function (prodId) {
+                allProductIds.push(prodId)
+            })
+        }
+
+
+        $scope.loadProductData(allProductIds);
+
+
+
+        LogonService.WidgetIndex().then(function(response){
+            $scope.allWidgets = response.data;
+            if ($scope.allWidgets.length > 0) {
+                $scope.selectedWidget =  $scope.allWidgets[0]
+                console.log('loaded widget', $scope.selectedWidget)
+
+                if ($stateParams.widgetId !== null) {
+                    // user wants to load a widget
+                    const widgetIndex = $scope.allWidgets.findIndex(function(widg) { return widg.id === $stateParams.widgetId})
+                    $scope.selectedWidget = $scope.allWidgets[widgetIndex];
+                    $scope.openWidget()
+                }
+                else if ($stateParams.productIds.length === 0) {
+                    $scope.selectedWidget = $scope.allWidgets[0];
+                    $scope.openWidget()
+                }
+
+            }
+
+        }, function (error) {
+            $scope.$parent.sendAlert('Could not load widgets, please check internet connection', 'danger')
+        })
+
+        $scope.loadingFinished = true;
+
+       // migrateOldWidgets()
+    });
+
 
 
 

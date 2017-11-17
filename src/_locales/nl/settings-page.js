@@ -159,6 +159,16 @@
             "WIDGET_WarningChangesNotSaved": "Er zijn niet-opgeslagen wijzigingen. Weet je zeker dat je een nieuwe widget aan wilt maken?",
             "SEARCHDISCOVER_FindProducts": "Find Products",
             "SEARCHDISCOVER_SelectAllProducts": "Select all",
-            "SETTINGS_updateProgramDataBtn": "Update program list data"
+            "SETTINGS_updateProgramDataBtn": "Update program list data",
+            "WIDGET_CouldNotSave": "Could not save Widget. Check Internet Connection",
+
+            "ALLWIDGETS_PageName": "All Widgets",
+            "ALLWIDGETS_WidgetName": "Name",
+            "ALLWIDGETS_ProductCount": "Number of products",
+            "ALLWIDGETS_Edit": "Edit",
+            "ALLWIDGETS_OldProducts": "Update Products",
+            "ALLWIDGETS_ButtonEdit": "Edit",
+            "ALLWIDGETS_ClearOldProducts": "Clear unavailable products",
+            "ALLWIDGETS_OldProductsRemoved": "Widget updated",
         });
 });

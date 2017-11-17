@@ -65,9 +65,17 @@ angular.module('AffilinetToolbar').config(['$stateProvider', '$urlRouterProvider
                 url: '/widget',
                 params: {
                     productIds: [],
+                    widgetId: null
                 },
                 templateUrl: 'templates/widget.html',
                 controller: 'WidgetController'
+            })
+            .state('allwidgets', {
+                url: '/allwidgets',
+                params: {
+                },
+                templateUrl: 'templates/allwidgets.html',
+                controller: 'AllWidgetsController'
             })
         ;
 

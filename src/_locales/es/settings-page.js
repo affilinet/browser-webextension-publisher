@@ -160,5 +160,15 @@ app.config(function ($translateProvider) {
             "SEARCHDISCOVER_FindProducts": "Encontrar productos",
             "SEARCHDISCOVER_SelectAllProducts": "Seleccionar todo",
             "SETTINGS_updateProgramDataBtn": "Actualizar los datos de la lista de programas"
+
+
+            "ALLWIDGETS_PageName": "All Widgets",
+            "ALLWIDGETS_WidgetName": "Name",
+            "ALLWIDGETS_ProductCount": "Number of products",
+            "ALLWIDGETS_Edit": "Edit",
+            "ALLWIDGETS_OldProducts": "Update Products",
+            "ALLWIDGETS_ButtonEdit": "Edit",
+            "ALLWIDGETS_ClearOldProducts": "Clear unavailable products",
+            "ALLWIDGETS_OldProductsRemoved": "Widget updated",
         });
 });

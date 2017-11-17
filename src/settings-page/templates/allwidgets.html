@@ -1,0 +1,48 @@
+<div class="row" id="news" ng-show="loadingFinished">
+    <div class="col-lg-12">
+
+
+    <table class="table table-responsive table-hover">
+        <thead>
+        <tr>
+            <th>{{'ALLWIDGETS_WidgetName'|translate}}</th>
+            <th >{{'ALLWIDGETS_ProductCount'|translate}}</th>
+            <th >{{'ALLWIDGETS_Edit'|translate}}</th>
+            <th >{{'ALLWIDGETS_OldProducts'|translate}}</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="widget in allWidgets">
+
+            <td>
+                <a ui-sref="widget({'widgetId' : widget.id})">{{ widget.widgetName}}</a>
+            </td>
+            <td>
+                {{ widget.products.length}}
+            </td>
+            <td>
+                <a ui-sref="widget({'widgetId' : widget.id})" class="btn btn-default">{{'ALLWIDGETS_ButtonEdit'|translate}}</a>
+            </td>
+            <td>
+               <span ng-if="deletedProductCount(widget) > 0">
+                    <button class="btn btn-danger" ng-click="clearOldProduct(widget)">{{'ALLWIDGETS_ClearOldProducts'|translate : { number : deletedProductCount(widget)} }}</button>
+               </span>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+
+
+
+
+
+    </div>
+</div>
+
+<div class="row" ng-hide="loadingFinished">
+    <div class="col-lg-12 text-center">
+        <i class="fa fa-4x fa-spinner fa-spin"></i>
+    </div>
+</div>

@@ -10,7 +10,7 @@ let globalHasPartnership = false;
 let globalHasProgram = false;
 let globalHasProgramPartnerShipAndDeeplink = false;
 
-const linkShortener =  'https://widget-server.dev/api/v1.0/shortlink';
+const linkShortener =  'https://productwidget.com/api/v1.0/shortlink';
 
 
 ext.runtime.onMessage.addListener(

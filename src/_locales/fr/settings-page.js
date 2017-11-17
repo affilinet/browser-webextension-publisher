@@ -158,6 +158,16 @@ app.config(function ($translateProvider) {
             "WIDGET_WarningChangesNotSaved": "Vous avez effectué des modifications sans les enregistrer, voulez-vous vraiment créer un nouveau widget ?",
             "SEARCHDISCOVER_FindProducts": "Trouvez des produits",
             "SEARCHDISCOVER_SelectAllProducts": "Tout sélectionner",
-            "SETTINGS_updateProgramDataBtn": "Update program list data"
+            "SETTINGS_updateProgramDataBtn": "Update program list data",
+            "WIDGET_CouldNotSave": "Could not save Widget. Check Internet Connection",
+
+            "ALLWIDGETS_PageName": "All Widgets",
+            "ALLWIDGETS_WidgetName": "Name",
+            "ALLWIDGETS_ProductCount": "Number of products",
+            "ALLWIDGETS_Edit": "Edit",
+            "ALLWIDGETS_OldProducts": "Update Products",
+            "ALLWIDGETS_ButtonEdit": "Edit",
+            "ALLWIDGETS_ClearOldProducts": "Clear unavailable products",
+            "ALLWIDGETS_OldProductsRemoved": "Widget updated",
         });
 });

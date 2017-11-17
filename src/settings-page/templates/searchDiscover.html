@@ -29,7 +29,6 @@
 
                             <div class="col-xs-6">
                                 <oi-select
-
                                         oi-options="item.programTitle for item in myPrograms track by item.programId"
                                         ng-model="selectedPrograms"
                                         multiple
@@ -77,6 +76,9 @@
                                       rz-slider-options="priceSlider.options"></rzslider>
                         </div>
 
+
+
+
                         <div class="form-group">
                             <div class="col-sm-12 text-right">
 
@@ -94,6 +96,69 @@
                     </div>
 
                     </form>
+                </div>
+            </div>
+
+
+            <div class="row" ng-if="searchFinished">
+
+                <div class="widget">
+                    <div class="widget-header clickable"     ng-click="toggleFilters()" >
+                        {{ 'SEARCHDISCOVER_Filter'|translate}}
+                        <span class="pull-right">
+                            <i ng-if="showFilters" class="fa fa-chevron-up"></i>
+                            <i ng-if="!showFilters" class="fa fa-chevron-down"></i>
+                        </span>
+
+                    </div>
+
+
+                    <div class="widget-body "  ng-if="showFilters" id="filters-widget-body">
+
+                            <div class="row form-group">
+
+
+                                <label class="col-xs-4" translate="SEARCHDISCOVER_LabelBrand"  ></label>
+                                <label class="col-xs-4" translate="SEARCHDISCOVER_LabelManufacturer"  ></label>
+                                <label class="col-xs-4" translate="SEARCHDISCOVER_LabelAffilinetCategoryPath" ></label>
+
+
+                                <div class="col-xs-6 col-sm-4 facet" >
+                                    <a class="badge" ng-click="setBrand('')" ng-if="selectedBrand != ''"><i class="fa fa-times"></i> {{selectedBrand}}</a>
+                                    <span ng-repeat="item in facetsResult[0].values" >
+                                        <a class="facet-item" ng-click="setBrand(item.FacetValueName)"  ng-if="selectedBrand !== item.FacetValueName">{{item.displayName }}</a>
+                                    </span>
+                                </div>
+
+
+                                <div class="col-xs-6 col-sm-4 facet">
+                                    <a class="badge" ng-click="setManufacturer('')" ng-if="selectedManufacturer != ''"><i class="fa fa-times"></i> {{selectedManufacturer}}</a>
+                                    <span ng-repeat="item in facetsResult[2].values" >
+                                        <a class="facet-item" ng-click="setManufacturer(item.FacetValueName)" ng-if="selectedManufacturer !== item.FacetValueName">{{item.displayName }}</a></li>
+                                    </span>
+                                </div>
+
+
+                                <div class="col-xs-6 col-sm-4 facet">
+                                    <a class="badge" ng-click="setAffilinetCategoryPath('')" ng-if="selectedAffilinetCategoryPath != ''"><i class="fa fa-times"></i> {{affilinetCategoryPathToDisplayValue(selectedAffilinetCategoryPath)}}</a>
+                                    <span ng-repeat="item in facetsResult[1].values" >
+                                        <a class="facet-item" ng-click="setAffilinetCategoryPath(item.FacetValueName)"  ng-if="selectedAffilinetCategoryPath !== item.FacetValueName">{{ item.displayName }}</a>
+                                    </span>
+
+                                </div>
+
+                                <!--  <label class="col-xs-6" translate="SEARCHDISCOVER_LabelDistributor" ></label>
+                                <div class="col-xs-6 facet" >
+                                    <a class="badge" ng-click="setDistributor('')" ng-if="selectedDistributor != ''"><i class="fa fa-times"></i> {{selectedDistributor}}</a>
+                                    <span ng-repeat="item in facetsResult[3].values" >
+                                        <a class="facet-item" ng-click="setDistributor(item.FacetValueName)" ng-if="selectedDistributor !== item.FacetValueName"><i class="fa fa-times"></i> {{item.displayName }}</a>
+                                    </span>
+                                </div>
+                                -->
+
+                            </div>
+
+                    </div>
                 </div>
             </div>
 

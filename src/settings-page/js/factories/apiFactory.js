@@ -2,14 +2,15 @@ angular.module('AffilinetToolbar')
 
     .factory('LogonService', ['$http', '$moment', '$timeout', '$q', '$rootScope', '$window', 'BrowserExtensionService', function ($http, $moment, $timeout, $q, $rootScope, $window, BrowserExtensionService) {
 
-        var endpointPublisherWebservice = 'https://api.affili.net/V2.0/';
+        let endpointPublisherWebservice = 'https://api.affili.net/V2.0/';
+        let endpointWidgetWebservice = 'https://productwidget.com/api/v1.0/';
 
 
-        var token = false;
-        var validUntil = false;
-        var credentials = false;
+        let token = false;
+        let validUntil = false;
+        let credentials = false;
 
-        var _sendRequest = function (requestBody, method, soap_action, successCallback, errorCallback) {
+        let _sendRequest = function (requestBody, method, soap_action, successCallback, errorCallback) {
             $http({
                 method: 'POST',
                 data: requestBody,
@@ -22,35 +23,37 @@ angular.module('AffilinetToolbar')
 
         };
 
-        var _tokenMustBeRefreshed = function () {
+        let _tokenMustBeRefreshed =  () => {
             // Refresh token 2 minutes before it is invalid
-            const now =  new $moment().subtract(2, 'minutes');
+            const now =  new $moment().add(2, 'minutes');
             if (token === false) {
                 return true;
             }
+            console.log('token will be valid for',  $moment(validUntil) - now, token)
             return validUntil === false || validUntil < now;
         };
 
 
-        var _removeToken = function () {
+        let _removeToken = function () {
             "use strict";
             token = false;
             validUntil = false;
         };
 
-        var getToken = function () {
-            var deferred = $q.defer();
+        let _getToken = function () {
+            let deferred = $q.defer();
 
 
             if (_tokenMustBeRefreshed()) {
                 Logon().then(
                     function success(response) {
-                        var localToken = response.data.Envelope.Body.CredentialToken.toString();
+                        let localToken = response.data.Envelope.Body.CredentialToken.toString();
                         token = localToken;
                         _getTokenExpiration(token).then(
                             (tokenExpResult) => {
                                 let expirationDate = tokenExpResult.data.Envelope.Body.ExpirationDate.toString();
                                 validUntil = new Date(expirationDate);
+                                console.log('created a token, it is valid until', validUntil);
                                 deferred.resolve(localToken);
 
                             },
@@ -71,10 +74,30 @@ angular.module('AffilinetToolbar')
             return deferred.promise
         };
 
-        var _loadCreadentialsFromRootScope = function () {
-            var deferred = $q.defer();
 
-            var checkIfCredentialObjectIsSet = function () {
+        let _getWidgetApiCredentials = function() {
+            let deferred = $q.defer();
+            _getToken().then(function(){
+                "use strict";
+                let httpConfig = {
+                    params : {
+                        publisherId :  $rootScope.credentials.publisherId,
+                        credentialToken :  token,
+                    }
+                };
+                deferred.resolve(httpConfig)
+
+            }, function(error) {
+                "use strict";
+                deferred.reject(error)
+            })
+            return deferred.promise;
+        }
+
+        let _loadCreadentialsFromRootScope = function () {
+            let deferred = $q.defer();
+
+            let checkIfCredentialObjectIsSet = function () {
                 BrowserExtensionService.storage.local.get(['publisherId', 'webservicePassword'], function(result) {
                     "use strict";
                     if (result.webservicePassword && result.publisherId) {
@@ -92,17 +115,17 @@ angular.module('AffilinetToolbar')
                     }
                 })
             };
-            var refreshIntervalId = null;
+            let refreshIntervalId = null;
             refreshIntervalId = setInterval(checkIfCredentialObjectIsSet, 50);
             return deferred.promise;
 
         };
 
-        var Logon = function () {
-            var deferred = $q.defer();
+        let Logon = function () {
+            let deferred = $q.defer();
             _loadCreadentialsFromRootScope().then(
                 function success(credentials) {
-                    var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:typ="http://affilinet.framework.webservices/types">' +
+                    let requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:typ="http://affilinet.framework.webservices/types">' +
                         '<soapenv:Header/>' +
                         '<soapenv:Body>' +
                         '<svc:LogonRequestMsg>' +
@@ -123,8 +146,8 @@ angular.module('AffilinetToolbar')
 
 
         let _getTokenExpiration = function (token) {
-            var deferred = $q.defer();
-            var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc">' +
+            let deferred = $q.defer();
+            let requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc">' +
                         '   <soapenv:Header/>' +
                         '   <soapenv:Body>' +
                         '      <svc:CredentialToken>' + token  + '</svc:CredentialToken>' +
@@ -135,9 +158,9 @@ angular.module('AffilinetToolbar')
         };
 
 
-        var _checkCredentials = function (credentials) {
-            var deferred = $q.defer();
-            var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:typ="http://affilinet.framework.webservices/types">' +
+        let _checkCredentials = function (credentials) {
+            let deferred = $q.defer();
+            let requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:typ="http://affilinet.framework.webservices/types">' +
                 '<soapenv:Header/>' +
                 '<soapenv:Body>' +
                 '<svc:LogonRequestMsg>' +
@@ -160,6 +183,11 @@ angular.module('AffilinetToolbar')
                 return _loadCreadentialsFromRootScope();
             },
 
+            GetToken: function () {
+                "use strict";
+                return _getToken();
+            },
+
             RemoveToken: function () {
                 "use strict";
                 _removeToken();
@@ -167,7 +195,7 @@ angular.module('AffilinetToolbar')
 
             CheckCredentials: function (credentials) {
                 "use strict";
-                var deferred = $q.defer();
+                let deferred = $q.defer();
                 _checkCredentials(credentials).then(
                     function success(response) {
                         deferred.resolve(response);
@@ -182,11 +210,11 @@ angular.module('AffilinetToolbar')
             },
 
             GetProgram: function (programId) {
-                var deferred = $q.defer();
+                let deferred = $q.defer();
 
-                getToken().then(
+                _getToken().then(
                     function success(response) {
-                        var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherProgram" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
+                        let requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherProgram" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
                             '<soapenv:Header/>' +
                             '<soapenv:Body>' +
                             '<svc:GetProgramsRequest>' +
@@ -219,11 +247,11 @@ angular.module('AffilinetToolbar')
 
 
             GetProgramInfoForIds: function (programIds) {
-                var deferred = $q.defer();
+                let deferred = $q.defer();
 
-                getToken().then(
+                _getToken().then(
                     function success(response) {
-                        var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherProgram" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
+                        let requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherProgram" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
                             '<soapenv:Header/>' +
                             '<soapenv:Body>' +
                             '<svc:GetProgramsRequest>' +
@@ -262,11 +290,11 @@ angular.module('AffilinetToolbar')
             },
 
             GetVouchers: function (programId) {
-                var deferred = $q.defer();
+                let deferred = $q.defer();
 
-                getToken().then(
+                _getToken().then(
                     function success(response) {
-                        var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherInbox">' +
+                        let requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherInbox">' +
                             '<soapenv:Header/>' +
                             '<soapenv:Body>' +
                             '<svc:SearchVoucherCodesRequest>' +
@@ -290,11 +318,11 @@ angular.module('AffilinetToolbar')
             },
 
             GetNewVouchers: function () {
-                var deferred = $q.defer();
+                let deferred = $q.defer();
 
-                getToken().then(
+                _getToken().then(
                     function success(response) {
-                        var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherInbox">' +
+                        let requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherInbox">' +
                             '<soapenv:Header/>' +
                             '<soapenv:Body>' +
                             '<svc:SearchVoucherCodesRequest>' +
@@ -318,11 +346,11 @@ angular.module('AffilinetToolbar')
 
 
             GetCreatives: function (programId) {
-                var deferred = $q.defer();
+                let deferred = $q.defer();
 
-                getToken().then(
+                _getToken().then(
                     function success(response) {
-                        var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherCreative" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
+                        let requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherCreative" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
                             '<soapenv:Header/>' +
                             '<soapenv:Body>' +
                             '<svc:SearchCreativesRequest>' +
@@ -352,11 +380,11 @@ angular.module('AffilinetToolbar')
             },
 
             GetNewPrograms: function () {
-                var deferred = $q.defer();
+                let deferred = $q.defer();
 
-                getToken().then(
+                _getToken().then(
                     function success(response) {
-                        var requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherProgram" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
+                        let requestBody = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherProgram" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">' +
                             '<soapenv:Header/>' +
                             '<soapenv:Body>' +
                             '<svc:GetProgramsRequest>' +
@@ -388,11 +416,11 @@ angular.module('AffilinetToolbar')
             },
 
             GetDailyStatistics: function (start, end) {
-                var deferred = $q.defer();
+                let deferred = $q.defer();
 
-                getToken().then(
+                _getToken().then(
                     function success(response) {
-                        var requestBody =
+                        let requestBody =
                             '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherStatistics">' +
                             '<soapenv:Header/>' +
                             '<soapenv:Body>' +
@@ -424,11 +452,11 @@ angular.module('AffilinetToolbar')
 
 
             GetAllProgramStatistics: function (start, end) {
-                var deferred = $q.defer();
+                let deferred = $q.defer();
 
-                getToken().then(
+                _getToken().then(
                     function success(response) {
-                        var requestBody =
+                        let requestBody =
                             '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:svc="http://affilinet.framework.webservices/Svc" xmlns:pub="http://affilinet.framework.webservices/types/PublisherStatistics">' +
                             '<soapenv:Header/>' +
                             '<soapenv:Body>' +
@@ -457,7 +485,48 @@ angular.module('AffilinetToolbar')
                     }
                 );
                 return deferred.promise;
-            }
+            },
+
+
+            WidgetCreate : function(data) {
+                let deferred = $q.defer();
+                _getWidgetApiCredentials().then(
+                    function(credentials) {
+                        $http.post(endpointWidgetWebservice + 'widgets', data, credentials).then(deferred.resolve, deferred.reject)
+                    }
+                )
+                return deferred.promise;
+            },
+
+            WidgetUpdate : function(id, data){
+                let deferred = $q.defer();
+                _getWidgetApiCredentials().then(
+                    function(credentials) {
+                        $http.put(endpointWidgetWebservice + 'widgets/' + id, data, credentials).then(deferred.resolve, deferred.reject)
+                    }
+                )
+                return deferred.promise;
+            },
+
+            WidgetDelete : function(id, data){
+                let deferred = $q.defer();
+                _getWidgetApiCredentials().then(
+                    function(credentials) {
+                        $http.delete(endpointWidgetWebservice + 'widgets/' + id, credentials).then(deferred.resolve, deferred.reject)
+                    }
+                )
+                return deferred.promise;
+            },
+
+            WidgetIndex : function(){
+                let deferred = $q.defer();
+                _getWidgetApiCredentials().then(
+                    function(credentials) {
+                        $http.get(endpointWidgetWebservice + 'widgets', credentials).then(deferred.resolve, deferred.reject)
+                    }
+                )
+                return deferred.promise;
+            },
 
 
         }

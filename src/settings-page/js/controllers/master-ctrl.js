@@ -15,7 +15,7 @@ function MasterCtrl($scope, $rootScope, BrowserExtensionService) {
     var checkIfCredentialObjectIsSet = function () {
         BrowserExtensionService.storage.local.get(['publisherId', 'webservicePassword', 'countryPlatform', 'disableImageContextMenu', 'productWebservicePassword'], function(result) {
             "use strict";
-            if (result.webservicePassword && result.publisherId && result.countryPlatform) {
+            if (result.webservicePassword && result.publisherId && result.countryPlatform && result.productWebservicePassword) {
                 $rootScope.credentials = result;
                 clearInterval(refreshIntervalId);
                 $rootScope.$broadcast('updateCredentials');

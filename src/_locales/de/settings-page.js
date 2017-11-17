@@ -158,7 +158,23 @@ app.config(function ($translateProvider) {
             "WIDGET_BtnDeleteWidget": "Widget löschen",
             "WIDGET_WarningChangesNotSaved": "Sie haben ungesicherte Änderungen. Wollen Sie wirklich ein neues Widget anlegen",
             "SEARCHDISCOVER_FindProducts": "Produkte finden",
-            "SEARCHDISCOVER_SelectAllProducts": "All selektieren",
-            "SETTINGS_updateProgramDataBtn": "Programmliste aktualisieren"
+            "SEARCHDISCOVER_Filter": "Filter",
+            "SEARCHDISCOVER_SelectAllProducts": "Alle selektieren",
+            "SEARCHDISCOVER_LabelBrand" : "Marke",
+            "SEARCHDISCOVER_LabelManufacturer" : "Hersteller",
+            "SEARCHDISCOVER_LabelAffilinetCategoryPath" : "Kategorie",
+            "SEARCHDISCOVER_LabelDistributor" : "Distributor",
+            "SETTINGS_updateProgramDataBtn": "Programmliste aktualisieren",
+            "WIDGET_CouldNotSave": "Konnte das Widget nicht speichern. Internet Verbindung prüfen",
+
+
+            "ALLWIDGETS_PageName": "Alle Widgets",
+            "ALLWIDGETS_WidgetName": "Name",
+            "ALLWIDGETS_ProductCount": "Produkte",
+            "ALLWIDGETS_Edit": "Bearbeiten",
+            "ALLWIDGETS_OldProducts": "Aktualisieren",
+            "ALLWIDGETS_ButtonEdit": "Bearbeiten",
+            "ALLWIDGETS_ClearOldProducts": "Entferne {{number}} veraltete Produkte",
+            "ALLWIDGETS_OldProductsRemoved": "Veraltete Produkte entfernt",
         });
 });
