@@ -1,4 +1,4 @@
-platform;programId;trackingLink;params;redirector
+﻿platform;programId;trackingLink;params;redirector
 DE;5643;http://partners.webmasterplan.com/click.aspx?site=5643&ref=[ref]&type=text&tnb=423&diurl=[deeplink];;
 DE;2950;http://partners.webmasterplan.com/click.aspx?site=2950&ref=[ref]&type=text&tnb=132&diurl=[deeplink];page=&IWL=054&AffiliateID=LA992&campid=LA259650;
 DE;2945;http://partners.webmasterplan.com/click.aspx?site=2945&ref=[ref]&type=text&tnb=187&diurl=[deeplink];hk=WW1&insert=WD&utm_source=affilinet&utm_medium=deeplink&utm_content=dl_article&utm_campaign=affiliate&WT.mc_id=affiliate_affilinet_textlink;https://m.exactag.com/cl.aspx?tc=51617901ff7ad4f03f52319e84c6cd7c&extSi=20367-$ref$&url=
@@ -233,7 +233,7 @@ FR;13754;http://clic.reussissonsensemble.fr/click.aspx?site=13754&ref=[ref]&type
 DE;8040;http://partners.webmasterplan.com/click.aspx?site=8040&ref=[ref]&type=text&tnb=199&diurl=[deeplink];refID=affilinet/linkgen_$ref$&emsrc=aff;
 DE;13142;http://partners.webmasterplan.com/click.aspx?site=13142&ref=[ref]&type=text&tnb=41&diurl=[deeplink];;
 DE;6843;http://partners.webmasterplan.com/click.aspx?site=6843&ref=[ref]&type=text&tnb=132&diurl=[deeplink];;http://tracking.metalyzer.com/deichmann/de/click.php?kid=1237&dlid=1&conid=11837&fwid=1043316&url=
-DE;6123;http://partners.webmasterplan.com/click.aspx?site=6123&ref=[ref]&type=text&tnb=238&diurl=[deeplink];pid=AfG09-001-000-000000-00000-B�roartikel&utm_campaign=textlinks&utm_content=allgemein&utm_medium=affiliate%20B2B&utm_source=affilinet&channel=affiliate;
+DE;6123;http://partners.webmasterplan.com/click.aspx?site=6123&ref=[ref]&type=text&tnb=238&diurl=[deeplink];pid=AfG09-001-000-000000-00000-Büroartikel&utm_campaign=textlinks&utm_content=allgemein&utm_medium=affiliate%20B2B&utm_source=affilinet&channel=affiliate;
 FR;14485;http://clic.reussissonsensemble.fr/click.aspx?site=14485&ref=[ref]&type=text&tnb=250&diurl=[deeplink];Origin=affilinet$ref$;https://eultech.fnac.com/dynclick/fnac/?eseg-name=affilieID&eseg-item=$ref$&eaf-publisher=AFFILINET&eaf-name=Generateur_liens&eaf-creative=$affmt$&eaf-creativetype=$affmn$&eurl=
 DE;12417;http://partners.webmasterplan.com/click.aspx?site=12417&ref=[ref]&type=text&tnb=151&diurl=[deeplink];;
 DE;12734;http://partners.webmasterplan.com/click.aspx?site=12734&ref=[ref]&type=text&tnb=156&diurl=[deeplink];;
@@ -602,3 +602,8 @@ CH;12603;http://partners.webmasterplan.com/click.aspx?site=12603&ref=[ref]&type=
 DE;16624;http://partners.webmasterplan.com/click.aspx?site=16624&ref=[ref]&type=text&tnb=2&diurl=[deeplink];wt_mc=amc151213595615978;
 DE;15241;http://partners.webmasterplan.com/click.aspx?site=15241&ref=[ref]&type=text&tnb=29&diurl=[deeplink];;
 DE;16925;http://partners.webmasterplan.com/click.aspx?site=16925&ref=[ref]&type=text&tnb=1&diurl=[deeplink];utm_campaign=dlinkgen;
+DE;3495;http://partners.webmasterplan.com/click.aspx?site=3495&ref=[ref]&type=text&tnb=170&diurl=[deeplink];;http://tracking.metalyzer.com/ullapopken/de/click.php?kid=2302&dlid=1&conid=33790&fwid=1269837&url=
+DE;6843;http://partners.webmasterplan.com/click.aspx?site=6843&ref=[ref]&type=text&tnb=132&diurl=[deeplink];;http://tracking.metalyzer.com/deichmann/de/click.php?kid=1237&dlid=1&conid=11837&fwid=1269835&url=
+DE;9384;http://partners.webmasterplan.com/click.aspx?site=9384&ref=[ref]&type=text&tnb=63&diurl=[deeplink];;http://tracking.metalyzer.com/rolandschuhe/click.php?kid=1637&dlid=1&conid=17518&fwid=1269844&url=
+DE;11574;http://partners.webmasterplan.com/click.aspx?site=11574&ref=[ref]&type=text&tnb=40&diurl=[deeplink];;http://tracking.metalyzer.com/ullapopken/gl/click.php?kid=2305&dlid=1&conid=33796&fwid=1269838&url=
+DE;12558;http://partners.webmasterplan.com/click.aspx?site=12558&ref=[ref]&type=text&tnb=42&diurl=[deeplink];;http://tracking.metalyzer.com/fila/de/click.php?kid=1821&dlid=1&conid=22219&fwid=1269843&url=
