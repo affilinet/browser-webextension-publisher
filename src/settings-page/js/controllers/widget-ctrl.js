@@ -480,12 +480,12 @@ function WidgetController($scope, $sce, $translate, $timeout, BrowserExtensionSe
         let code = '<div id="affilinet-product-widget-' + $scope.widget.id + '"' +
         ' class="affilinet-product-widget"' +
         ' data-affilinet-widget-id="' + $scope.widget.id + '">' +
-        '<sty' + 'le type="text/css">@import "https://productwidget.com/style-2.0.0.css";</style>' +
+        '<sty' + 'le type="text/css">@import "https://productwidget.com/style-1.0.0.css";</style>' +
         '<scr' + 'ipt type="text/javascript">' +
         '!function(d){var e,i = \'affilinet-product-widget-script\';if(!d.getElementById(i)){' +
         'e = d.createElement(\'script\');' +
         'e.id = i;' +
-        'e.src = \'https://productwidget.com/affilinet-product-widget-2.0.0.js\';' +
+        'e.src = \'https://productwidget.com/affilinet-product-widget-1.0.0-min.js\';' +
         'd.body.appendChild(e);}' +
         'if (typeof window.__affilinetWidget===\'object\')if (d.readyState===\'complete\'){' +
         'window.__affilinetWidget.init();}}(document);</scr' + 'ipt></div>'
