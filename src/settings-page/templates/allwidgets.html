@@ -1,39 +1,36 @@
-<div class="row" id="news" ng-show="loadingFinished">
+<div class="row" id="allWidgets" ng-show="loadingFinished"  data-ng-repeat="widget in allWidgets">
+
+
+
+
     <div class="col-lg-12">
 
 
-    <table class="table table-responsive table-hover">
-        <thead>
-        <tr>
-            <th>{{'ALLWIDGETS_WidgetName'|translate}}</th>
-            <th >{{'ALLWIDGETS_ProductCount'|translate}}</th>
-            <th >{{'ALLWIDGETS_Edit'|translate}}</th>
-            <th >{{'ALLWIDGETS_OldProducts'|translate}}</th>
+        <div class="widget productList"  >
+            <div class="widget-header">
 
-        </tr>
-        </thead>
-        <tbody>
-        <tr data-ng-repeat="widget in allWidgets">
+                <div class="popover-wrapper ">
 
-            <td>
-                <a ui-sref="widget({'widgetId' : widget.id})">{{ widget.widgetName}}</a>
-            </td>
-            <td>
-                {{ widget.products.length}}
-            </td>
-            <td>
-                <a ui-sref="widget({'widgetId' : widget.id})" class="btn btn-default">{{'ALLWIDGETS_ButtonEdit'|translate}}</a>
-            </td>
-            <td>
-               <span ng-if="deletedProductCount(widget) > 0">
-                    <button class="btn btn-danger" ng-click="clearOldProduct(widget)">{{'ALLWIDGETS_ClearOldProducts'|translate : { number : deletedProductCount(widget)} }}</button>
-               </span>
-            </td>
+                    <a ui-sref="widget({'widgetId' : widget.id})">{{ widget.widgetName}}  <i class="fa fa-pencil"></i></a>
 
-        </tr>
-        </tbody>
-    </table>
 
+                    <span ng-if="deletedProductCount(widget) > 0" class="pull-right">
+                        <button class="btn btn-danger btn-xs" ng-click="clearOldProduct(widget)"> {{'ALLWIDGETS_ClearOldProducts'|translate:{ number : deletedProductCount(widget)} }}</button>
+                    </span>
+
+                </div>
+
+                <span class="clearfix"></span>
+            </div>
+
+            <div class="widget-body clearfix">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img  class="img-responsive" ng-if="widget.products[$index]"  style="height: 40px; float: left" ng-repeat="i in widget.products" ng-src="{{ trustAsUrl(widget.products[$index].img) }}">
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 

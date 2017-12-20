@@ -593,8 +593,6 @@ function WidgetController($scope, $rootScope, $sce, $translate, $timeout, Browse
                                             }
                                         });
                                         convertedWidget.products = products;
-                                        convertedWidget.platform = $rootScope.credentials.countryPlatform;
-
                                         convertedWidget.platform =  function(){
                                             if ($rootScope.credentials  && $rootScope.credentials.countryPlatform ) {
                                                 switch ($rootScope.credentials.countryPlatform) {
