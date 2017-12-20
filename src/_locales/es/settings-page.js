@@ -157,9 +157,14 @@ app.config(function ($translateProvider) {
             "WIDGET_SureYouWantToDeleteWidget": "¿Seguro que quieres borrar este widget?",
             "WIDGET_BtnDeleteWidget": "Borrar Widget",
             "WIDGET_WarningChangesNotSaved": "No has guardado los cambios, ¿quieres crear un nuevo Widget?",
+            "WIDGET_SaveToShowCode": "Guardar para obtener el código de integración",
+            "WIDGET_WidgetCreated": "Widget creado",
+            "WIDGET_WidgetSaved": "Widget guardado",
+
+
             "SEARCHDISCOVER_FindProducts": "Encontrar productos",
             "SEARCHDISCOVER_SelectAllProducts": "Seleccionar todo",
-            "SETTINGS_updateProgramDataBtn": "Actualizar los datos de la lista de programas"
+            "SETTINGS_updateProgramDataBtn": "Actualizar los datos de la lista de programas",
 
 
             "ALLWIDGETS_PageName": "All Widgets",

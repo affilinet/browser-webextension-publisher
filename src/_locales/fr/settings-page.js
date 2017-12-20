@@ -156,10 +156,12 @@ app.config(function ($translateProvider) {
             "WIDGET_SureYouWantToDeleteWidget": "Voulez-vous vraiment supprimer ce widget ?",
             "WIDGET_BtnDeleteWidget": "Supprimer le widget",
             "WIDGET_WarningChangesNotSaved": "Vous avez effectué des modifications sans les enregistrer, voulez-vous vraiment créer un nouveau widget ?",
+            "WIDGET_SaveToShowCode": "Enregistrer pour obtenir le code d'intégration",
+            "WIDGET_CouldNotSave": "Impossible d'enregistrer le widget. Vérifiez la connexion Internet",
+
             "SEARCHDISCOVER_FindProducts": "Trouvez des produits",
             "SEARCHDISCOVER_SelectAllProducts": "Tout sélectionner",
             "SETTINGS_updateProgramDataBtn": "Update program list data",
-            "WIDGET_CouldNotSave": "Could not save Widget. Check Internet Connection",
 
             "ALLWIDGETS_PageName": "All Widgets",
             "ALLWIDGETS_WidgetName": "Name",

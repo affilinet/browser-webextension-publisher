@@ -157,10 +157,14 @@
             "WIDGET_SureYouWantToDeleteWidget": "Weet je zeker dat je deze widget wilt verwijderen?",
             "WIDGET_BtnDeleteWidget": "Verwijder Widget",
             "WIDGET_WarningChangesNotSaved": "Er zijn niet-opgeslagen wijzigingen. Weet je zeker dat je een nieuwe widget aan wilt maken?",
+            "WIDGET_CouldNotSave": "Could not save Widget. Check Internet Connection",
+            "WIDGET_SaveToShowCode": "Save to get the integration code",
+            "WIDGET_WidgetCreated": "Widget gemaakt",
+            "WIDGET_WidgetSaved": "Widget opgeslagen",
+
             "SEARCHDISCOVER_FindProducts": "Find Products",
             "SEARCHDISCOVER_SelectAllProducts": "Select all",
             "SETTINGS_updateProgramDataBtn": "Update program list data",
-            "WIDGET_CouldNotSave": "Could not save Widget. Check Internet Connection",
 
             "ALLWIDGETS_PageName": "All Widgets",
             "ALLWIDGETS_WidgetName": "Name",

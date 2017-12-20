@@ -98,9 +98,9 @@ angular.module('AffilinetToolbar')
             let deferred = $q.defer();
 
             let checkIfCredentialObjectIsSet = function () {
-                BrowserExtensionService.storage.local.get(['publisherId', 'webservicePassword'], function(result) {
+                BrowserExtensionService.storage.local.get(['publisherId', 'webservicePassword', 'countryPlatform'], function(result) {
                     "use strict";
-                    if (result.webservicePassword && result.publisherId) {
+                    if (result.webservicePassword && result.publisherId && result.countryPlatform) {
                         clearInterval(refreshIntervalId);
                         deferred.resolve(result);
                         $rootScope.$broadcast('updateCredentials');
