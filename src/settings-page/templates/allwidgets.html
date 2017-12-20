@@ -11,8 +11,8 @@
 
                 <div class="popover-wrapper ">
 
-                    <a ui-sref="widget({'widgetId' : widget.id})">{{ widget.widgetName}}  <i class="fa fa-pencil"></i></a>
-
+                    <a ui-sref="widget({'widgetId' : widget.id})">{{ widget.widgetName}}</a>
+                    <a  style="margin-left: 5px"  ui-sref="widget({'widgetId' : widget.id})"><i class="fa fa-pencil"></i></a>
 
                     <span ng-if="deletedProductCount(widget) > 0" class="pull-right">
                         <button class="btn btn-danger btn-xs" ng-click="clearOldProduct(widget)"> {{'ALLWIDGETS_ClearOldProducts'|translate:{ number : deletedProductCount(widget)} }}</button>
