@@ -162,9 +162,15 @@ app.config(function ($translateProvider) {
             "WIDGET_WidgetCreated": "Widget created",
             "WIDGET_WidgetSaved": "Widget saved",
 
-            "SEARCHDISCOVER_FindProducts": "Find Products",
-            "SEARCHDISCOVER_SelectAllProducts": "Select all",
-            "SETTINGS_updateProgramDataBtn": "Update program list data",
+
+            "SEARCHDISCOVER_FindProducts": "Produkte finden",
+            "SEARCHDISCOVER_Filter": "Filter",
+            "SEARCHDISCOVER_SelectAllProducts": "Alle selektieren",
+            "SEARCHDISCOVER_LabelBrand" : "Marke",
+            "SEARCHDISCOVER_LabelManufacturer" : "Hersteller",
+            "SEARCHDISCOVER_LabelAffilinetCategoryPath" : "Kategorie",
+            "SEARCHDISCOVER_LabelDistributor" : "Distributor",
+            "SETTINGS_updateProgramDataBtn": "Programmliste aktualisieren",
 
 
             "ALLWIDGETS_PageName": "All Widgets",
@@ -175,5 +181,8 @@ app.config(function ($translateProvider) {
             "ALLWIDGETS_ButtonEdit": "Edit",
             "ALLWIDGETS_ClearOldProducts": "Clear unavailable products",
             "ALLWIDGETS_OldProductsRemoved": "Widget updated",
+
+
+
         });
 });

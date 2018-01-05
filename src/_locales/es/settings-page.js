@@ -167,6 +167,14 @@ app.config(function ($translateProvider) {
             "SETTINGS_updateProgramDataBtn": "Actualizar los datos de la lista de programas",
 
 
+            "SEARCHDISCOVER_Filter": "Filter",
+            "SEARCHDISCOVER_LabelBrand" : "Marke",
+            "SEARCHDISCOVER_LabelManufacturer" : "Hersteller",
+            "SEARCHDISCOVER_LabelAffilinetCategoryPath" : "Kategorie",
+            "SEARCHDISCOVER_LabelDistributor" : "Distributor",
+
+
+
             "ALLWIDGETS_PageName": "All Widgets",
             "ALLWIDGETS_WidgetName": "Name",
             "ALLWIDGETS_ProductCount": "Number of products",

@@ -166,6 +166,13 @@
             "SEARCHDISCOVER_SelectAllProducts": "Select all",
             "SETTINGS_updateProgramDataBtn": "Update program list data",
 
+
+            "SEARCHDISCOVER_Filter": "Filter",
+            "SEARCHDISCOVER_LabelBrand" : "Marke",
+            "SEARCHDISCOVER_LabelManufacturer" : "Hersteller",
+            "SEARCHDISCOVER_LabelAffilinetCategoryPath" : "Kategorie",
+            "SEARCHDISCOVER_LabelDistributor" : "Distributor",
+
             "ALLWIDGETS_PageName": "All Widgets",
             "ALLWIDGETS_WidgetName": "Name",
             "ALLWIDGETS_ProductCount": "Number of products",
