@@ -43,6 +43,7 @@ app.config(function ($translateProvider) {
             "SETTINGS_CountryPlatformAT": "affilinet Austria",
             "SETTINGS_CountryPlatformES": "affilinet España",
             "SETTINGS_CountryPlatformNL": "affilinet Benelux",
+            "SETTINGS_updateProgramDataBtn": "Actualizar los datos de la lista de programas",
             "APPLY_PageName": "Solicitar Ahora",
             "APPLY_ProgramDesc": "Descripción de Programa",
             "APPLY_ProgramLimits": "Limitaciones de Programa",
@@ -104,6 +105,13 @@ app.config(function ($translateProvider) {
             "SEARCHDISCOVER_DisplayBrand": "Marca",
             "SEARCHDISCOVER_DisplayPrice": "Precio",
             "SEARCHDISCOVER_DisplayManufacturer": "Fabricante",
+            "SEARCHDISCOVER_FindProducts": "Encontrar productos",
+            "SEARCHDISCOVER_SelectAllProducts": "Seleccionar todo",
+            "SEARCHDISCOVER_Filter": "Filtrar",
+            "SEARCHDISCOVER_LabelBrand" : "Marca",
+            "SEARCHDISCOVER_LabelManufacturer" : "Fabricante",
+            "SEARCHDISCOVER_LabelAffilinetCategoryPath" : "Categoría",
+            "SEARCHDISCOVER_LabelDistributor" : "Distribuidor",
             "LIKELIST_PageName": "Lista de Likes",
             "LIKELIST_TabProducts": "Productos",
             "LIKELIST_TabPins": "Imágenes / Sitios Web",
@@ -160,28 +168,13 @@ app.config(function ($translateProvider) {
             "WIDGET_SaveToShowCode": "Guardar para obtener el código de integración",
             "WIDGET_WidgetCreated": "Widget creado",
             "WIDGET_WidgetSaved": "Widget guardado",
-
-
-            "SEARCHDISCOVER_FindProducts": "Encontrar productos",
-            "SEARCHDISCOVER_SelectAllProducts": "Seleccionar todo",
-            "SETTINGS_updateProgramDataBtn": "Actualizar los datos de la lista de programas",
-
-
-            "SEARCHDISCOVER_Filter": "Filter",
-            "SEARCHDISCOVER_LabelBrand" : "Marke",
-            "SEARCHDISCOVER_LabelManufacturer" : "Hersteller",
-            "SEARCHDISCOVER_LabelAffilinetCategoryPath" : "Kategorie",
-            "SEARCHDISCOVER_LabelDistributor" : "Distributor",
-
-
-
-            "ALLWIDGETS_PageName": "All Widgets",
-            "ALLWIDGETS_WidgetName": "Name",
-            "ALLWIDGETS_ProductCount": "Number of products",
-            "ALLWIDGETS_Edit": "Edit",
-            "ALLWIDGETS_OldProducts": "Update Products",
-            "ALLWIDGETS_ButtonEdit": "Edit",
-            "ALLWIDGETS_ClearOldProducts": "Clear unavailable products",
-            "ALLWIDGETS_OldProductsRemoved": "Widget updated",
+            "ALLWIDGETS_PageName": "Todos los widgets",
+            "ALLWIDGETS_WidgetName": "Nombre",
+            "ALLWIDGETS_ProductCount": "Número de productos",
+            "ALLWIDGETS_Edit": "Editar",
+            "ALLWIDGETS_OldProducts": "Actualizar productos",
+            "ALLWIDGETS_ButtonEdit": "Editar",
+            "ALLWIDGETS_ClearOldProducts": "Borrar productos no disponibles",
+            "ALLWIDGETS_OldProductsRemoved": "Widget actualizado",
         });
 });
