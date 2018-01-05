@@ -499,7 +499,7 @@ function WidgetController($scope, $rootScope, $sce, $translate, $timeout, Browse
         let code = '<div id="affilinet-product-widget-' + $scope.widget.id + '"' +
             ' class="affilinet-product-widget"' +
             ' data-affilinet-widget-id="' + $scope.widget.id + '">' +
-            '<sty' + 'le type="text/css">@import "https://productwidget.com/style-1.0.0.css";</style>' +
+            '<link rel="stylesheet" type="text/css" href="https://productwidget.com/style-1.0.0.css">' +
             '<scr' + 'ipt type="text/javascript">' +
             '!function(d){var e,i = \'affilinet-product-widget-script\';if(!d.getElementById(i)){' +
             'e = d.createElement(\'script\');' +
