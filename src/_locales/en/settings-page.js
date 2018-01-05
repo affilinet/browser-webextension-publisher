@@ -106,6 +106,14 @@ app.config(function ($translateProvider) {
             "SEARCHDISCOVER_DisplayBrand": "Brand",
             "SEARCHDISCOVER_DisplayPrice": "Price",
             "SEARCHDISCOVER_DisplayManufacturer": "Manufacturer",
+            "SEARCHDISCOVER_FindProducts": "Find products",
+            "SEARCHDISCOVER_Filter": "Filter",
+            "SEARCHDISCOVER_SelectAllProducts": "Select all",
+            "SEARCHDISCOVER_LabelBrand" : "Brand",
+            "SEARCHDISCOVER_LabelManufacturer" : "Manufacturer",
+            "SEARCHDISCOVER_LabelAffilinetCategoryPath" : "Category",
+            "SEARCHDISCOVER_LabelDistributor" : "Distributor",
+            "SETTINGS_updateProgramDataBtn": "Update program list",
             "LIKELIST_PageName": "Like List",
             "LIKELIST_TabProducts": "Products",
             "LIKELIST_TabPins": "Images / Websites",
@@ -161,18 +169,6 @@ app.config(function ($translateProvider) {
             "WIDGET_SaveToShowCode": "Save to get the integration code",
             "WIDGET_WidgetCreated": "Widget created",
             "WIDGET_WidgetSaved": "Widget saved",
-
-
-            "SEARCHDISCOVER_FindProducts": "Produkte finden",
-            "SEARCHDISCOVER_Filter": "Filter",
-            "SEARCHDISCOVER_SelectAllProducts": "Alle selektieren",
-            "SEARCHDISCOVER_LabelBrand" : "Marke",
-            "SEARCHDISCOVER_LabelManufacturer" : "Hersteller",
-            "SEARCHDISCOVER_LabelAffilinetCategoryPath" : "Kategorie",
-            "SEARCHDISCOVER_LabelDistributor" : "Distributor",
-            "SETTINGS_updateProgramDataBtn": "Programmliste aktualisieren",
-
-
             "ALLWIDGETS_PageName": "All Widgets",
             "ALLWIDGETS_WidgetName": "Name",
             "ALLWIDGETS_ProductCount": "Number of products",
@@ -181,8 +177,5 @@ app.config(function ($translateProvider) {
             "ALLWIDGETS_ButtonEdit": "Edit",
             "ALLWIDGETS_ClearOldProducts": "Clear unavailable products",
             "ALLWIDGETS_OldProductsRemoved": "Widget updated",
-
-
-
         });
 });
