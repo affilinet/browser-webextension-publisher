@@ -106,6 +106,14 @@ app.config(function ($translateProvider) {
             "SEARCHDISCOVER_DisplayBrand": "Marke",
             "SEARCHDISCOVER_DisplayPrice": "Preis",
             "SEARCHDISCOVER_DisplayManufacturer": "Hersteller",
+            "SEARCHDISCOVER_FindProducts": "Produkte finden",
+            "SEARCHDISCOVER_Filter": "Filter",
+            "SEARCHDISCOVER_SelectAllProducts": "Alle selektieren",
+            "SEARCHDISCOVER_LabelBrand" : "Marke",
+            "SEARCHDISCOVER_LabelManufacturer" : "Hersteller",
+            "SEARCHDISCOVER_LabelAffilinetCategoryPath" : "Kategorie",
+            "SEARCHDISCOVER_LabelDistributor" : "Distributor",
+            "SETTINGS_updateProgramDataBtn": "Programmliste aktualisieren",
             "LIKELIST_PageName": "Like Liste",
             "LIKELIST_TabProducts": "Produkte",
             "LIKELIST_TabPins": "Bilder / Webseiten",
@@ -157,26 +165,10 @@ app.config(function ($translateProvider) {
             "WIDGET_SureYouWantToDeleteWidget": "Wollen Sie das Widget wirklich löschen?",
             "WIDGET_BtnDeleteWidget": "Widget löschen",
             "WIDGET_WarningChangesNotSaved": "Sie haben ungesicherte Änderungen. Wollen Sie wirklich ein neues Widget anlegen",
-
-
             "WIDGET_CouldNotSave": "Konnte das Widget nicht speichern. Internet Verbindung prüfen",
             "WIDGET_SaveToShowCode": "Speichern um den Widget Code zu erhalten",
             "WIDGET_WidgetCreated": "Widget erstellt",
             "WIDGET_WidgetSaved": "Widget gespeichert",
-
-
-
-            "SEARCHDISCOVER_FindProducts": "Produkte finden",
-            "SEARCHDISCOVER_Filter": "Filter",
-            "SEARCHDISCOVER_SelectAllProducts": "Alle selektieren",
-            "SEARCHDISCOVER_LabelBrand" : "Marke",
-            "SEARCHDISCOVER_LabelManufacturer" : "Hersteller",
-            "SEARCHDISCOVER_LabelAffilinetCategoryPath" : "Kategorie",
-            "SEARCHDISCOVER_LabelDistributor" : "Distributor",
-            "SETTINGS_updateProgramDataBtn": "Programmliste aktualisieren",
-
-
-
             "ALLWIDGETS_PageName": "Alle Widgets",
             "ALLWIDGETS_WidgetName": "Name",
             "ALLWIDGETS_ProductCount": "Produkte",
