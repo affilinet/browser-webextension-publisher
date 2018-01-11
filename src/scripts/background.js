@@ -533,9 +533,10 @@ function hasProgram(hostname) {
 
                 // find program in allPrograms
                 let programIndex = result.allPrograms.findIndex((program) => {
-                    return program.platformId === result.countryPlatform && (hostname.endsWith('/' + program.programUrl)  === true || hostname.endsWith('.' + program.programUrl)  === true  )
+                    if (program.platformId !== result.countryPlatform) return false;
+                    return (hostname.endsWith('/' + program.programUrl)  === true || hostname.endsWith('.' + program.programUrl)  === true  )
                 });
-                if (programIndex > 0 ) {
+                if (programIndex >= 0 ) {
                     resolve(result.allPrograms[programIndex]);
                 } else {
                     resolve(false);
