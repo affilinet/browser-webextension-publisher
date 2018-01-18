@@ -281,7 +281,7 @@
                             <span class=""  ng-if="widget.brand">{{ widget.products[$index].brand }}</span>
                             <span class=""  ng-if="widget.manufacturer">{{ widget.products[$index].manufacturer }}</span>
                             <span class=""  ng-if="widget.shop">
-                                {{  widget.products[$index].url  }}
+                                {{  widget.products[$index].shop  }}
                             </span>
                             <span class=""  ng-if="widget.price">{{ widget.products[$index].price }}</span>
                         </span>
@@ -306,9 +306,7 @@
                                      data-drop="true"
                                      data-index="{{i}}"
                                      jqyoui-droppable="{onDrop: 'dropProductOnWidget'}"
-
                                      data-drag="true"
-
                                      ng-mouseenter="activateDragOnSlick()"
                                      data-product-id="{{widget.products[$index].id}}"
                                      data-from="widget"
@@ -320,7 +318,7 @@
                             <span class=""  ng-if="widget.brand">{{ widget.products[$index].brand }}</span>
                             <span class=""  ng-if="widget.manufacturer">{{ widget.products[$index].manufacturer }}</span>
                             <span class=""  ng-if="widget.shop">
-                                {{  widget.products[$index]].url }}
+                                {{  widget.products[$index].shop }}
                             </span>
                             <span class=""  ng-if="widget.price">{{ widget.products[$index].price }}</span>
                         </span>
