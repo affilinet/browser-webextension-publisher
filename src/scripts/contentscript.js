@@ -285,13 +285,39 @@ function initContextMenu() {
 }
 
 
-(function () {
+function detectWordpressPluginAdminPage() {
+    if (window.location.toString().indexOf('wp-admin') > -1) {
 
+        // open widgets page when clicking on the button
+        let buttons = document.getElementsByClassName('affilinet-browser-extension-open-widgets-page-on-click');
+
+        for (let i = 0; i < buttons.length; i++) {
+            console.log(buttons[i])
+            buttons[i].addEventListener('click', function() {
+                ext.runtime.sendMessage({action: "open-page", data: {page: "widget"}});
+            });
+        }
+
+
+        // unhide elements to simulate 'detection of browser extension'
+        let elems = document.getElementsByClassName('affilinet-browser-extension-show');
+        for (let i = 0; i < elems.length; i++) {
+            elems[i].style.display = 'block';
+        }
+    }
+
+}
+
+(function () {
     storage.get('disableImageContextMenu', (result) => {
         if (result.disableImageContextMenu !== true) {
             initContextMenu();
         }
     });
+    // detect Wordpress plugin settings page
+    detectWordpressPluginAdminPage();
+
+
 
 })();
 
