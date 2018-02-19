@@ -9,7 +9,6 @@ import storage from "./utils/storage";
 
 
 
-
 function initContextMenu() {
     let contextMenuIsOpened = false;
     let currentImage = null;
@@ -292,7 +291,6 @@ function detectWordpressPluginAdminPage() {
         let buttons = document.getElementsByClassName('affilinet-browser-extension-open-widgets-page-on-click');
 
         for (let i = 0; i < buttons.length; i++) {
-            console.log(buttons[i])
             buttons[i].addEventListener('click', function() {
                 ext.runtime.sendMessage({action: "open-page", data: {page: "widget"}});
             });

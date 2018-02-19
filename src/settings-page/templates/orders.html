@@ -1,5 +1,5 @@
-<div class="row" ng-show="loadingFinished">
-    <div class="col-lg-12">
+<div class="row" ng-show="loadedByDay && loadedByProgram">
+    <div class="col-lg-12" >
 
         <uib-tabset>
             <uib-tab heading="{{ 'ORDERS_BY_DAY'|translate}}" select="refreshPlot('chartByDay', month, year)">
@@ -27,9 +27,8 @@
                     </div>
                 </div>
                 <div class="row clearfix">
-                    <div class="col-lg-12" style="min-height: 350px;">
-                        <flot dataset="chartDataByDay" id="chartByDay" options="chartOptionsByDay" width="100%"
-                              height="200px" style="height:100px;width:100%;"></flot>
+                    <div class="col-lg-12" style="min-height: 350px;" >
+                        <flot dataset="chartDataByDay" id="chartByDay" options="chartOptionsByDay" height="300" width="{{ chartWidth }}" style="display: block;"></flot>
                     </div>
                 </div>
                 <div class="row">
@@ -125,7 +124,7 @@
                 <div class="row ">
                     <div class="col-lg-12" style="min-height: 350px;">
                         <flot dataset="chartDataByProgram" id="chartByProgram" options="chartOptionsByProgram"
-                              width="100%" height="200px" style="height:100px;width:100%;"></flot>
+                              height="300" width="{{ chartWidth }}" style="display: block;"></flot>
                     </div>
 
                 </div>
@@ -190,8 +189,12 @@
 
 </div>
 
-<div class="row" ng-hide="loadingFinished">
+<div class="row" ng-show="!loadedByDay || !loadedByProgram">
     <div class="col-lg-12 text-center">
         <i class="fa fa-4x fa-spinner fa-spin"></i>
     </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12" id="chartWidthSelector"></div>
 </div>

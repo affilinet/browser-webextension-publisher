@@ -2,7 +2,8 @@ angular.module('AffilinetToolbar')
     .controller('OrdersController', ['$scope', 'LogonService', '$sce', '$location', '$moment', '$translate', '$rootScope', '$window', OrdersController]);
 
 function OrdersController($scope, LogonService, $sce, $location, $moment, $translate, $rootScope, $window) {
-    $scope.loadingFinished = false;
+    $scope.loadedByDay = false;
+    $scope.loadedByProgram = false;
 
     $translate('ORDERS_PageName').then(function (text) {
         $scope.$parent.pageName = text;
@@ -30,6 +31,7 @@ function OrdersController($scope, LogonService, $sce, $location, $moment, $trans
         years.push(i);
     }
     $scope.years = years;
+    $scope.chartWidth = 1000 ;
 
     $scope.ApiLocale = $window.ApiLocale;
 
@@ -118,6 +120,7 @@ function OrdersController($scope, LogonService, $sce, $location, $moment, $trans
 
     $scope.loadDataByDay = function (month, year) {
 
+        $scope.loadedByDay = false;
         $scope.chartDataByDay = [];
 
         var totalCommission = [];
@@ -198,7 +201,8 @@ function OrdersController($scope, LogonService, $sce, $location, $moment, $trans
                 {label: $scope.labelTotalSales, color: '#a8a199', data: totalSales, yaxis: 1}
             ];
 
-            $scope.loadingFinished = true;
+            $scope.refreshWidth()
+            $scope.loadedByDay = true;
         });
 
     };
@@ -241,6 +245,8 @@ function OrdersController($scope, LogonService, $sce, $location, $moment, $trans
 
 
     $scope.loadDataByProgram = function (month, year) {
+
+        $scope.loadedByProgram = false;
 
         $scope.chartDataByProgram = [];
         $scope.chartDataByProgramOrder = [];
@@ -325,7 +331,8 @@ function OrdersController($scope, LogonService, $sce, $location, $moment, $trans
                     $scope.pushToByProgramChart(shortProgramName, +statisticsRecord.Sales.toString(), +statisticsRecord.Commission.toString());
                 }
             });
-            $scope.loadingFinished = true;
+            $scope.refreshWidth()
+            $scope.loadedByProgram = true;
         });
 
 
@@ -364,8 +371,10 @@ function OrdersController($scope, LogonService, $sce, $location, $moment, $trans
 
 
     $scope.showData = function (month, year) {
+
         $scope.loadDataByDay(month, year);
         $scope.loadDataByProgram(month, year);
+
     };
 
 
@@ -386,8 +395,20 @@ function OrdersController($scope, LogonService, $sce, $location, $moment, $trans
         $('#' + that).css('display', 'block');
         $('#' + that).css('clear', 'both');
 
-        //$.plot();
+
     };
 
+    $scope.refreshWidth = function() {
+        var elem = document.getElementById('chartWidthSelector');
+
+        if (elem !== null) {
+            $scope.chartWidth = elem.clientWidth -80;
+
+        }
+    }
+
+    window.addEventListener('resize', function () {
+        $scope.refreshWidth();
+    })
 
 }
