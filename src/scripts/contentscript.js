@@ -297,11 +297,13 @@ function detectWordpressPluginAdminPage() {
         }
 
 
-        // unhide elements to simulate 'detection of browser extension'
-        let elems = document.getElementsByClassName('affilinet-browser-extension-show');
-        for (let i = 0; i < elems.length; i++) {
-            elems[i].style.display = 'block';
-        }
+        // open settingspage event listener
+        document.addEventListener("affilinet-browser-extension-open-widgets", function(data) {
+            ext.runtime.sendMessage({action: "open-page", data: {page: "widget"}});
+        });
+
+
+        document.getElementsByClassName('wp-admin')[0].classList.add('affilinet-browser-extension-installed');
     }
 
 }
