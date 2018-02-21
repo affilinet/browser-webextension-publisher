@@ -1,7 +1,7 @@
 angular.module('AffilinetToolbar')
-    .controller('WidgetController', ['$scope', '$rootScope', '$sce' , '$translate', '$timeout', 'BrowserExtensionService', 'productWebservice', '$stateParams', 'LogonService', WidgetController]);
+    .controller('WidgetController', ['$scope', '$rootScope', '$sce' , '$translate', '$timeout', 'BrowserExtensionService', 'productWebservice', '$stateParams', 'LogonService', '$location', WidgetController]);
 
-function WidgetController($scope, $rootScope, $sce, $translate, $timeout, BrowserExtensionService, productWebservice, $stateParams, LogonService) {
+function WidgetController($scope, $rootScope, $sce, $translate, $timeout, BrowserExtensionService, productWebservice, $stateParams, LogonService, $location) {
 
 
     $scope.loadingFinished = false;
@@ -713,11 +713,22 @@ function WidgetController($scope, $rootScope, $sce, $translate, $timeout, Browse
                     // user wants to load a widget
                     const widgetIndex = $scope.allWidgets.findIndex(function (widg) {
                         return widg.id === $stateParams.widgetId
-                    })
+                    });
+                    console.log('open widget from state param');
+                    $scope.selectedWidget = $scope.allWidgets[widgetIndex];
+                    $scope.openWidget()
+                }
+                // for initial page view loading of widget (the search parameter widgetId is set in the background script)
+                else if ($location.search().widgetId) {
+                    const widgetIndex = $scope.allWidgets.findIndex(function (widg) {
+                        return widg.id == $location.search().widgetId;
+                    });
+
                     $scope.selectedWidget = $scope.allWidgets[widgetIndex];
                     $scope.openWidget()
                 }
                 else if ($stateParams.productIds.length === 0) {
+                    console.log('open first widget');
                     $scope.selectedWidget = $scope.allWidgets[0];
                     $scope.openWidget()
                 }
@@ -733,5 +744,17 @@ function WidgetController($scope, $rootScope, $sce, $translate, $timeout, Browse
         // migrateOldWidgets()
     });
 
+    // when the serarch param changes (done by background script)
+    $rootScope.$on('$locationChangeSuccess', function(){
 
+        if ($scope.selectedWidget && $location.search().widgetId && $location.search().widgetId != $scope.selectedWidget.id) {
+            const widgetIndex = $scope.allWidgets.findIndex(function (widg) {
+                return widg.id == $location.search().widgetId;
+            });
+            $scope.selectedWidget = $scope.allWidgets[widgetIndex];
+            $scope.openWidget()
+
+        }
+
+    })
 };

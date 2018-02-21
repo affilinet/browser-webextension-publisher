@@ -319,9 +319,7 @@ let onSettingsPageTabUpdated = function (tabId, changeInfo) {
 }
 
 function openPage(page) {
-
     ext.windows.getCurrent(function (currentWindow, test) {
-
         if (settingsPageTabId === null) {
             ext.tabs.create({
                 url: ext.extension.getURL('/settings-page/index.html#' + page)
@@ -344,14 +342,9 @@ function openPage(page) {
                     }, function (tab) {
 
                     });
-
             });
-
         }
-
     })
-
-
 }
 
 let updateStatisticsInPopup = function (current, open, cancelled) {

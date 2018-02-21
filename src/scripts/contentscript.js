@@ -298,9 +298,16 @@ function detectWordpressPluginAdminPage() {
 
 
         // open settingspage event listener
-        document.addEventListener("affilinet-browser-extension-open-widgets", function(data) {
-            ext.runtime.sendMessage({action: "open-page", data: {page: "widget"}});
+        document.addEventListener("affilinet-browser-extension-open-widgets", function(e) {
+
+            var data =  {page: 'widget'};
+            if (e.detail && e.detail.widgetId) {
+                data.page = 'widget?widgetId=' + e.detail.widgetId;
+            }
+            ext.runtime.sendMessage({action: "open-page", data: data});
         });
+
+
 
 
         document.getElementsByClassName('wp-admin')[0].classList.add('affilinet-browser-extension-installed');
