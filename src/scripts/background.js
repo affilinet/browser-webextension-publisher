@@ -203,11 +203,11 @@ function generateTrackingUrl(url) {
                         (hasPartnershipResult) => {
                             if (hasPartnershipResult === true) {
                                 hasDeeplink(programDetails.programId).then(
-                                    (deeplinkInfo, publisherId = false) => {
-                                        if (deeplinkInfo === false) {
+                                    (result) => {
+                                      if (result.deeplinkInfo === false || result.publisherId === null) {
                                             resolve(url);
                                         } else {
-                                            resolve(generateDeeplink(url, publisherId, deeplinkInfo))
+                                            resolve(generateDeeplink(url, result.publisherId, result.deeplinkInfo))
                                         }
                                     }
                                 )
@@ -220,7 +220,6 @@ function generateTrackingUrl(url) {
             }
         )
     });
-
 }
 
 function shortenLink(url, sendResponse) {
@@ -503,16 +502,16 @@ function hasDeeplink(programId) {
     return new Promise((resolve, reject) => {
         storage.get(['programsWithDeeplink', 'publisherId'], (storageResult) => {
             let deeplinkInfo = storageResult.programsWithDeeplink.find((entry) => entry.programId === programId && entry.platform !== '');
-            resolve(deeplinkInfo, storageResult.publisherId)
+            resolve({deeplinkInfo: deeplinkInfo, publisherId: storageResult.publisherId})
         });
     })
 
 }
 function checkHostHasDeeplink(programId, tabId){
     hasDeeplink(programId).then(
-        (deeplinkInfo) => {
-            console.log('programId hasDeeplink', programId, deeplinkInfo);
-            globalHasProgramPartnerShipAndDeeplink = !!deeplinkInfo;
+        (result) => {
+            console.log('programId hasDeeplink', result);
+            globalHasProgramPartnerShipAndDeeplink = !!result.deeplinkInfo;
         }
     )
 }
