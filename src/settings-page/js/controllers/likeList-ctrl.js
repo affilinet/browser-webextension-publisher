@@ -185,12 +185,10 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
         if (confirm($scope.messages.LIKELIST_SureYouWantToDeleteProduct)) {
             $scope.storedProductLists[listKey].products.splice(productKey, 1);
         }
-
     };
+
+
     $scope.deleteProductList = function(listKey) {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopPropagation();
         if (confirm($scope.messages.LIKELIST_SureYouWantToDeleteProductList)) {
             $scope.storedProductLists.splice(listKey, 1);
         }
@@ -198,9 +196,6 @@ function LikeListController($scope,  $translate, BrowserExtensionService, produc
     };
 
     $scope.deleteLike = function(likeKey) {
-        "use strict";
-        event.preventDefault();
-        event.stopPropagation();
         if (confirm($scope.messages.LIKELIST_SureYouWantToDeleteLike)) {
             $scope.likeList.splice(likeKey, 1);
         }

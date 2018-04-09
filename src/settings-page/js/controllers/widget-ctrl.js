@@ -370,7 +370,6 @@ function WidgetController($scope, $rootScope, $sce, $translate, $timeout, Browse
                     data: {programId: ApiProduct.ProgramId}
                 },
                 function (programDetails) {
-                    console.log('received details', programDetails);
                     if (programDetails !== false) {
                         programUrls[ApiProduct.ProgramId] = programDetails.programUrl;
                         $scope.productDetails[ApiProduct.ProductId] = {
@@ -382,6 +381,8 @@ function WidgetController($scope, $rootScope, $sce, $translate, $timeout, Browse
                             "name": ApiProduct.ProductName,
                             "manufacturer": ApiProduct.Manufacturer,
                             "shop": programDetails.programUrl,
+                            "articleNumber": ApiProduct.ArticleNumber,
+                            "shopId": ApiProduct.ShopId,
                             "deleted": false
                         }
 
@@ -392,8 +393,6 @@ function WidgetController($scope, $rootScope, $sce, $translate, $timeout, Browse
                 })
         }
         else {
-            console.log('store details')
-
             $scope.productDetails[ApiProduct.ProductId] = {
                 "id": ApiProduct.ProductId,
                 "url": ApiProduct.Deeplink1,
@@ -403,6 +402,8 @@ function WidgetController($scope, $rootScope, $sce, $translate, $timeout, Browse
                 "name": ApiProduct.ProductName,
                 "manufacturer": ApiProduct.Manufacturer,
                 "shop": programUrls[ApiProduct.ProgramId],
+                "articleNumber": ApiProduct.ArticleNumber,
+                "shopId": ApiProduct.ShopId,
                 "deleted": false
             }
             if (addToWidget) {

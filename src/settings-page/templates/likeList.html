@@ -19,7 +19,7 @@
                                 <a editable-text="storedProductLists[key].name"  onbeforesave="checkProductListName($data, storedProductLists[key])">
                                     {{storedProductLists[key].name}} <i class="fa fa-pencil"></i></a>
 
-                                <a ng-click="deleteProductList(key)"><i class="fa fa-trash-o"></i></a>
+                                <span class="btn-link" ng-click="deleteProductList(key)"><i class="fa fa-trash-o"></i></span>
                                 <a ui-sref="widget({productIds : storedProductLists[key].products  })"><i class="fa fa-file-code-o"></i></a>
                             </div>
 
