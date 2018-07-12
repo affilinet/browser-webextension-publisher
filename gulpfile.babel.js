@@ -1,6 +1,6 @@
 
 var
-    usemin = require('gulp-usemin'),
+    gulp = require('gulp'),
     wrap = require('gulp-wrap'),
     connect = require('gulp-connect'),
     watch = require('gulp-watch'),
@@ -14,12 +14,13 @@ var
     templateCache = require('gulp-angular-templatecache'),
     template = require('gulp-template'),
     modify = require('gulp-modify'),
-    jsonFormat = require('gulp-json-format');
-
+    jsonFormat = require('gulp-json-format'),
+    del = require('del'),
+    usemin = require('gulp-usemin'),
+    sass = require('gulp-sass');
 
 
 import fs from "fs";
-import gulp from 'gulp';
 import {merge} from 'event-stream'
 import browserify from 'browserify';
 import source from 'vinyl-source-stream';
@@ -48,6 +49,10 @@ let production = process.env.NODE_ENV === "production";
 let target = process.env.TARGET || "chrome";
 let environment = process.env.NODE_ENV || "development";
 
+console.log('TARGET', target);
+console.log('environment', environment);
+
+
 let generic = JSON.parse(fs.readFileSync(`./config/${environment}.json`));
 let specific = JSON.parse(fs.readFileSync(`./config/${target}.json`));
 let context = Object.assign({}, generic, specific);
@@ -74,50 +79,62 @@ let manifest = {
 }
 
 // Tasks
-gulp.task('clean', () => {
-    return pipe(`./build/${target}`, $.clean())
+gulp.task('clean', function(){
+    return del([`./build/${target}`])
 })
 
-gulp.task('build', (cb) => {
-    $.runSequence('clean', 'copyDependencies', 'copyStaticFiles', 'build-settings-page', 'styles', 'ext', cb)
-});
-
-gulp.task('watch', ['build'], () => {
-    $.livereload.listen();
 
 
-    gulp.watch(
-        ['./src/**/*']
-    ).on("change", () => {
-        $.runSequence('build', $.livereload.reload);
-    });
-});
 
-gulp.task('default', ['build']);
-
-
-gulp.task('ext', ['manifest', 'js'], () => {
-    return mergeAll(target)
-});
 
 
 // -----------------
 // COMMON
 // -----------------
-gulp.task('js', () => {
-    return buildJS(target)
-})
+gulp.task('js', gulp.series(() => {
+  const files = [
+    'background.js',
+    'contentscript.js',
+    'popup.js',
+    'livereload.js',
+    'services/publisherWebservice.js',
+    'utils/ext.js',
+    'utils/storage.js',
+  ];
 
-gulp.task('styles', () => {
+  let tasks = files.map(file => {
+    return browserify({
+      entries: 'src/scripts/' + file,
+      debug: true
+    })
+      .transform('babelify', {presets: ['es2015']})
+      .transform(preprocessify, {
+        includeExtensions: ['.js'],
+        context: context
+      })
+      .bundle()
+      .pipe(source(file))
+      .pipe(buffer())
+      .pipe(gulpif(!production, $.sourcemaps.init({loadMaps: true})))
+      .pipe(gulpif(!production, $.sourcemaps.write('./')))
+      .pipe(gulpif(production, $.uglify({
+        "mangle": false,
+        "output": {
+          "ascii_only": true
+        }
+      })))
+      .pipe(gulp.dest(`build/${target}/scripts`));
+  });
+
+  return merge.apply(null, tasks);
+}))
+
+gulp.task('styles', gulp.series(() => {
     return gulp.src('src/styles/**/*.scss')
-        .pipe($.plumber())
-        .pipe($.sass.sync({
-            outputStyle: 'expanded',
-            precision: 10,
-            includePaths: ['.']
-        }).on('error', $.sass.logError))
-        .pipe(gulp.dest(`build/${target}/styles`));
-});
+      .pipe(sass().on('error', sass.logError))
+      .pipe(gulp.dest(`build/${target}/styles`));
+
+}));
 
 gulp.task("manifest", () => {
     return gulp.src('./manifest.json')
@@ -136,31 +153,40 @@ gulp.task("manifest", () => {
 
 
 
+gulp.task('ext', (cb) => {
+  gulp.series('manifest', 'js');
+  pipe('./src/icons/**/*', `./build/${target}/icons`);
+  pipe(['./src/_locales/**/*'], `./build/${target}/_locales`);
+  pipe([`./src/images/${target}/**/*`], `./build/${target}/images`);
+  pipe(['./src/images/shared/**/*'], `./build/${target}/images`);
+  pipe(['./src/*.html'], `./build/${target}`);
+  cb()
+});
+
+
 gulp.task('copyDependencies', () => {
     return gulp.src('node_modules/papaparse/papaparse.min.js')
         .pipe(gulp.dest(`src/scripts/services`));
 });
 
 
-gulp.task('copyStaticFiles',  () => {
-
-
+gulp.task('copyStaticFiles',  (done) => {
     gulp.src('./src/fonts/**/*')
         .pipe(gulp.dest(`build/${target}/fonts`));
-    
+
     gulp.src(paths.angularLocales)
         .pipe(gulp.dest(`build/${target}/settings-page/locales/`));
+    done()
 });
 
 // -----------------
 // DIST
 // -----------------
-gulp.task('dist', (cb) => {
-    $.runSequence('build', 'zip', cb)
-});
 
-gulp.task('zip', () => {
-    return pipe(`./build/${target}/**/*`, $.zip(`${target}.zip`), './dist')
+
+gulp.task('zip', (cb) => {
+    pipe(`./build/${target}/**/*`, $.zip(`${target}.zip`), './dist');
+    cb();
 })
 
 
@@ -234,8 +260,7 @@ gulp.task('copy-locales', function() {
 });
 
 
-gulp.task('build-settings-page', ['minify', 'copy-bower-fonts', 'custom-templates', 'custom-images', 'custom-js', 'custom-less' ]);
-
+gulp.task('build-settings-page', gulp.series('minify', 'copy-bower-fonts', 'custom-templates', 'custom-images', 'custom-js', 'custom-less' ));
 
 
 
@@ -247,50 +272,25 @@ function pipe(src, ...transforms) {
     }, gulp.src(src))
 }
 
-function mergeAll(dest) {
-    return merge(
-        pipe('./src/icons/**/*', `./build/${dest}/icons`),
-        pipe(['./src/_locales/**/*'], `./build/${dest}/_locales`),
-        pipe([`./src/images/${target}/**/*`], `./build/${dest}/images`),
-        pipe(['./src/images/shared/**/*'], `./build/${dest}/images`),
-        pipe(['./src/*.html'], `./build/${dest}`)
-    )
-}
 
-function buildJS(target) {
-    const files = [
-        'background.js',
-        'contentscript.js',
-        'popup.js',
-        'livereload.js',
-        'services/publisherWebservice.js',
-        'utils/ext.js',
-        'utils/storage.js',
-    ];
 
-    let tasks = files.map(file => {
-        return browserify({
-            entries: 'src/scripts/' + file,
-            debug: true
-        })
-            .transform('babelify', {presets: ['es2015']})
-            .transform(preprocessify, {
-                includeExtensions: ['.js'],
-                context: context
-            })
-            .bundle()
-            .pipe(source(file))
-            .pipe(buffer())
-            .pipe(gulpif(!production, $.sourcemaps.init({loadMaps: true})))
-            .pipe(gulpif(!production, $.sourcemaps.write('./')))
-            .pipe(gulpif(production, $.uglify({
-                "mangle": false,
-                "output": {
-                    "ascii_only": true
-                }
-            })))
-            .pipe(gulp.dest(`build/${target}/scripts`));
-    });
+gulp.task('build', (cb) => {
+  gulp.series('clean', 'copyDependencies', 'copyStaticFiles', 'build-settings-page', 'styles', 'ext');
+  cb();
+});
+gulp.task('dist', gulp.series('build', 'zip'));
 
-    return merge.apply(null, tasks);
-}
+gulp.task('watch', (cb) => {
+  $.livereload.listen();
+
+  gulp.watch('./src/**/*').on('change', function(event) {
+    gulp.series('build', function() {
+      $.livereload.reload()
+    })
+
+  });
+  cb()
+});
+
+
+gulp.task('default',  gulp.series('build'));

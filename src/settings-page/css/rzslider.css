@@ -74,10 +74,10 @@
   background: transparent;
 }
 .rzslider .rz-bar-wrapper.rz-left-out-selection .rz-bar {
-  background: #df002d;
+  background: #DF002D;
 }
 .rzslider .rz-bar-wrapper.rz-right-out-selection .rz-bar {
-  background: #03a688;
+  background: #03A688;
 }
 .rzslider .rz-selection {
   z-index: 2;
@@ -107,10 +107,10 @@
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  background: #ffffff;
+  background: #fff;
 }
 .rzslider .rz-pointer:hover:after {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 .rzslider .rz-pointer.rz-active {
   z-index: 4;

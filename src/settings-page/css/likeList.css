@@ -28,10 +28,10 @@
   border-bottom: 0;
 }
 #likeList .text-color {
-  color: #3b302d;
+  color: #3B302D;
 }
 #likeList .productPopoverMenu .btn {
-  color: #3b302d;
+  color: #3B302D;
   cursor: pointer;
 }
 #likeList .productPopoverMenu .row {
@@ -46,12 +46,12 @@
   z-index: 1000;
   margin-top: 20px;
   font-size: 14px;
-  color: #3b302d;
+  color: #3B302D;
 }
 #likeList .popover-wrapper .btn-link,
 #likeList .popover-wrapper a,
 #likeList .popover-wrapper p {
-  color: #3b302d;
+  color: #3B302D;
   font-size: 15px;
   font-weight: normal;
 }
