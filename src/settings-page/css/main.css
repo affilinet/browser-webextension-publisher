@@ -31,7 +31,7 @@ body {
 }
 #page-wrapper,
 #sidebar-wrapper {
-  transition: all .4s ease 0s;
+  transition: all 0.4s ease 0s;
 }
 .green {
   background: #23ae89 !important;
