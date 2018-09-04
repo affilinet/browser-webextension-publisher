@@ -42,7 +42,7 @@ DE;6327;http://partners.webmasterplan.com/click.aspx?site=6327&ref=[ref]&type=te
 DE;6668;http://partners.webmasterplan.com/click.aspx?site=6668&ref=[ref]&type=text&tnb=93&diurl=[deeplink];;
 DE;9141;http://partners.webmasterplan.com/click.aspx?site=9141&ref=[ref]&type=text&tnb=258&diurl=[deeplink];;
 DE;9846;http://partners.webmasterplan.com/click.aspx?site=9846&ref=[ref]&type=text&tnb=77&diurl=[deeplink];;
-DE;14637;http://partners.webmasterplan.com/click.aspx?site=14637&ref=[ref]&type=text&tnb=146&diurl=[deeplink];utm_medium=affiliate&utm_source=affilinet&utm_campaign=$ref$&utm_content=$affmt$____$affmn$_textlinkgenerator-URL&utm=dynamic;
+DE;14637;http://partners.webmasterplan.com/click.aspx?site=14637&ref=[ref]&type=text&tnb=146&diurl=[deeplink];utm_medium=affiliate&utm_source=affiliate_affilinet_acquisition&utm_campaign=$ref$&utm_content=$affmt$____$affmn$_textlinkgenerator-URL&utm=dynamic;
 DE;15168;http://partners.webmasterplan.com/click.aspx?site=15168&ref=[ref]&type=text&tnb=342&diurl=[deeplink];camp=affilinet;
 DE;16062;http://partners.webmasterplan.com/click.aspx?site=16062&ref=[ref]&type=text&tnb=37&diurl=[deeplink];;
 DE;13245;http://partners.webmasterplan.com/click.aspx?site=13245&ref=[ref]&type=text&tnb=47&diurl=[deeplink];adCode=032Q40W10C22B&utm_source=afn&utm_medium=af&utm_content=Lkg&utm_campaign=brd;
@@ -825,7 +825,7 @@ DE;4601;http://partners.webmasterplan.com/click.aspx?site=4601&ref=[ref]&type=te
 DE;15455;http://partners.webmasterplan.com/click.aspx?site=15455&ref=[ref]&type=text&tnb=40&diurl=[deeplink];;
 DE;16308;http://partners.webmasterplan.com/click.aspx?site=16308&ref=[ref]&type=text&tnb=17&diurl=[deeplink];;
 DE;15865;http://partners.webmasterplan.com/click.aspx?site=15865&ref=[ref]&type=text&tnb=13&diurl=[deeplink];utm_source=affilinet&utm_medium=affiliate&utm_campaign=cpo;
-AT;14899;http://partners.webmasterplan.com/click.aspx?site=14899&ref=[ref]&type=text&tnb=24&diurl=[deeplink];;
+AT;14899;http://partners.webmasterplan.com/click.aspx?site=14899&ref=[ref]&type=text&tnb=24&diurl=[deeplink];utm_medium=affiliate&utm_source=affiliate_affilinet_acquisition&utm_campaign=$ref$&utm_content=$affmt$____$affmn$_textlinkgenerator-URL&utm=dynamic;
 DE;6543;http://partners.webmasterplan.com/click.aspx?site=6543&ref=[ref]&type=text&tnb=158&diurl=[deeplink];wt_mc=de.affiliate.af.AL0000.TXT.NA&utm_medium=affiliate&utm_source=af&utm_campaign=AL0000&utm_content=TXT&utm_term=NA;
 DE;9130;http://partners.webmasterplan.com/click.aspx?site=9130&ref=[ref]&type=text&tnb=26&diurl=[deeplink];;
 CH;15661;http://partners.webmasterplan.com/click.aspx?site=15661&ref=[ref]&type=text&tnb=49&diurl=[deeplink];wt_mc=pt.aff.$ref$.$affmt$.$affmn$.0.;
@@ -1089,3 +1089,6 @@ AT;15477;http://partners.webmasterplan.com/click.aspx?site=15477&ref=[ref]&type=
 FR;16495;http://clic.reussissonsensemble.fr/click.aspx?site=16495&ref=[ref]&type=text&tnb=9&diurl=[deeplink];;
 DE;16120;http://partners.webmasterplan.com/click.aspx?site=16120&ref=[ref]&type=text&tnb=31&diurl=[deeplink];utm_content=individuell&utm_campaign=deeplinkgen;
 AT;16880;http://partners.webmasterplan.com/click.aspx?site=16880&ref=[ref]&type=text&tnb=1&diurl=[deeplink];utm_source=affilinet&utm_medium=Affiliates;
+FR;15054;http://clic.reussissonsensemble.fr/click.aspx?site=15054&ref=[ref]&type=text&tnb=54&diurl=[deeplink];utm_medium=affiliate&utm_source=affiliate_affilinet_acquisition&utm_campaign=$ref$&utm_content=$affmt$____$affmn$_textlinkgenerator-URL&utm=dynamic;
+ES;15120;http://web.epartner.es/click.aspx?site=15120&ref=[ref]&type=text&tnb=23&diurl=[deeplink];utm_medium=affiliate&utm_source=affiliate_affilinet_acquisition&utm_campaign=$ref$&utm_content=$affmt$____$affmn$_textlinkgenerator-URL&utm=dynamic;
+ES;15127;http://web.epartner.es/click.aspx?site=15127&ref=[ref]&type=text&tnb=22&diurl=[deeplink];utm_medium=affiliate&utm_source=affiliate_affilinet_acquisition&utm_campaign=$ref$&utm_content=$affmt$____$affmn$_textlinkgenerator-URL&utm=dynamic;
