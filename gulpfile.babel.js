@@ -91,7 +91,7 @@ gulp.task('clean', function(){
 // -----------------
 // COMMON
 // -----------------
-gulp.task('js', gulp.series(() => {
+gulp.task('js', (cb) => {
   const files = [
     'background.js',
     'contentscript.js',
@@ -126,18 +126,19 @@ gulp.task('js', gulp.series(() => {
       .pipe(gulp.dest(`build/${target}/scripts`));
   });
 
-  return merge.apply(null, tasks);
-}))
+   merge.apply(null, tasks);
+    cb()
+})
 
-gulp.task('styles', gulp.series(() => {
+gulp.task('styles', () => {
     return gulp.src('src/styles/**/*.scss')
       .pipe(sass().on('error', sass.logError))
       .pipe(gulp.dest(`build/${target}/styles`));
 
-}));
+});
 
-gulp.task("manifest", () => {
-    return gulp.src('./manifest.json')
+gulp.task("manifest-task", (cb) => {
+    gulp.src('./manifest.json')
         .pipe(gulpif(!production, $.mergeJson({
             fileName: "manifest.json",
             jsonSpace: " ".repeat(4),
@@ -148,13 +149,13 @@ gulp.task("manifest", () => {
             jsonSpace: " ".repeat(4),
             endObj: manifest.firefox
         })))
-        .pipe(gulp.dest(`./build/${target}`))
+        .pipe(gulp.dest(`./build/${target}`));
+    cb();
 });
 
 
 
 gulp.task('ext', (cb) => {
-  gulp.series('manifest', 'js');
   pipe('./src/icons/**/*', `./build/${target}/icons`);
   pipe(['./src/_locales/**/*'], `./build/${target}/_locales`);
   pipe([`./src/images/${target}/**/*`], `./build/${target}/images`);
@@ -274,10 +275,7 @@ function pipe(src, ...transforms) {
 
 
 
-gulp.task('build', (cb) => {
-  gulp.series('clean', 'copyDependencies', 'copyStaticFiles', 'build-settings-page', 'styles', 'ext');
-  cb();
-});
+gulp.task('build',  gulp.series('clean', 'copyDependencies', 'copyStaticFiles', 'build-settings-page', 'styles', 'manifest-task', 'js', 'ext'));
 gulp.task('dist', gulp.series('build', 'zip'));
 
 gulp.task('watch', (cb) => {

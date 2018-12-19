@@ -264,15 +264,37 @@ function generateDeeplink(url, publisherId, deeplinkInfo) {
     }
     let finalUrl = deeplinkParser.href;
 
-    // redirect form tracking url to attribution solution?
+
+    if (deeplinkInfo.hasOwnProperty('programId')) {
+      // special workaround for media markt
+      if (deeplinkInfo.programId === '16901') {
+        finalUrl = finalUrl.replace("%2B","%25252B");
+      }
+
+      // special workaround for otto
+      if (deeplinkInfo.programId === '2950') {
+        finalUrl =  finalUrl.replace(/^https?:\/\/.*otto\.de\//,"");
+      }
+    }
+
+
+    // redirect tracking url to attribution solution?
     if (deeplinkInfo.hasOwnProperty('redirector')) {
         if (deeplinkInfo.redirector !== '') {
             // do not directly redirect to advertiser
-            finalUrl = deeplinkInfo.redirector + encodeURIComponent(finalUrl);
+
+            // should the redirector param be url encoded?
+            // partners.webmasterplan.com/?diurl=http://redirector.com/?url={endocedOrUnencodedUrl}
+            if (!deeplinkInfo.hasOwnProperty('urlencodeRedirectorUrl') || deeplinkInfo.urlencodeRedirectorUrl === 'true') {
+                finalUrl = deeplinkInfo.redirector + encodeURIComponent(finalUrl);
+            } else {
+                finalUrl = deeplinkInfo.redirector + finalUrl;
+            }
+
         }
     }
 
-    trackingLink = trackingLink.replace('[deeplink]', encodeURIComponent(finalUrl));
+    trackingLink = trackingLink.replace('[deeplink]', encodeURIComponent(finalUrl)); // always encode the parameter for partners.webmasterplan
     trackingLink = trackingLink.replace('[ref]', publisherId);
     trackingLink = trackingLink.replace('[paramforwarding]', '');
     return trackingLink;
