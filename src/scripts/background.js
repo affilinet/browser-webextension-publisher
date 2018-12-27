@@ -32,6 +32,7 @@ ext.runtime.onMessage.addListener(
 
                 break;
             case "copyDeeplink" :
+               console.log('copy deeplink');
                 generateTrackingUrl(request.data.uri).then( (deeplink) => {
                     console.log('copy deeplink', deeplink);
                     _copyTextToClipboard(deeplink);
@@ -205,7 +206,7 @@ function generateTrackingUrl(url) {
                                 hasDeeplink(programDetails.programId).then(
                                     (result) => {
                                       if (result.deeplinkInfo === false || result.publisherId === null) {
-                                            resolve(url);
+                                        resolve(url);
                                         } else {
                                             resolve(generateDeeplink(url, result.publisherId, result.deeplinkInfo))
                                         }
