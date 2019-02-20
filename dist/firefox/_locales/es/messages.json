@@ -1,0 +1,118 @@
+{
+  "appName": {
+    "message": "affilinet",
+    "description": "The name of the extension."
+  },
+  "appDescription": {
+    "message": "Extensión para publishers de affilinet",
+    "description": "The description of the extension."
+  },
+  "btnTooltip": {
+    "message": "affilinet",
+    "description": "Tooltip for the button."
+  },
+  "popup_applyNow": {
+    "message": "Solicitar",
+    "description": "Popup Button Name for applyNow"
+  },
+  "popup_getCreatives": {
+    "message": "Obtener Creatividades",
+    "description": "Popup Button Name for getCreatives"
+  },
+  "popup_getVouchers": {
+    "message": "Obtener Vouchers",
+    "description": "Popup Button Name for getVouchers"
+  },
+  "popup_getTrackingLink": {
+    "message": "Enlace Estandar",
+    "description": "Popup Button Name for get tracking link"
+  },
+  "popup_getDeeplink": {
+    "message": "Deeplink",
+    "description": "Popup Button Name for get deeplink"
+  },
+  "popup_copyLink": {
+    "message": "Copiar",
+    "description": "Popup Button Name copy link"
+  },
+  "popup_shortenLink": {
+    "message": "Cortar",
+    "description": "Popup Button Name shorten link"
+  },
+  "popup_statistics": {
+    "message": "Estadísticas",
+    "description": "Popup Button Name for statistics"
+  },
+  "popup_news": {
+    "message": "Nuevos Programas",
+    "description": "Popup Button Name for news"
+  },
+  "popup_settings": {
+    "message": "Ajustes",
+    "description": "Popup Button Name for settings"
+  },
+  "popup_errorButton": {
+    "message": "Instalar",
+    "description": "Popup Error Button Name linking to Settings Page, visible if no credentials"
+  },
+  "popup_errorMessageInvalidCredentials": {
+    "message": "Credenciales incorrectas.  Por favor, guarda tu password de Webservice.",
+    "description": "Popup Error: Invalid Login Credentials"
+  },
+  "popup_trackingLinkOnly": {
+    "message": "Este anunciante no admite deeplinks todavía.",
+    "description": "Deeplink is Trackinglink only"
+  },
+  "popup_searchDiscover": {
+    "message": "Buscar y Descubrir",
+    "description": "Popup Button Name for Search&Discover"
+  },
+  "popup_likeList": {
+    "message": "Lista de Likes",
+    "description": "Popup Button Name for Like List"
+  },
+  "popup_widgetGenerator": {
+    "message": "Generador de Widget",
+    "description": "Popup Button Name for Widget Generator"
+  },
+  "context_shareOn": {
+    "message": "Compartir",
+    "description": "Context menu headline for share icons"
+  },
+  "context_likeList": {
+    "message": "Guardar en mi lista de Likes",
+    "description": "Context menu headline Like List icons"
+  },
+  "context_codes": {
+    "message": "Obtener los Códigos",
+    "description": "Context menu headline get codes"
+  },
+  "context_messageImageSaved": {
+    "message": "Imagen aañadida a mi lista de Likes ",
+    "description": "Context menu success message for Image Pin saved"
+  },
+  "context_messageWebsiteSaved": {
+    "message": "Enlace añadido en mi lista de Likes ",
+    "description": "Context menu success message for Website Pin saved"
+  },
+  "context_messageDeeplinkCopied": {
+    "message": "Deeplink copiado al portapapeles ",
+    "description": "Context menu success message for Deeplink copied"
+  },
+  "context_messageImageCodeCopied": {
+    "message": "Código de imagen copiado al portapapeles",
+    "description": "Context menu success message for Image Code copied"
+  },
+  "popup_headlineStatus" : {
+    "message" : "Cuenta",
+    "description" : "Popup Headline above statistics"
+  },
+  "popup_headlineShop" : {
+    "message" : "Anunciante",
+    "description" : "Popup Headline above Shop Details"
+  },
+  "popup_headlineTools" : {
+    "message" : "Herramientas",
+    "description" : "Popup Headline above Tools/links"
+  }
+}

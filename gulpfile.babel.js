@@ -274,13 +274,8 @@ function pipe(src, ...transforms) {
 }
 
 
-/***
- * TODO Chekcen warum das zipp[en nicht geht.
- *
- */
-
 gulp.task('build',  gulp.series('clean', 'copyDependencies', 'copyStaticFiles', 'build-settings-page', 'styles',  'js', 'ext', 'manifest-task'));
-gulp.task('dist', gulp.series('build', 'zip'));
+
 
 gulp.task('watch', (cb) => {
   $.livereload.listen();

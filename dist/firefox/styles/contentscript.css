@@ -1,0 +1,65 @@
+#affilinet-webext-imageHoverBtn {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif !important;
+  font-size: 16px;
+  line-height: 16px;
+  color: #333333 !important;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  width: 16px !important;
+  height: 16px !important;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1000000000;
+  display: none;
+  text-align: left !important; }
+  #affilinet-webext-imageHoverBtn img {
+    position: relative;
+    border: 4px solid white;
+    border-radius: 16px;
+    background-color: white; }
+  #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu {
+    display: none;
+    box-sizing: content-box !important;
+    padding: 10px;
+    width: 200px;
+    background-color: white;
+    border: 1px solid #a2a2a2;
+    border-radius: 5px; }
+    #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu p {
+      margin: 0 !important;
+      padding: 0 !important; }
+    #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu #affilinet-webext-close {
+      cursor: pointer;
+      box-sizing: content-box !important;
+      float: right;
+      width: 16px !important;
+      height: 16px !important;
+      margin: 0 !important;
+      padding: 0 !important; }
+    #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu .affilinet-webext-row {
+      margin: 0 0 10px 0 !important;
+      padding: 0;
+      width: 200px; }
+      #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu .affilinet-webext-row:last-of-type {
+        clear: both;
+        float: none; }
+    #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu .affilinet-webext-share, #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu .affilinet-webext-save, #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu .affilinet-webext-code, #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu .affilinet-webext-deeplink {
+      cursor: pointer;
+      box-sizing: content-box !important;
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      border: 0;
+      border-radius: 0; }
+    #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu #affilinet-webext-success-message {
+      display: inline-block;
+      color: white;
+      background-color: #6dc16d;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px; }
+    #affilinet-webext-imageHoverBtn #affilinet-webext-contextmenu .affilinet-webext-hidden {
+      display: none !important; }
