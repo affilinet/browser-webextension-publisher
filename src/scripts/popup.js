@@ -257,14 +257,10 @@ function generateDeeplink(publisherId, deeplinkInfo) {
     let finalUrl = deeplinkParser.href;
 
     if (deeplinkInfo.hasOwnProperty('programId')) {
-      // special workaround for media markt
-      if (deeplinkInfo.programId === '16901') {
-        finalUrl = finalUrl.replace("%2B","%25252B");
-      }
 
       // special workaround for otto
       if (deeplinkInfo.programId === '2950') {
-        finalUrl =  finalUrl.replace(/^https?:\/\/.*otto\.de\//,"");
+        finalUrl =  finalUrl.replace(/^https?:\/\/.*otto\.de\//,"/");
       }
     }
 
@@ -281,7 +277,6 @@ function generateDeeplink(publisherId, deeplinkInfo) {
         } else {
           finalUrl = deeplinkInfo.redirector + finalUrl;
         }
-
       }
     }
 
